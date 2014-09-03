@@ -1,0 +1,649 @@
+Release 14.7 - xst P.20131013 (lin64)
+Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
+--> 
+Parameter TMPDIR set to /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/synthesis/xst_temp_dir/
+
+
+Total REAL time to Xst completion: 0.00 secs
+Total CPU time to Xst completion: 0.03 secs
+ 
+--> 
+
+TABLE OF CONTENTS
+  1) Synthesis Options Summary
+  2) HDL Compilation
+  3) Design Hierarchy Analysis
+  4) HDL Analysis
+  5) HDL Synthesis
+     5.1) HDL Synthesis Report
+  6) Advanced HDL Synthesis
+     6.1) Advanced HDL Synthesis Report
+  7) Low Level Synthesis
+  8) Partition Report
+  9) Final Report
+	9.1) Device utilization summary
+	9.2) Partition Resource Summary
+	9.3) TIMING REPORT
+
+
+=========================================================================
+*                      Synthesis Options Summary                        *
+=========================================================================
+---- Source Parameters
+Input Format                       : MIXED
+Input File Name                    : "system_iic_adc0_wrapper_xst.prj"
+Verilog Include Directory          : {"/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/pcores/" "/opt/xilinx/14.7/ISE_DS/EDK/hw/XilinxBFMinterface/pcores/" "/opt/xilinx/14.7/ISE_DS/EDK/hw/XilinxProcessorIPLib/pcores/" }
+
+---- Target Parameters
+Target Device                      : xc5vsx95tff1136-1
+Output File Name                   : "../implementation/system_iic_adc0_wrapper.ngc"
+
+---- Source Options
+Top Module Name                    : system_iic_adc0_wrapper
+
+---- Target Options
+Add IO Buffers                     : NO
+
+---- General Options
+Optimization Goal                  : speed
+Netlist Hierarchy                  : as_optimized
+Optimization Effort                : 1
+Hierarchy Separator                : /
+
+---- Other Options
+Cores Search Directories           : {../implementation}
+
+=========================================================================
+
+
+=========================================================================
+*                          HDL Compilation                              *
+=========================================================================
+Compiling verilog file "/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/pcores/kat_adc_iic_controller_v1_00_a/hdl/verilog/kat_adc_iic_controller.v" in library kat_adc_iic_controller_v1_00_a
+Compiling verilog file "/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/pcores/kat_adc_iic_controller_v1_00_a/hdl/verilog/miic_ops.v" in library kat_adc_iic_controller_v1_00_a
+Module <kat_adc_iic_controller> compiled
+Compiling verilog file "/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/pcores/kat_adc_iic_controller_v1_00_a/hdl/verilog/gain_set.v" in library kat_adc_iic_controller_v1_00_a
+Module <miic_ops> compiled
+Compiling verilog file "/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/pcores/kat_adc_iic_controller_v1_00_a/hdl/verilog/opb_attach.v" in library kat_adc_iic_controller_v1_00_a
+Module <gain_set> compiled
+Compiling verilog file "/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/pcores/kat_adc_iic_controller_v1_00_a/hdl/verilog/cpu_op_fifo.v" in library kat_adc_iic_controller_v1_00_a
+Module <opb_attach> compiled
+Compiling verilog file "/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/pcores/kat_adc_iic_controller_v1_00_a/hdl/verilog/fab_op_fifo.v" in library kat_adc_iic_controller_v1_00_a
+Module <cpu_op_fifo> compiled
+Compiling verilog file "/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/pcores/kat_adc_iic_controller_v1_00_a/hdl/verilog/rx_fifo.v" in library kat_adc_iic_controller_v1_00_a
+Module <fab_op_fifo> compiled
+Module <rx_fifo> compiled
+Compiling verilog file "../hdl/system_iic_adc0_wrapper.v" in library work
+Module <system_iic_adc0_wrapper> compiled
+No errors in compilation
+Analysis of file <"system_iic_adc0_wrapper_xst.prj"> succeeded.
+ 
+
+=========================================================================
+*                     Design Hierarchy Analysis                         *
+=========================================================================
+Analyzing hierarchy for module <system_iic_adc0_wrapper> in library <work>.
+
+Analyzing hierarchy for module <kat_adc_iic_controller> in library <kat_adc_iic_controller_v1_00_a> with parameters.
+	ARB_CPU = "00000000000000000000000000000001"
+	ARB_FAB = "00000000000000000000000000000000"
+	CORE_FREQ = "00000000000000010100010110000101"
+	C_BASEADDR = "00000000000001000000000000000000"
+	C_HIGHADDR = "00000000000001000000011111111111"
+	C_OPB_AWIDTH = "00000000000000000000000000100000"
+	C_OPB_DWIDTH = "00000000000000000000000000100000"
+	EN_GAIN = "00000000000000000000000000000001"
+	IIC_FREQ = "00000000000000000000000001100100"
+
+Analyzing hierarchy for module <opb_attach> in library <kat_adc_iic_controller_v1_00_a> with parameters.
+	C_BASEADDR = "00000000000001000000000000000000"
+	C_HIGHADDR = "00000000000001000000011111111111"
+	C_OPB_AWIDTH = "00000000000000000000000000100000"
+	C_OPB_DWIDTH = "00000000000000000000000000100000"
+	REG_CTRL = "00000000000000000000000000000011"
+	REG_OP_FIFO = "00000000000000000000000000000000"
+	REG_RX_FIFO = "00000000000000000000000000000001"
+	REG_STATUS = "00000000000000000000000000000010"
+
+Analyzing hierarchy for module <miic_ops> in library <kat_adc_iic_controller_v1_00_a> with parameters.
+	BITWIDTH_DIV2 = "00000000000000000000000110100000"
+	BIT_ACK = "00000000000000000000000000000100"
+	BIT_DATA = "00000000000000000000000000000011"
+	BIT_IDLE = "00000000000000000000000000000000"
+	BIT_START = "00000000000000000000000000000001"
+	BIT_STOP = "00000000000000000000000000000010"
+	CLK_FULL = "00000000000000000000000000000001"
+	CLK_HALF = "00000000000000000000000000000010"
+	CLK_IDLE = "00000000000000000000000000000000"
+	CLK_WAIT = "00000000000000000000000000000011"
+	CORE_FREQ = "00000000000000010100010110000101"
+	IIC_DATA = "00000000000000000000000000000011"
+	IIC_FREQ = "00000000000000000000000001100100"
+	IIC_IDLE = "00000000000000000000000000000000"
+	IIC_RUN = "00000000000000000000000000000010"
+	IIC_START = "00000000000000000000000000000001"
+	IIC_STOP = "00000000000000000000000000000100"
+
+Analyzing hierarchy for module <gain_set> in library <kat_adc_iic_controller_v1_00_a> with parameters.
+	GPIO_IIC_ADDRI = "0100000"
+	GPIO_IIC_ADDRQ = "0100001"
+	GPIO_REG_OEN = "00000110"
+	GPIO_REG_OUT = "00000010"
+	IIC_WR = "0"
+	NUM_OPS = "00000000000000000000000000001100"
+	STATE_IDLE = "00000000000000000000000000000000"
+	STATE_RUN = "00000000000000000000000000000001"
+
+
+=========================================================================
+*                            HDL Analysis                               *
+=========================================================================
+Analyzing top module <system_iic_adc0_wrapper>.
+Module <system_iic_adc0_wrapper> is correct for synthesis.
+ 
+Analyzing module <kat_adc_iic_controller> in library <kat_adc_iic_controller_v1_00_a>.
+	ARB_CPU = 32'sb00000000000000000000000000000001
+	ARB_FAB = 32'sb00000000000000000000000000000000
+	CORE_FREQ = 32'sb00000000000000010100010110000101
+	C_BASEADDR = 32'b00000000000001000000000000000000
+	C_HIGHADDR = 32'b00000000000001000000011111111111
+	C_OPB_AWIDTH = 32'sb00000000000000000000000000100000
+	C_OPB_DWIDTH = 32'sb00000000000000000000000000100000
+	EN_GAIN = 32'sb00000000000000000000000000000001
+	IIC_FREQ = 32'sb00000000000000000000000001100100
+WARNING:Xst:2211 - "/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/pcores/kat_adc_iic_controller_v1_00_a/hdl/verilog/fab_op_fifo.v" line 186: Instantiating black box module <fab_op_fifo>.
+Module <kat_adc_iic_controller> is correct for synthesis.
+ 
+Analyzing module <opb_attach> in library <kat_adc_iic_controller_v1_00_a>.
+	C_BASEADDR = 32'b00000000000001000000000000000000
+	C_HIGHADDR = 32'b00000000000001000000011111111111
+	C_OPB_AWIDTH = 32'sb00000000000000000000000000100000
+	C_OPB_DWIDTH = 32'sb00000000000000000000000000100000
+	REG_CTRL = 32'sb00000000000000000000000000000011
+	REG_OP_FIFO = 32'sb00000000000000000000000000000000
+	REG_RX_FIFO = 32'sb00000000000000000000000000000001
+	REG_STATUS = 32'sb00000000000000000000000000000010
+Module <opb_attach> is correct for synthesis.
+ 
+Analyzing module <miic_ops> in library <kat_adc_iic_controller_v1_00_a>.
+	BITWIDTH_DIV2 = 32'sb00000000000000000000000110100000
+	BIT_ACK = 32'sb00000000000000000000000000000100
+	BIT_DATA = 32'sb00000000000000000000000000000011
+	BIT_IDLE = 32'sb00000000000000000000000000000000
+	BIT_START = 32'sb00000000000000000000000000000001
+	BIT_STOP = 32'sb00000000000000000000000000000010
+	CLK_FULL = 32'sb00000000000000000000000000000001
+	CLK_HALF = 32'sb00000000000000000000000000000010
+	CLK_IDLE = 32'sb00000000000000000000000000000000
+	CLK_WAIT = 32'sb00000000000000000000000000000011
+	CORE_FREQ = 32'sb00000000000000010100010110000101
+	IIC_DATA = 32'sb00000000000000000000000000000011
+	IIC_FREQ = 32'sb00000000000000000000000001100100
+	IIC_IDLE = 32'sb00000000000000000000000000000000
+	IIC_RUN = 32'sb00000000000000000000000000000010
+	IIC_START = 32'sb00000000000000000000000000000001
+	IIC_STOP = 32'sb00000000000000000000000000000100
+Module <miic_ops> is correct for synthesis.
+ 
+Analyzing module <gain_set> in library <kat_adc_iic_controller_v1_00_a>.
+	GPIO_IIC_ADDRI = 7'b0100000
+	GPIO_IIC_ADDRQ = 7'b0100001
+	GPIO_REG_OEN = 8'b00000110
+	GPIO_REG_OUT = 8'b00000010
+	IIC_WR = 1'b0
+	NUM_OPS = 32'sb00000000000000000000000000001100
+	STATE_IDLE = 32'sb00000000000000000000000000000000
+	STATE_RUN = 32'sb00000000000000000000000000000001
+Module <gain_set> is correct for synthesis.
+ 
+
+=========================================================================
+*                           HDL Synthesis                               *
+=========================================================================
+
+Performing bidirectional port resolution...
+
+Synthesizing Unit <opb_attach>.
+    Related source file is "/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/pcores/kat_adc_iic_controller_v1_00_a/hdl/verilog/opb_attach.v".
+WARNING:Xst:647 - Input <OPB_BE<0:2>> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:647 - Input <OPB_DBus<0:19>> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:647 - Input <OPB_seqAddr> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:646 - Signal <local_addr<31:4>> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <local_addr<1:0>> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+    Found 32-bit comparator greatequal for signal <addr_match$cmp_ge0000> created at line 61.
+    Found 32-bit comparator lessequal for signal <addr_match$cmp_le0000> created at line 61.
+    Found 1-bit register for signal <fifo_rst_reg>.
+    Found 32-bit subtractor for signal <local_addr>.
+    Found 1-bit register for signal <op_error_reg>.
+    Found 1-bit register for signal <op_fifo_block_reg>.
+    Found 1-bit register for signal <op_fifo_over_reg>.
+    Found 1-bit register for signal <op_fifo_wr_en_reg>.
+    Found 1-bit register for signal <rx_fifo_over_reg>.
+    Found 1-bit register for signal <rx_fifo_rd_en_reg>.
+    Found 1-bit register for signal <Sl_xferAck_reg>.
+    Summary:
+	inferred   8 D-type flip-flop(s).
+	inferred   1 Adder/Subtractor(s).
+	inferred   2 Comparator(s).
+Unit <opb_attach> synthesized.
+
+
+Synthesizing Unit <miic_ops>.
+    Related source file is "/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/pcores/kat_adc_iic_controller_v1_00_a/hdl/verilog/miic_ops.v".
+WARNING:Xst:647 - Input <scl_i> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+    Found 1-bit register for signal <bit_done>.
+    Found 1-bit register for signal <bit_first>.
+    Found 3-bit register for signal <bit_index>.
+    Found 3-bit adder for signal <bit_index$share0000>.
+    Found 3-bit register for signal <bit_state>.
+    Found 32-bit register for signal <bitwidth_counter>.
+    Found 32-bit subtractor for signal <bitwidth_counter$share0000> created at line 309.
+    Found 1-bit register for signal <clk_done_reg>.
+    Found 1-bit register for signal <clk_pend>.
+    Found 2-bit register for signal <clk_state>.
+    Found 3-bit register for signal <iic_state>.
+    Found 1-bit register for signal <issue_full_clk>.
+    Found 1-bit register for signal <issue_half_clk>.
+    Found 1-bit register for signal <op_ack_reg>.
+    Found 1-bit register for signal <op_err_reg>.
+    Found 8-bit register for signal <op_rd_data_reg>.
+    Found 1-bit register for signal <scl_o_reg>.
+    Found 1-bit register for signal <sda_o_reg>.
+    Summary:
+	inferred  61 D-type flip-flop(s).
+	inferred   2 Adder/Subtractor(s).
+	inferred   1 Multiplexer(s).
+Unit <miic_ops> synthesized.
+
+
+Synthesizing Unit <gain_set>.
+    Related source file is "/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/pcores/kat_adc_iic_controller_v1_00_a/hdl/verilog/gain_set.v".
+    Found 16x2-bit ROM for signal <progress$rom0000>.
+    Found 14-bit register for signal <gain_value_latch>.
+    Found 4-bit up counter for signal <progress>.
+    Found 1-bit register for signal <state>.
+    Summary:
+	inferred   1 ROM(s).
+	inferred   1 Counter(s).
+	inferred  15 D-type flip-flop(s).
+Unit <gain_set> synthesized.
+
+
+Synthesizing Unit <kat_adc_iic_controller>.
+    Related source file is "/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/pcores/kat_adc_iic_controller_v1_00_a/hdl/verilog/kat_adc_iic_controller.v".
+    Found 1-bit register for signal <arb_select>.
+    Found 1-bit register for signal <cpu_op_fifo_empty_z>.
+    Found 1-bit register for signal <locked>.
+    Summary:
+	inferred   3 D-type flip-flop(s).
+Unit <kat_adc_iic_controller> synthesized.
+
+
+Synthesizing Unit <system_iic_adc0_wrapper>.
+    Related source file is "../hdl/system_iic_adc0_wrapper.v".
+Unit <system_iic_adc0_wrapper> synthesized.
+
+INFO:Xst:1767 - HDL ADVISOR - Resource sharing has identified that some arithmetic operations in this design can share the same physical resources for reduced device utilization. For improved clock frequency you may try to disable resource sharing.
+
+=========================================================================
+HDL Synthesis Report
+
+Macro Statistics
+# ROMs                                                 : 1
+ 16x2-bit ROM                                          : 1
+# Adders/Subtractors                                   : 3
+ 3-bit adder                                           : 1
+ 32-bit subtractor                                     : 2
+# Counters                                             : 1
+ 4-bit up counter                                      : 1
+# Registers                                            : 36
+ 1-bit register                                        : 30
+ 14-bit register                                       : 1
+ 2-bit register                                        : 1
+ 3-bit register                                        : 3
+ 32-bit register                                       : 1
+# Comparators                                          : 2
+ 32-bit comparator greatequal                          : 1
+ 32-bit comparator lessequal                           : 1
+# Multiplexers                                         : 1
+ 1-bit 8-to-1 multiplexer                              : 1
+
+=========================================================================
+
+=========================================================================
+*                       Advanced HDL Synthesis                          *
+=========================================================================
+
+
+=========================================================================
+Advanced HDL Synthesis Report
+
+Macro Statistics
+# ROMs                                                 : 1
+ 16x2-bit ROM                                          : 1
+# Adders/Subtractors                                   : 3
+ 3-bit adder                                           : 1
+ 32-bit subtractor                                     : 1
+ 4-bit subtractor                                      : 1
+# Counters                                             : 1
+ 4-bit up counter                                      : 1
+# Registers                                            : 87
+ Flip-Flops                                            : 87
+# Comparators                                          : 2
+ 32-bit comparator greatequal                          : 1
+ 32-bit comparator lessequal                           : 1
+# Multiplexers                                         : 1
+ 1-bit 8-to-1 multiplexer                              : 1
+
+=========================================================================
+
+=========================================================================
+*                         Low Level Synthesis                           *
+=========================================================================
+
+Optimizing unit <system_iic_adc0_wrapper> ...
+
+Optimizing unit <opb_attach> ...
+
+Optimizing unit <miic_ops> ...
+
+Optimizing unit <gain_set> ...
+
+Optimizing unit <kat_adc_iic_controller> ...
+WARNING:Xst:2677 - Node <iic_adc0/cpu_op_fifo_empty_z> of sequential type is unconnected in block <system_iic_adc0_wrapper>.
+
+Mapping all equations...
+Building and optimizing final netlist ...
+
+Final Macro Processing ...
+
+=========================================================================
+Final Register Report
+
+Macro Statistics
+# Registers                                            : 90
+ Flip-Flops                                            : 90
+
+=========================================================================
+
+=========================================================================
+*                           Partition Report                            *
+=========================================================================
+
+Partition Implementation Status
+-------------------------------
+
+  No Partitions were found in this design.
+
+-------------------------------
+
+=========================================================================
+*                            Final Report                               *
+=========================================================================
+Final Results
+Top Level Output File Name         : ../implementation/system_iic_adc0_wrapper.ngc
+Output Format                      : ngc
+Optimization Goal                  : speed
+Keep Hierarchy                     : no
+
+Design Statistics
+# IOs                              : 131
+
+Cell Usage :
+# BELS                             : 272
+#      GND                         : 1
+#      INV                         : 34
+#      LUT1                        : 1
+#      LUT2                        : 5
+#      LUT3                        : 13
+#      LUT4                        : 31
+#      LUT5                        : 59
+#      LUT6                        : 55
+#      MUXCY                       : 36
+#      MUXF7                       : 4
+#      VCC                         : 1
+#      XORCY                       : 32
+# FlipFlops/Latches                : 90
+#      FD                          : 2
+#      FDE                         : 59
+#      FDR                         : 24
+#      FDRE                        : 2
+#      FDS                         : 3
+# Others                           : 3
+#      cpu_op_fifo                 : 1
+#      fab_op_fifo                 : 1
+#      rx_fifo                     : 1
+=========================================================================
+
+Device utilization summary:
+---------------------------
+
+Selected Device : 5vsx95tff1136-1 
+
+
+Slice Logic Utilization: 
+ Number of Slice Registers:              90  out of  58880     0%  
+ Number of Slice LUTs:                  198  out of  58880     0%  
+    Number used as Logic:               198  out of  58880     0%  
+
+Slice Logic Distribution: 
+ Number of LUT Flip Flop pairs used:    212
+   Number with an unused Flip Flop:     122  out of    212    57%  
+   Number with an unused LUT:            14  out of    212     6%  
+   Number of fully used LUT-FF pairs:    76  out of    212    35%  
+   Number of unique control sets:        21
+
+IO Utilization: 
+ Number of IOs:                         131
+ Number of bonded IOBs:                   0  out of    640     0%  
+
+Specific Feature Utilization:
+
+---------------------------
+Partition Resource Summary:
+---------------------------
+
+  No Partitions were found in this design.
+
+---------------------------
+
+
+=========================================================================
+TIMING REPORT
+
+NOTE: THESE TIMING NUMBERS ARE ONLY A SYNTHESIS ESTIMATE.
+      FOR ACCURATE TIMING INFORMATION PLEASE REFER TO THE TRACE REPORT
+      GENERATED AFTER PLACE-and-ROUTE.
+
+Clock Information:
+------------------
+-----------------------------------+--------------------------------------------------------+-------+
+Clock Signal                       | Clock buffer(FF name)                                  | Load  |
+-----------------------------------+--------------------------------------------------------+-------+
+app_clk                            | NONE(iic_adc0/GAIN_ENABLE_generate.gain_set_inst/state)| 19    |
+OPB_Clk                            | NONE(iic_adc0/miic_ops_inst/op_ack_reg)                | 71    |
+-----------------------------------+--------------------------------------------------------+-------+
+INFO:Xst:2169 - HDL ADVISOR - Some clock signals were not automatically buffered by XST with BUFG/BUFR resources. Please use the buffer_type constraint in order to insert these buffers to the clock signals to help prevent skew problems.
+
+Asynchronous Control Signals Information:
+----------------------------------------
+No asynchronous control signals found in this design
+
+Timing Summary:
+---------------
+Speed Grade: -1
+
+   Minimum period: 3.419ns (Maximum Frequency: 292.496MHz)
+   Minimum input arrival time before clock: 3.947ns
+   Maximum output required time after clock: 1.716ns
+   Maximum combinational path delay: 1.094ns
+
+Timing Detail:
+--------------
+All values displayed in nanoseconds (ns)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'app_clk'
+  Clock period: 1.981ns (frequency: 504.796MHz)
+  Total number of paths / destination ports: 33 / 23
+-------------------------------------------------------------------------
+Delay:               1.981ns (Levels of Logic = 1)
+  Source:            iic_adc0/GAIN_ENABLE_generate.gain_set_inst/state (FF)
+  Destination:       iic_adc0/GAIN_ENABLE_generate.gain_set_inst/progress_0 (FF)
+  Source Clock:      app_clk rising
+  Destination Clock: app_clk rising
+
+  Data Path: iic_adc0/GAIN_ENABLE_generate.gain_set_inst/state to iic_adc0/GAIN_ENABLE_generate.gain_set_inst/progress_0
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDR:C->Q              3   0.471   0.491  iic_adc0/GAIN_ENABLE_generate.gain_set_inst/state (iic_adc0/GAIN_ENABLE_generate.gain_set_inst/state)
+     LUT2:I1->O            4   0.094   0.352  iic_adc0/GAIN_ENABLE_generate.gain_set_inst/progress_or00001 (iic_adc0/GAIN_ENABLE_generate.gain_set_inst/progress_or0000)
+     FDR:R                     0.573          iic_adc0/GAIN_ENABLE_generate.gain_set_inst/progress_0
+    ----------------------------------------
+    Total                      1.981ns (1.138ns logic, 0.843ns route)
+                                       (57.4% logic, 42.6% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'OPB_Clk'
+  Clock period: 3.419ns (frequency: 292.496MHz)
+  Total number of paths / destination ports: 2112 / 72
+-------------------------------------------------------------------------
+Delay:               3.419ns (Levels of Logic = 3)
+  Source:            iic_adc0/miic_ops_inst/bitwidth_counter_21 (FF)
+  Destination:       iic_adc0/miic_ops_inst/bitwidth_counter_0 (FF)
+  Source Clock:      OPB_Clk rising
+  Destination Clock: OPB_Clk rising
+
+  Data Path: iic_adc0/miic_ops_inst/bitwidth_counter_21 to iic_adc0/miic_ops_inst/bitwidth_counter_0
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDE:C->Q              4   0.471   1.085  iic_adc0/miic_ops_inst/bitwidth_counter_21 (iic_adc0/miic_ops_inst/bitwidth_counter_21)
+     LUT6:I0->O            1   0.094   0.973  iic_adc0/miic_ops_inst/clk_state_or000211 (iic_adc0/miic_ops_inst/clk_state_or000211)
+     LUT6:I1->O           35   0.094   0.608  iic_adc0/miic_ops_inst/clk_state_or0002100 (iic_adc0/miic_ops_inst/clk_state_or0002)
+     LUT4:I3->O            1   0.094   0.000  iic_adc0/miic_ops_inst/clk_state_mux0000<1>1 (iic_adc0/miic_ops_inst/clk_state_mux0000<1>)
+     FDR:D                    -0.018          iic_adc0/miic_ops_inst/clk_state_0
+    ----------------------------------------
+    Total                      3.419ns (0.753ns logic, 2.666ns route)
+                                       (22.0% logic, 78.0% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'app_clk'
+  Total number of paths / destination ports: 48 / 34
+-------------------------------------------------------------------------
+Offset:              1.259ns (Levels of Logic = 1)
+  Source:            OPB_Rst (PAD)
+  Destination:       iic_adc0/GAIN_ENABLE_generate.gain_set_inst/progress_0 (FF)
+  Destination Clock: app_clk rising
+
+  Data Path: OPB_Rst to iic_adc0/GAIN_ENABLE_generate.gain_set_inst/progress_0
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     LUT2:I0->O            4   0.094   0.352  iic_adc0/GAIN_ENABLE_generate.gain_set_inst/progress_or00001 (iic_adc0/GAIN_ENABLE_generate.gain_set_inst/progress_or0000)
+     FDR:R                     0.573          iic_adc0/GAIN_ENABLE_generate.gain_set_inst/progress_0
+    ----------------------------------------
+    Total                      1.259ns (0.907ns logic, 0.352ns route)
+                                       (72.0% logic, 28.0% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'OPB_Clk'
+  Total number of paths / destination ports: 513 / 99
+-------------------------------------------------------------------------
+Offset:              3.947ns (Levels of Logic = 9)
+  Source:            OPB_ABus<20> (PAD)
+  Destination:       iic_adc0/opb_attch_inst/op_fifo_over_reg (FF)
+  Destination Clock: OPB_Clk rising
+
+  Data Path: OPB_ABus<20> to iic_adc0/opb_attch_inst/op_fifo_over_reg
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     LUT5:I0->O            1   0.094   0.000  iic_adc0/opb_attch_inst/Mcompar_addr_match_cmp_le0000_lut<0> (iic_adc0/opb_attch_inst/Mcompar_addr_match_cmp_le0000_lut<0>)
+     MUXCY:S->O            1   0.372   0.000  iic_adc0/opb_attch_inst/Mcompar_addr_match_cmp_le0000_cy<0> (iic_adc0/opb_attch_inst/Mcompar_addr_match_cmp_le0000_cy<0>)
+     MUXCY:CI->O           1   0.026   0.000  iic_adc0/opb_attch_inst/Mcompar_addr_match_cmp_le0000_cy<1> (iic_adc0/opb_attch_inst/Mcompar_addr_match_cmp_le0000_cy<1>)
+     MUXCY:CI->O           1   0.026   0.000  iic_adc0/opb_attch_inst/Mcompar_addr_match_cmp_le0000_cy<2> (iic_adc0/opb_attch_inst/Mcompar_addr_match_cmp_le0000_cy<2>)
+     MUXCY:CI->O           1   0.026   0.000  iic_adc0/opb_attch_inst/Mcompar_addr_match_cmp_le0000_cy<3> (iic_adc0/opb_attch_inst/Mcompar_addr_match_cmp_le0000_cy<3>)
+     MUXCY:CI->O           4   0.254   0.726  iic_adc0/opb_attch_inst/Mcompar_addr_match_cmp_le0000_cy<4> (iic_adc0/opb_attch_inst/addr_match_cmp_le0000)
+     LUT3:I0->O            1   0.094   0.789  iic_adc0/opb_attch_inst/addr_match42 (iic_adc0/opb_attch_inst/addr_match)
+     LUT6:I2->O            2   0.094   0.715  iic_adc0/opb_attch_inst/op_fifo_over_reg_mux000011 (iic_adc0/opb_attch_inst/N0)
+     LUT3:I0->O            1   0.094   0.000  iic_adc0/opb_attch_inst/rx_fifo_over_reg_mux00001 (iic_adc0/opb_attch_inst/rx_fifo_over_reg_mux0000)
+     FDR:D                    -0.018          iic_adc0/opb_attch_inst/rx_fifo_over_reg
+    ----------------------------------------
+    Total                      3.947ns (1.717ns logic, 2.230ns route)
+                                       (43.5% logic, 56.5% route)
+
+=========================================================================
+Timing constraint: Default OFFSET OUT AFTER for Clock 'OPB_Clk'
+  Total number of paths / destination ports: 36 / 27
+-------------------------------------------------------------------------
+Offset:              1.700ns (Levels of Logic = 1)
+  Source:            iic_adc0/opb_attch_inst/Sl_xferAck_reg (FF)
+  Destination:       Sl_DBus<31> (PAD)
+  Source Clock:      OPB_Clk rising
+
+  Data Path: iic_adc0/opb_attch_inst/Sl_xferAck_reg to Sl_DBus<31>
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDR:C->Q             13   0.471   1.135  iic_adc0/opb_attch_inst/Sl_xferAck_reg (iic_adc0/opb_attch_inst/Sl_xferAck_reg)
+     LUT6:I0->O            0   0.094   0.000  iic_adc0/opb_attch_inst/Sl_DBus<31>1 (Sl_DBus<31>)
+    ----------------------------------------
+    Total                      1.700ns (0.565ns logic, 1.135ns route)
+                                       (33.2% logic, 66.8% route)
+
+=========================================================================
+Timing constraint: Default OFFSET OUT AFTER for Clock 'app_clk'
+  Total number of paths / destination ports: 59 / 12
+-------------------------------------------------------------------------
+Offset:              1.716ns (Levels of Logic = 1)
+  Source:            iic_adc0/GAIN_ENABLE_generate.gain_set_inst/progress_0 (FF)
+  Destination:       iic_adc0/GAIN_ENABLE_generate.fab_op_fifo_inst:din<2> (PAD)
+  Source Clock:      app_clk rising
+
+  Data Path: iic_adc0/GAIN_ENABLE_generate.gain_set_inst/progress_0 to iic_adc0/GAIN_ENABLE_generate.fab_op_fifo_inst:din<2>
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDR:C->Q             16   0.471   1.151  iic_adc0/GAIN_ENABLE_generate.gain_set_inst/progress_0 (iic_adc0/GAIN_ENABLE_generate.gain_set_inst/progress_0)
+     LUT6:I0->O            0   0.094   0.000  iic_adc0/GAIN_ENABLE_generate.gain_set_inst/trans_data_reg<2>1 (iic_adc0/GAIN_ENABLE_generate_trans_data<2>)
+    fab_op_fifo:din<2>         0.000          iic_adc0/GAIN_ENABLE_generate.fab_op_fifo_inst
+    ----------------------------------------
+    Total                      1.716ns (0.565ns logic, 1.151ns route)
+                                       (32.9% logic, 67.1% route)
+
+=========================================================================
+Timing constraint: Default path analysis
+  Total number of paths / destination ports: 50 / 28
+-------------------------------------------------------------------------
+Delay:               1.094ns (Levels of Logic = 1)
+  Source:            iic_adc0/cpu_op_fifo_inst:dout<8> (PAD)
+  Destination:       iic_adc0/rx_fifo_inst:wr_en (PAD)
+
+  Data Path: iic_adc0/cpu_op_fifo_inst:dout<8> to iic_adc0/rx_fifo_inst:wr_en
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+    cpu_op_fifo:dout<8>    6   0.000   1.000  iic_adc0/cpu_op_fifo_inst (iic_adc0/cpu_op_fifo_rd_data<8>)
+     LUT5:I0->O            0   0.094   0.000  iic_adc0/rx_fifo_wr_en1 (iic_adc0/rx_fifo_wr_en)
+    rx_fifo:wr_en              0.000          iic_adc0/rx_fifo_inst
+    ----------------------------------------
+    Total                      1.094ns (0.094ns logic, 1.000ns route)
+                                       (8.6% logic, 91.4% route)
+
+=========================================================================
+
+
+Total REAL time to Xst completion: 5.00 secs
+Total CPU time to Xst completion: 5.49 secs
+ 
+--> 
+
+
+Total memory usage is 543884 kilobytes
+
+Number of errors   :    0 (   0 filtered)
+Number of warnings :    8 (   0 filtered)
+Number of infos    :    2 (   0 filtered)
+

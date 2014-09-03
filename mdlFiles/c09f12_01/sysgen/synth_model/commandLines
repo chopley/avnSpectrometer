@@ -1,0 +1,2 @@
+/opt/xilinx/14.7/ISE_DS/ISE/sysgen/bin/lin64/saferun -- /opt/xilinx/14.7/ISE_DS/ISE//bin/lin64/xst -ifn xst_c09f12_01.scr -ofn c09f12_01_cw.syr
+/opt/xilinx/14.7/ISE_DS/ISE/sysgen/bin/lin64/saferun -- /opt/xilinx/14.7/ISE_DS/ISE//bin/lin64/ngcbuild -p xc5vsx95t-1ff1136 c09f12_01_cw c09f12_01_cw_complete.ngc

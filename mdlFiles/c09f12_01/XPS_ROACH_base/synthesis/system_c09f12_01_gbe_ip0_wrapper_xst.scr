@@ -1,0 +1,14 @@
+set -tmpdir /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/synthesis/xst_temp_dir/
+run
+-opt_mode speed
+-netlist_hierarchy as_optimized
+-opt_level 1
+-p xc5vsx95tff1136-1
+-top system_c09f12_01_gbe_ip0_wrapper
+-ifmt MIXED
+-ifn system_c09f12_01_gbe_ip0_wrapper_xst.prj
+-ofn ../implementation/system_c09f12_01_gbe_ip0_wrapper.ngc
+-hierarchy_separator /
+-iobuf NO
+-sd {../implementation}
+-vlgincdir {"/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/pcores/" "/opt/xilinx/14.7/ISE_DS/EDK/hw/XilinxBFMinterface/pcores/" "/opt/xilinx/14.7/ISE_DS/EDK/hw/XilinxProcessorIPLib/pcores/" }

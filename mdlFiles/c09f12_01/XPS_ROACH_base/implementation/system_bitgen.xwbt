@@ -1,0 +1,7 @@
+INFILE=/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/system.ncd
+OUTFILE=/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/system.bit
+FAMILY=Virtex5
+PART=xc5vsx95t-1ff1136
+WORKINGDIR=/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation
+LICENSE=ISE
+USER_INFO=204761482_179619506_210579199_900

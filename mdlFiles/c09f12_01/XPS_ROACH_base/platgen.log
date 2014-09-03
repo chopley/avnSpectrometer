@@ -1,0 +1,1134 @@
+Release 14.7 - platgen Xilinx EDK 14.7 Build EDK_P.20131013
+ (lin64)
+Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
+
+Command Line: platgen -p xc5vsx95tff1136-1 -lang vhdl -intstyle default -msg
+__xps/ise/xmsgprops.lst system.mhs 
+
+Parse /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs ...
+
+Read MPD definitions ...
+WARNING:EDK:4088 - IPNAME: opb_bram_if_cntlr, INSTANCE: c09f12_01_adc_snap0_bram
+   - Superseded core for architecture 'virtex5sx' -
+   /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 478 
+WARNING:EDK:4088 - IPNAME: opb_bram_if_cntlr, INSTANCE: c09f12_01_adc_snap1_bram
+   - Superseded core for architecture 'virtex5sx' -
+   /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 568 
+WARNING:EDK:4088 - IPNAME: opb_bram_if_cntlr, INSTANCE: c09f12_01_eq0 -
+   Superseded core for architecture 'virtex5sx' -
+   /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 778 
+WARNING:EDK:4088 - IPNAME: opb_bram_if_cntlr, INSTANCE: c09f12_01_eq1 -
+   Superseded core for architecture 'virtex5sx' -
+   /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 808 
+WARNING:EDK:4088 - IPNAME: opb_bram_if_cntlr, INSTANCE:
+   c09f12_01_snap_debug_bram - Superseded core for architecture 'virtex5sx' -
+   /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1484 
+WARNING:EDK:4088 - IPNAME: opb_opb_lite, INSTANCE: opb2opb_bridge_opb1 -
+   Superseded core for architecture 'virtex5sx' -
+   /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1528 
+WARNING:EDK:4088 - IPNAME: opb_bram_if_cntlr, INSTANCE: c09f12_01_adc_snap0_bram
+   - Superseded core for architecture 'virtex5sx' -
+   /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 478 
+WARNING:EDK:4088 - IPNAME: opb_bram_if_cntlr, INSTANCE: c09f12_01_adc_snap1_bram
+   - Superseded core for architecture 'virtex5sx' -
+   /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 568 
+WARNING:EDK:4088 - IPNAME: opb_bram_if_cntlr, INSTANCE: c09f12_01_eq0 -
+   Superseded core for architecture 'virtex5sx' -
+   /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 778 
+WARNING:EDK:4088 - IPNAME: opb_bram_if_cntlr, INSTANCE: c09f12_01_eq1 -
+   Superseded core for architecture 'virtex5sx' -
+   /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 808 
+WARNING:EDK:4088 - IPNAME: opb_bram_if_cntlr, INSTANCE:
+   c09f12_01_snap_debug_bram - Superseded core for architecture 'virtex5sx' -
+   /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1484 
+WARNING:EDK:4088 - IPNAME: opb_opb_lite, INSTANCE: opb2opb_bridge_opb1 -
+   Superseded core for architecture 'virtex5sx' -
+   /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1528 
+
+Overriding IP level properties ...
+
+Computing clock values...
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:740 - Cannot determine the input clock associated with port :
+   infrastructure_inst:epb_clk. Clock DRCs will not be performed on this core
+   and cores connected to it. 
+INFO:EDK:1039 - Did not update the value for parameter:
+   c09f12_01_adc_snap0_bram:c_opb_clk_period_ps. Top-level frequency could not
+   be propagated to this IP. Please make sure that you have specified the
+   frequency of the top-level clock port, and that the clocks are properly
+   connected.
+INFO:EDK:1039 - Did not update the value for parameter:
+   c09f12_01_adc_snap1_bram:c_opb_clk_period_ps. Top-level frequency could not
+   be propagated to this IP. Please make sure that you have specified the
+   frequency of the top-level clock port, and that the clocks are properly
+   connected.
+INFO:EDK:1039 - Did not update the value for parameter:
+   c09f12_01_eq0:c_opb_clk_period_ps. Top-level frequency could not be
+   propagated to this IP. Please make sure that you have specified the frequency
+   of the top-level clock port, and that the clocks are properly connected.
+INFO:EDK:1039 - Did not update the value for parameter:
+   c09f12_01_eq1:c_opb_clk_period_ps. Top-level frequency could not be
+   propagated to this IP. Please make sure that you have specified the frequency
+   of the top-level clock port, and that the clocks are properly connected.
+INFO:EDK:1039 - Did not update the value for parameter:
+   c09f12_01_snap_debug_bram:c_opb_clk_period_ps. Top-level frequency could not
+   be propagated to this IP. Please make sure that you have specified the
+   frequency of the top-level clock port, and that the clocks are properly
+   connected.
+
+Performing IP level DRCs on properties...
+
+Running DRC Tcl procedures for OPTION IPLEVEL_DRC_PROC...
+Address Map for Processor epb_opb_bridge_inst
+  (0000000000-0x0000ffff) sys_block_inst	opb0
+  (0x00020000-0x0002ffff) opb_katadccontroller_0	opb0
+  (0x00040000-0x000407ff) iic_adc0	opb0
+  (0x00070000-0x0007ffff) qdr0_sniffer	opb0
+  (0x01000000-0x010000ff) c09f12_01_a0_fd0	opb0
+  (0x01000100-0x010001ff) c09f12_01_a0_fd1	opb0
+  (0x01000200-0x010002ff) c09f12_01_a1_fd0	opb0
+  (0x01000300-0x010003ff) c09f12_01_a1_fd1	opb0
+  (0x01000400-0x010004ff) c09f12_01_adc_ctrl0	opb0
+  (0x01000500-0x010005ff) c09f12_01_adc_ctrl1	opb0
+  (0x01001000-0x01001fff) c09f12_01_adc_snap0_bram	opb0
+  (0x01002000-0x010020ff) c09f12_01_adc_snap0_ctrl	opb0
+  (0x01002100-0x010021ff) c09f12_01_adc_snap0_status	opb0
+  (0x01002200-0x010022ff) c09f12_01_adc_snap0_tr_en_cnt	opb0
+  (0x01002300-0x010023ff) c09f12_01_adc_snap0_trig_offset	opb0
+  (0x01002400-0x010024ff) c09f12_01_adc_snap0_val	opb0
+  (0x01003000-0x01003fff) c09f12_01_adc_snap1_bram	opb0
+  (0x01004000-0x010040ff) c09f12_01_adc_snap1_ctrl	opb0
+  (0x01004100-0x010041ff) c09f12_01_adc_snap1_status	opb0
+  (0x01004200-0x010042ff) c09f12_01_adc_snap1_tr_en_cnt	opb0
+  (0x01004300-0x010043ff) c09f12_01_adc_snap1_trig_offset	opb0
+  (0x01004400-0x010044ff) c09f12_01_adc_snap1_val	opb0
+  (0x01004500-0x010045ff) c09f12_01_adc_sum_sq0	opb0
+  (0x01004600-0x010046ff) c09f12_01_adc_sum_sq1	opb0
+  (0x01004700-0x010047ff) c09f12_01_board_id	opb0
+  (0x01004800-0x010048ff) c09f12_01_clk_frequency	opb0
+  (0x01004900-0x010049ff) c09f12_01_coarse_ctrl	opb0
+  (0x01004a00-0x01004aff) c09f12_01_coarse_delay0	opb0
+  (0x01004b00-0x01004bff) c09f12_01_coarse_delay1	opb0
+  (0x01080000-0x010800ff) c09f12_01_control	opb0->opb2opb_bridge_opb1->opb1
+  (0x01080100-0x010801ff)
+c09f12_01_delay_tr_status0	opb0->opb2opb_bridge_opb1->opb1
+  (0x01080200-0x010802ff)
+c09f12_01_delay_tr_status1	opb0->opb2opb_bridge_opb1->opb1
+  (0x01084000-0x01087fff) c09f12_01_eq0	opb0->opb2opb_bridge_opb1->opb1
+  (0x01088000-0x0108bfff) c09f12_01_eq1	opb0->opb2opb_bridge_opb1->opb1
+  (0x0108c000-0x0108c0ff) c09f12_01_fine_ctrl	opb0->opb2opb_bridge_opb1->opb1
+  (0x0108c100-0x0108c1ff) c09f12_01_fstatus0	opb0->opb2opb_bridge_opb1->opb1
+  (0x0108c200-0x0108c2ff) c09f12_01_fstatus1	opb0->opb2opb_bridge_opb1->opb1
+  (0x01090000-0x01093fff) c09f12_01_gbe0	opb0->opb2opb_bridge_opb1->opb1
+  (0x01094000-0x010940ff) c09f12_01_gbe_ip0	opb0->opb2opb_bridge_opb1->opb1
+  (0x01094100-0x010941ff) c09f12_01_gbe_port	opb0->opb2opb_bridge_opb1->opb1
+  (0x01094200-0x010942ff) c09f12_01_gbe_tx_cnt0	opb0->opb2opb_bridge_opb1->opb1
+  (0x01094300-0x010943ff)
+c09f12_01_gbe_tx_err_cnt0	opb0->opb2opb_bridge_opb1->opb1
+  (0x01094400-0x010944ff) c09f12_01_ld_time_lsw0	opb0->opb2opb_bridge_opb1->opb1
+  (0x01094500-0x010945ff) c09f12_01_ld_time_lsw1	opb0->opb2opb_bridge_opb1->opb1
+  (0x01094600-0x010946ff) c09f12_01_ld_time_msw0	opb0->opb2opb_bridge_opb1->opb1
+  (0x01094700-0x010947ff) c09f12_01_ld_time_msw1	opb0->opb2opb_bridge_opb1->opb1
+  (0x01094800-0x010948ff) c09f12_01_mcount_lsw	opb0->opb2opb_bridge_opb1->opb1
+  (0x01094900-0x010949ff) c09f12_01_mcount_msw	opb0->opb2opb_bridge_opb1->opb1
+  (0x01094a00-0x01094aff) c09f12_01_pps_count	opb0->opb2opb_bridge_opb1->opb1
+  (0x01094b00-0x01094bff) c09f12_01_rcs_app	opb0->opb2opb_bridge_opb1->opb1
+  (0x01094c00-0x01094cff) c09f12_01_rcs_lib	opb0->opb2opb_bridge_opb1->opb1
+  (0x01094d00-0x01094dff) c09f12_01_rcs_user	opb0->opb2opb_bridge_opb1->opb1
+  (0x01094e00-0x01094eff)
+c09f12_01_snap_debug_addr	opb0->opb2opb_bridge_opb1->opb1
+  (0x01096000-0x01097fff)
+c09f12_01_snap_debug_bram	opb0->opb2opb_bridge_opb1->opb1
+  (0x01098000-0x010980ff)
+c09f12_01_snap_debug_ctrl	opb0->opb2opb_bridge_opb1->opb1
+  (0x01098100-0x010981ff) c09f12_01_trig_level	opb0->opb2opb_bridge_opb1->opb1
+  (0x02000000-0x027fffff) qdr0_sniffer	opb0
+INFO:EDK:4130 - IPNAME: opb_v20, INSTANCE:opb0 - tool is overriding PARAMETER
+   C_NUM_MASTERS value to 1 -
+   /opt/xilinx/14.7/ISE_DS/EDK/hw/XilinxProcessorIPLib/pcores/opb_v20_v1_10_c/da
+   ta/opb_v20_v2_1_0.mpd line 74 
+INFO:EDK:4130 - IPNAME: opb_v20, INSTANCE:opb0 - tool is overriding PARAMETER
+   C_NUM_SLAVES value to 31 -
+   /opt/xilinx/14.7/ISE_DS/EDK/hw/XilinxProcessorIPLib/pcores/opb_v20_v1_10_c/da
+   ta/opb_v20_v2_1_0.mpd line 75 
+INFO:EDK:4130 - IPNAME: opb_v20, INSTANCE:opb1 - tool is overriding PARAMETER
+   C_NUM_MASTERS value to 1 -
+   /opt/xilinx/14.7/ISE_DS/EDK/hw/XilinxProcessorIPLib/pcores/opb_v20_v1_10_c/da
+   ta/opb_v20_v2_1_0.mpd line 74 
+INFO:EDK:4130 - IPNAME: opb_v20, INSTANCE:opb1 - tool is overriding PARAMETER
+   C_NUM_SLAVES value to 27 -
+   /opt/xilinx/14.7/ISE_DS/EDK/hw/XilinxProcessorIPLib/pcores/opb_v20_v1_10_c/da
+   ta/opb_v20_v2_1_0.mpd line 75 
+
+Checking platform address map ...
+
+Checking platform configuration ...
+IPNAME: opb_v20, INSTANCE: opb0 - 1 master(s) : 31 slave(s) 
+IPNAME: opb_v20, INSTANCE: opb1 - 1 master(s) : 27 slave(s) 
+
+Checking port drivers...
+WARNING:EDK:4180 - PORT: xaui_reset, CONNECTOR: xaui_reset - No driver found.
+   Port will be driven to GND -
+   /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/pcores/kat_ten_gb_eth_
+   v1_00_a/data/kat_ten_gb_eth_v2_1_0.mpd line 77 
+WARNING:EDK:4180 - PORT: xaui_reset, CONNECTOR: xgmii0_xaui_reset - No driver
+   found. Port will be driven to GND -
+   /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/pcores/xaui_phy_v1_00_
+   a/data/xaui_phy_v2_1_0.mpd line 48 
+WARNING:EDK:4181 - PORT: sys_clk, CONNECTOR: sys_clk - floating connection -
+   /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 100 
+WARNING:EDK:4181 - PORT: sys_clk90, CONNECTOR: sys_clk90 - floating connection -
+   /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 101 
+WARNING:EDK:4181 - PORT: sys_clk180, CONNECTOR: sys_clk180 - floating connection
+   - /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 102 
+WARNING:EDK:4181 - PORT: sys_clk270, CONNECTOR: sys_clk270 - floating connection
+   - /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 103 
+WARNING:EDK:4181 - PORT: sys_clk_lock, CONNECTOR: sys_clk_lock - floating
+   connection -
+   /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 104 
+WARNING:EDK:4181 - PORT: sys_clk2x, CONNECTOR: sys_clk2x - floating connection -
+   /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 105 
+WARNING:EDK:4181 - PORT: sys_clk2x90, CONNECTOR: sys_clk2x90 - floating
+   connection -
+   /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 106 
+WARNING:EDK:4181 - PORT: sys_clk2x180, CONNECTOR: sys_clk2x180 - floating
+   connection -
+   /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 107 
+WARNING:EDK:4181 - PORT: sys_clk2x270, CONNECTOR: sys_clk2x270 - floating
+   connection -
+   /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 108 
+WARNING:EDK:4181 - PORT: aux0_clk, CONNECTOR: aux0_clk - floating connection -
+   /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 110 
+WARNING:EDK:4181 - PORT: aux0_clk90, CONNECTOR: aux0_clk90 - floating connection
+   - /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 111 
+WARNING:EDK:4181 - PORT: aux0_clk180, CONNECTOR: aux0_clk180 - floating
+   connection -
+   /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 112 
+WARNING:EDK:4181 - PORT: aux0_clk270, CONNECTOR: aux0_clk270 - floating
+   connection -
+   /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 113 
+WARNING:EDK:4181 - PORT: aux1_clk, CONNECTOR: aux1_clk - floating connection -
+   /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 114 
+WARNING:EDK:4181 - PORT: aux1_clk90, CONNECTOR: aux1_clk90 - floating connection
+   - /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 115 
+WARNING:EDK:4181 - PORT: aux1_clk180, CONNECTOR: aux1_clk180 - floating
+   connection -
+   /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 116 
+WARNING:EDK:4181 - PORT: aux1_clk270, CONNECTOR: aux1_clk270 - floating
+   connection -
+   /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 117 
+WARNING:EDK:4181 - PORT: aux0_clk2x, CONNECTOR: aux0_clk2x - floating connection
+   - /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 118 
+WARNING:EDK:4181 - PORT: aux0_clk2x90, CONNECTOR: aux0_clk2x90 - floating
+   connection -
+   /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 119 
+WARNING:EDK:4181 - PORT: aux0_clk2x180, CONNECTOR: aux0_clk2x180 - floating
+   connection -
+   /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 120 
+WARNING:EDK:4181 - PORT: aux0_clk2x270, CONNECTOR: aux0_clk2x270 - floating
+   connection -
+   /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 121 
+WARNING:EDK:4181 - PORT: soft_reset, CONNECTOR: soft_reset - floating connection
+   - /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 205 
+WARNING:EDK:4181 - PORT: mgt_clk_1, CONNECTOR: mgt_clk_1 - floating connection -
+   /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 239 
+WARNING:EDK:4181 - PORT: ctrl_dcm_locked, CONNECTOR: adc0_dcm_locked - floating
+   connection -
+   /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 999 
+WARNING:EDK:4181 - PORT: slave_rd_dvld, CONNECTOR: slave_rd_dvld - floating
+   connection -
+   /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/pcores/opb_qdr_sniffer
+   _v1_00_a/data/opb_qdr_sniffer_v2_1_0.mpd line 83 
+
+Performing Clock DRCs...
+INFO:EDK:4060 - INSTANCE: c09f12_01_adc_snap0_bram, PARAMETER:
+   c_opb_clk_period_ps - Did not implement clock DRCs for the parameter.
+   Top-level frequency could not be propagated to this IP. Please make sure that
+   you have specified the frequency of the top-level clock port, and that the
+   clocks are properly connected.
+INFO:EDK:4060 - INSTANCE: c09f12_01_adc_snap1_bram, PARAMETER:
+   c_opb_clk_period_ps - Did not implement clock DRCs for the parameter.
+   Top-level frequency could not be propagated to this IP. Please make sure that
+   you have specified the frequency of the top-level clock port, and that the
+   clocks are properly connected.
+INFO:EDK:4060 - INSTANCE: c09f12_01_eq0, PARAMETER: c_opb_clk_period_ps - Did
+   not implement clock DRCs for the parameter. Top-level frequency could not be
+   propagated to this IP. Please make sure that you have specified the frequency
+   of the top-level clock port, and that the clocks are properly connected.
+INFO:EDK:4060 - INSTANCE: c09f12_01_eq1, PARAMETER: c_opb_clk_period_ps - Did
+   not implement clock DRCs for the parameter. Top-level frequency could not be
+   propagated to this IP. Please make sure that you have specified the frequency
+   of the top-level clock port, and that the clocks are properly connected.
+INFO:EDK:4060 - INSTANCE: c09f12_01_snap_debug_bram, PARAMETER:
+   c_opb_clk_period_ps - Did not implement clock DRCs for the parameter.
+   Top-level frequency could not be propagated to this IP. Please make sure that
+   you have specified the frequency of the top-level clock port, and that the
+   clocks are properly connected.
+
+Performing Reset DRCs...
+
+Overriding system level properties...
+
+Running system level update procedures...
+
+Running UPDATE Tcl procedures for OPTION SYSLEVEL_UPDATE_PROC...
+
+Running system level DRCs...
+
+Performing System level DRCs on properties...
+
+Running DRC Tcl procedures for OPTION SYSLEVEL_DRC_PROC...
+
+Running UPDATE Tcl procedures for OPTION PLATGEN_SYSLEVEL_UPDATE_PROC...
+Release 14.7 - Xilinx CORE Generator P.20131013 (lin64)
+Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
+All runtime messages will be recorded in
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01_
+adc_snap0_bram_ramblk_wrapper/coregen.log
+Wrote CGP file for project 'coregen'.
+Resolving generics for 'bram'...
+Applying external generics to 'bram'...
+Delivering associated files for 'bram'...
+Delivering EJava files for 'bram'...
+Generating implementation netlist for 'bram'...
+Running synthesis for 'bram'
+Running ngcbuild...
+Writing VEO instantiation template for 'bram'...
+Writing Verilog behavioral simulation model for 'bram'...
+Delivered 1 file into directory
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01_
+adc_snap0_bram_ramblk_wrapper/tmp/_cg/bram
+Generating ASY schematic symbol...
+Generating metadata file...
+Generating ISE project file for 'bram'...
+Generating ISE project...
+XCO file found: bram.xco
+XMDF file found: bram_xmdf.tcl
+Adding
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01_
+adc_snap0_bram_ramblk_wrapper/tmp/_cg/bram.asy -view all -origin_type imported
+Adding
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01_
+adc_snap0_bram_ramblk_wrapper/tmp/_cg/bram.ngc -view all -origin_type created
+Checking file
+"/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01
+_adc_snap0_bram_ramblk_wrapper/tmp/_cg/bram.ngc" for project device match ...
+File
+"/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01
+_adc_snap0_bram_ramblk_wrapper/tmp/_cg/bram.ngc" device information matches
+project device.
+Adding
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01_
+adc_snap0_bram_ramblk_wrapper/tmp/_cg/bram.v -view all -origin_type created
+INFO:HDLCompiler:1845 - Analyzing Verilog file
+   "/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12
+   _01_adc_snap0_bram_ramblk_wrapper/tmp/_cg/bram.v" into library work
+INFO:ProjectMgmt - Parsing design hierarchy completed successfully.
+Adding
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01_
+adc_snap0_bram_ramblk_wrapper/tmp/_cg/bram.veo -view all -origin_type imported
+INFO:TclTasksC:2116 - The automatic calculation of top has been turned-off.
+   Please set the new top explicitly by running the "project set top" command.
+   To re-calculate the new top automatically, set the "Auto Implementation Top"
+   property to true.
+Top level has been set to "/bram"
+Generating README file...
+Generating FLIST file...
+Moving files to output directory...
+Finished moving files to output directory
+Saved CGP file for project 'coregen'.
+Release 14.7 - Xilinx CORE Generator P.20131013 (lin64)
+Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
+All runtime messages will be recorded in
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01_
+adc_snap1_bram_ramblk_wrapper/coregen.log
+Wrote CGP file for project 'coregen'.
+Resolving generics for 'bram'...
+Applying external generics to 'bram'...
+Delivering associated files for 'bram'...
+Delivering EJava files for 'bram'...
+Generating implementation netlist for 'bram'...
+Running synthesis for 'bram'
+Running ngcbuild...
+Writing VEO instantiation template for 'bram'...
+Writing Verilog behavioral simulation model for 'bram'...
+Delivered 1 file into directory
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01_
+adc_snap1_bram_ramblk_wrapper/tmp/_cg/bram
+Generating ASY schematic symbol...
+Generating metadata file...
+Generating ISE project file for 'bram'...
+Generating ISE project...
+XCO file found: bram.xco
+XMDF file found: bram_xmdf.tcl
+Adding
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01_
+adc_snap1_bram_ramblk_wrapper/tmp/_cg/bram.asy -view all -origin_type imported
+Adding
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01_
+adc_snap1_bram_ramblk_wrapper/tmp/_cg/bram.ngc -view all -origin_type created
+Checking file
+"/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01
+_adc_snap1_bram_ramblk_wrapper/tmp/_cg/bram.ngc" for project device match ...
+File
+"/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01
+_adc_snap1_bram_ramblk_wrapper/tmp/_cg/bram.ngc" device information matches
+project device.
+Adding
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01_
+adc_snap1_bram_ramblk_wrapper/tmp/_cg/bram.v -view all -origin_type created
+INFO:HDLCompiler:1845 - Analyzing Verilog file
+   "/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12
+   _01_adc_snap1_bram_ramblk_wrapper/tmp/_cg/bram.v" into library work
+INFO:ProjectMgmt - Parsing design hierarchy completed successfully.
+Adding
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01_
+adc_snap1_bram_ramblk_wrapper/tmp/_cg/bram.veo -view all -origin_type imported
+INFO:TclTasksC:2116 - The automatic calculation of top has been turned-off.
+   Please set the new top explicitly by running the "project set top" command.
+   To re-calculate the new top automatically, set the "Auto Implementation Top"
+   property to true.
+Top level has been set to "/bram"
+Generating README file...
+Generating FLIST file...
+Moving files to output directory...
+Finished moving files to output directory
+Saved CGP file for project 'coregen'.
+Release 14.7 - Xilinx CORE Generator P.20131013 (lin64)
+Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
+All runtime messages will be recorded in
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01_
+eq0_ramblk_wrapper/coregen.log
+Wrote CGP file for project 'coregen'.
+Resolving generics for 'bram'...
+Applying external generics to 'bram'...
+Delivering associated files for 'bram'...
+Delivering EJava files for 'bram'...
+Generating implementation netlist for 'bram'...
+Running synthesis for 'bram'
+Running ngcbuild...
+Writing VEO instantiation template for 'bram'...
+Writing Verilog behavioral simulation model for 'bram'...
+Delivered 1 file into directory
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01_
+eq0_ramblk_wrapper/tmp/_cg/bram
+Generating ASY schematic symbol...
+Generating metadata file...
+Generating ISE project file for 'bram'...
+Generating ISE project...
+XCO file found: bram.xco
+XMDF file found: bram_xmdf.tcl
+Adding
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01_
+eq0_ramblk_wrapper/tmp/_cg/bram.asy -view all -origin_type imported
+Adding
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01_
+eq0_ramblk_wrapper/tmp/_cg/bram.ngc -view all -origin_type created
+Checking file
+"/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01
+_eq0_ramblk_wrapper/tmp/_cg/bram.ngc" for project device match ...
+File
+"/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01
+_eq0_ramblk_wrapper/tmp/_cg/bram.ngc" device information matches project device.
+Adding
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01_
+eq0_ramblk_wrapper/tmp/_cg/bram.v -view all -origin_type created
+INFO:HDLCompiler:1845 - Analyzing Verilog file
+   "/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12
+   _01_eq0_ramblk_wrapper/tmp/_cg/bram.v" into library work
+INFO:ProjectMgmt - Parsing design hierarchy completed successfully.
+Adding
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01_
+eq0_ramblk_wrapper/tmp/_cg/bram.veo -view all -origin_type imported
+INFO:TclTasksC:2116 - The automatic calculation of top has been turned-off.
+   Please set the new top explicitly by running the "project set top" command.
+   To re-calculate the new top automatically, set the "Auto Implementation Top"
+   property to true.
+Top level has been set to "/bram"
+Generating README file...
+Generating FLIST file...
+Moving files to output directory...
+Finished moving files to output directory
+Saved CGP file for project 'coregen'.
+Release 14.7 - Xilinx CORE Generator P.20131013 (lin64)
+Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
+All runtime messages will be recorded in
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01_
+eq1_ramblk_wrapper/coregen.log
+Wrote CGP file for project 'coregen'.
+Resolving generics for 'bram'...
+Applying external generics to 'bram'...
+Delivering associated files for 'bram'...
+Delivering EJava files for 'bram'...
+Generating implementation netlist for 'bram'...
+Running synthesis for 'bram'
+Running ngcbuild...
+Writing VEO instantiation template for 'bram'...
+Writing Verilog behavioral simulation model for 'bram'...
+Delivered 1 file into directory
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01_
+eq1_ramblk_wrapper/tmp/_cg/bram
+Generating ASY schematic symbol...
+Generating metadata file...
+Generating ISE project file for 'bram'...
+Generating ISE project...
+XCO file found: bram.xco
+XMDF file found: bram_xmdf.tcl
+Adding
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01_
+eq1_ramblk_wrapper/tmp/_cg/bram.asy -view all -origin_type imported
+Adding
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01_
+eq1_ramblk_wrapper/tmp/_cg/bram.ngc -view all -origin_type created
+Checking file
+"/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01
+_eq1_ramblk_wrapper/tmp/_cg/bram.ngc" for project device match ...
+File
+"/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01
+_eq1_ramblk_wrapper/tmp/_cg/bram.ngc" device information matches project device.
+Adding
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01_
+eq1_ramblk_wrapper/tmp/_cg/bram.v -view all -origin_type created
+INFO:HDLCompiler:1845 - Analyzing Verilog file
+   "/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12
+   _01_eq1_ramblk_wrapper/tmp/_cg/bram.v" into library work
+INFO:ProjectMgmt - Parsing design hierarchy completed successfully.
+Adding
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01_
+eq1_ramblk_wrapper/tmp/_cg/bram.veo -view all -origin_type imported
+INFO:TclTasksC:2116 - The automatic calculation of top has been turned-off.
+   Please set the new top explicitly by running the "project set top" command.
+   To re-calculate the new top automatically, set the "Auto Implementation Top"
+   property to true.
+Top level has been set to "/bram"
+Generating README file...
+Generating FLIST file...
+Moving files to output directory...
+Finished moving files to output directory
+Saved CGP file for project 'coregen'.
+Release 14.7 - Xilinx CORE Generator P.20131013 (lin64)
+Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
+All runtime messages will be recorded in
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01_
+snap_debug_bram_ramblk_wrapper/coregen.log
+Wrote CGP file for project 'coregen'.
+Resolving generics for 'bram'...
+Applying external generics to 'bram'...
+Delivering associated files for 'bram'...
+Delivering EJava files for 'bram'...
+Generating implementation netlist for 'bram'...
+Running synthesis for 'bram'
+Running ngcbuild...
+Writing VEO instantiation template for 'bram'...
+Writing Verilog behavioral simulation model for 'bram'...
+Delivered 1 file into directory
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01_
+snap_debug_bram_ramblk_wrapper/tmp/_cg/bram
+Generating ASY schematic symbol...
+Generating metadata file...
+Generating ISE project file for 'bram'...
+Generating ISE project...
+XCO file found: bram.xco
+XMDF file found: bram_xmdf.tcl
+Adding
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01_
+snap_debug_bram_ramblk_wrapper/tmp/_cg/bram.asy -view all -origin_type imported
+Adding
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01_
+snap_debug_bram_ramblk_wrapper/tmp/_cg/bram.ngc -view all -origin_type created
+Checking file
+"/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01
+_snap_debug_bram_ramblk_wrapper/tmp/_cg/bram.ngc" for project device match ...
+File
+"/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01
+_snap_debug_bram_ramblk_wrapper/tmp/_cg/bram.ngc" device information matches
+project device.
+Adding
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01_
+snap_debug_bram_ramblk_wrapper/tmp/_cg/bram.v -view all -origin_type created
+INFO:HDLCompiler:1845 - Analyzing Verilog file
+   "/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12
+   _01_snap_debug_bram_ramblk_wrapper/tmp/_cg/bram.v" into library work
+INFO:ProjectMgmt - Parsing design hierarchy completed successfully.
+Adding
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/implementation/c09f12_01_
+snap_debug_bram_ramblk_wrapper/tmp/_cg/bram.veo -view all -origin_type imported
+INFO:TclTasksC:2116 - The automatic calculation of top has been turned-off.
+   Please set the new top explicitly by running the "project set top" command.
+   To re-calculate the new top automatically, set the "Auto Implementation Top"
+   property to true.
+Top level has been set to "/bram"
+Generating README file...
+Generating FLIST file...
+Moving files to output directory...
+Finished moving files to output directory
+Saved CGP file for project 'coregen'.
+
+Modify defaults ...
+
+Creating stub ...
+
+Processing licensed instances ...
+Completion time: 0.00 seconds
+
+Creating hardware output directories ...
+
+Managing hardware (BBD-specified) netlist files ...
+IPNAME:c09f12_01 INSTANCE:c09f12_01_xsg_core_config -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 249 -
+Copying (BBD-specified) netlist files.
+IPNAME:bram_block_custom INSTANCE:c09f12_01_adc_snap0_bram_ramblk -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 460 -
+Copying (BBD-specified) netlist files.
+IPNAME:bram_block_custom INSTANCE:c09f12_01_adc_snap1_bram_ramblk -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 550 -
+Copying (BBD-specified) netlist files.
+IPNAME:bram_block_custom INSTANCE:c09f12_01_eq0_ramblk -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 760 -
+Copying (BBD-specified) netlist files.
+IPNAME:bram_block_custom INSTANCE:c09f12_01_eq1_ramblk -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 790 -
+Copying (BBD-specified) netlist files.
+IPNAME:kat_ten_gb_eth INSTANCE:c09f12_01_gbe0 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 856 -
+Copying (BBD-specified) netlist files.
+IPNAME:xaui_phy INSTANCE:xaui_phy_0 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 900 -
+Copying (BBD-specified) netlist files.
+IPNAME:kat_adc_interface INSTANCE:c09f12_01_katadc0 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 959 -
+Copying (BBD-specified) netlist files.
+IPNAME:kat_adc_iic_controller INSTANCE:iic_adc0 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1023 -
+Copying (BBD-specified) netlist files.
+IPNAME:bram_block_custom INSTANCE:c09f12_01_snap_debug_bram_ramblk -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1466 -
+Copying (BBD-specified) netlist files.
+
+Managing cache ...
+
+Elaborating instances ...
+
+Writing HDL for elaborated instances ...
+
+Inserting wrapper level ...
+Completion time: 0.00 seconds
+
+Constructing platform-level connectivity ...
+Completion time: 1.00 seconds
+
+Writing (top-level) BMM ...
+
+Writing (top-level and wrappers) HDL ...
+
+Generating synthesis project file ...
+
+Running XST synthesis ...
+
+INFO:EDK:4211 - The following instances are synthesized with XST. The MPD option
+   IMP_NETLIST=TRUE indicates that a NGC file is to be produced using XST
+   synthesis. IMP_NETLIST=FALSE (default) instances are not synthesized. 
+INSTANCE:opb_katadccontroller_0 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 66 -
+Running XST synthesis
+INSTANCE:infrastructure_inst -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 87 -
+Running XST synthesis
+INSTANCE:reset_block_inst -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 128 -
+Running XST synthesis
+INSTANCE:opb0 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 138 -
+Running XST synthesis
+INSTANCE:epb_opb_bridge_inst -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 147 -
+Running XST synthesis
+INSTANCE:epb_infrastructure_inst -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 165 -
+Running XST synthesis
+INSTANCE:sys_block_inst -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 190 -
+Running XST synthesis
+INSTANCE:xaui_infrastructure_inst -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 212 -
+Running XST synthesis
+INSTANCE:c09f12_01_xsg_core_config -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 249 -
+Running XST synthesis
+INSTANCE:c09f12_01_a0_fd0 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 388 -
+Running XST synthesis
+INSTANCE:c09f12_01_a0_fd1 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 400 -
+Running XST synthesis
+INSTANCE:c09f12_01_a1_fd0 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 412 -
+Running XST synthesis
+INSTANCE:c09f12_01_a1_fd1 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 424 -
+Running XST synthesis
+INSTANCE:c09f12_01_adc_ctrl0 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 436 -
+Running XST synthesis
+INSTANCE:c09f12_01_adc_ctrl1 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 448 -
+Running XST synthesis
+INSTANCE:c09f12_01_adc_snap0_bram_ramblk -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 460 -
+Running XST synthesis
+INSTANCE:c09f12_01_adc_snap0_bram -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 478 -
+Running XST synthesis
+INSTANCE:c09f12_01_adc_snap0_ctrl -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 490 -
+Running XST synthesis
+INSTANCE:c09f12_01_adc_snap0_status -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 502 -
+Running XST synthesis
+INSTANCE:c09f12_01_adc_snap0_tr_en_cnt -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 514 -
+Running XST synthesis
+INSTANCE:c09f12_01_adc_snap0_trig_offset -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 526 -
+Running XST synthesis
+INSTANCE:c09f12_01_adc_snap0_val -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 538 -
+Running XST synthesis
+INSTANCE:c09f12_01_adc_snap1_bram_ramblk -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 550 -
+Running XST synthesis
+INSTANCE:c09f12_01_adc_snap1_bram -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 568 -
+Running XST synthesis
+INSTANCE:c09f12_01_adc_snap1_ctrl -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 580 -
+Running XST synthesis
+INSTANCE:c09f12_01_adc_snap1_status -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 592 -
+Running XST synthesis
+INSTANCE:c09f12_01_adc_snap1_tr_en_cnt -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 604 -
+Running XST synthesis
+INSTANCE:c09f12_01_adc_snap1_trig_offset -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 616 -
+Running XST synthesis
+INSTANCE:c09f12_01_adc_snap1_val -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 628 -
+Running XST synthesis
+INSTANCE:c09f12_01_adc_sum_sq0 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 640 -
+Running XST synthesis
+INSTANCE:c09f12_01_adc_sum_sq1 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 652 -
+Running XST synthesis
+INSTANCE:c09f12_01_board_id -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 664 -
+Running XST synthesis
+INSTANCE:c09f12_01_clk_frequency -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 676 -
+Running XST synthesis
+INSTANCE:c09f12_01_coarse_ctrl -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 688 -
+Running XST synthesis
+INSTANCE:c09f12_01_coarse_delay0 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 700 -
+Running XST synthesis
+INSTANCE:c09f12_01_coarse_delay1 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 712 -
+Running XST synthesis
+INSTANCE:c09f12_01_control -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 724 -
+Running XST synthesis
+INSTANCE:c09f12_01_delay_tr_status0 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 736 -
+Running XST synthesis
+INSTANCE:c09f12_01_delay_tr_status1 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 748 -
+Running XST synthesis
+INSTANCE:c09f12_01_eq0_ramblk -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 760 -
+Running XST synthesis
+INSTANCE:c09f12_01_eq0 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 778 -
+Running XST synthesis
+INSTANCE:c09f12_01_eq1_ramblk -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 790 -
+Running XST synthesis
+INSTANCE:c09f12_01_eq1 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 808 -
+Running XST synthesis
+INSTANCE:c09f12_01_fine_ctrl -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 820 -
+Running XST synthesis
+INSTANCE:c09f12_01_fstatus0 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 832 -
+Running XST synthesis
+INSTANCE:c09f12_01_fstatus1 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 844 -
+Running XST synthesis
+INSTANCE:c09f12_01_gbe0 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 856 -
+Running XST synthesis
+INSTANCE:xaui_phy_0 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 900 -
+Running XST synthesis
+INSTANCE:c09f12_01_gbe_ip0 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 911 -
+Running XST synthesis
+INSTANCE:c09f12_01_gbe_port -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 923 -
+Running XST synthesis
+INSTANCE:c09f12_01_gbe_tx_cnt0 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 935 -
+Running XST synthesis
+INSTANCE:c09f12_01_gbe_tx_err_cnt0 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 947 -
+Running XST synthesis
+INSTANCE:c09f12_01_katadc0 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 959 -
+Running XST synthesis
+INSTANCE:iic_adc0 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1023 -
+Running XST synthesis
+INSTANCE:iic_infrastructure_adc0 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1048 -
+Running XST synthesis
+INSTANCE:c09f12_01_ld_time_lsw0 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1062 -
+Running XST synthesis
+INSTANCE:c09f12_01_ld_time_lsw1 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1074 -
+Running XST synthesis
+INSTANCE:c09f12_01_ld_time_msw0 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1086 -
+Running XST synthesis
+INSTANCE:c09f12_01_ld_time_msw1 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1098 -
+Running XST synthesis
+INSTANCE:c09f12_01_leds_roach_gpioa0 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1110 -
+Running XST synthesis
+INSTANCE:c09f12_01_leds_roach_gpioa1 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1125 -
+Running XST synthesis
+INSTANCE:c09f12_01_leds_roach_gpioa2 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1140 -
+Running XST synthesis
+INSTANCE:c09f12_01_leds_roach_gpioa3 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1155 -
+Running XST synthesis
+INSTANCE:c09f12_01_leds_roach_gpioa4 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1170 -
+Running XST synthesis
+INSTANCE:c09f12_01_leds_roach_gpioa5 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1185 -
+Running XST synthesis
+INSTANCE:c09f12_01_leds_roach_gpioa6 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1200 -
+Running XST synthesis
+INSTANCE:c09f12_01_leds_roach_gpioa7 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1215 -
+Running XST synthesis
+INSTANCE:c09f12_01_leds_roach_gpioa_oe -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1230 -
+Running XST synthesis
+INSTANCE:c09f12_01_leds_roach_led0 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1245 -
+Running XST synthesis
+INSTANCE:c09f12_01_leds_roach_led1 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1260 -
+Running XST synthesis
+INSTANCE:c09f12_01_leds_roach_led2 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1275 -
+Running XST synthesis
+INSTANCE:c09f12_01_leds_roach_led3 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1290 -
+Running XST synthesis
+INSTANCE:c09f12_01_mcount_lsw -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1305 -
+Running XST synthesis
+INSTANCE:c09f12_01_mcount_msw -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1317 -
+Running XST synthesis
+INSTANCE:c09f12_01_pps_count -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1329 -
+Running XST synthesis
+INSTANCE:qdr0_controller -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1341 -
+Running XST synthesis
+INSTANCE:qdr0_sniffer -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1385 -
+Running XST synthesis
+INSTANCE:c09f12_01_rcs_app -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1418 -
+Running XST synthesis
+INSTANCE:c09f12_01_rcs_lib -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1430 -
+Running XST synthesis
+INSTANCE:c09f12_01_rcs_user -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1442 -
+Running XST synthesis
+INSTANCE:c09f12_01_snap_debug_addr -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1454 -
+Running XST synthesis
+INSTANCE:c09f12_01_snap_debug_bram_ramblk -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1466 -
+Running XST synthesis
+INSTANCE:c09f12_01_snap_debug_bram -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1484 -
+Running XST synthesis
+INSTANCE:c09f12_01_snap_debug_ctrl -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1496 -
+Running XST synthesis
+INSTANCE:c09f12_01_trig_level -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1508 -
+Running XST synthesis
+INSTANCE:opb1 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1520 -
+Running XST synthesis
+INSTANCE:opb2opb_bridge_opb1 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1528 -
+Running XST synthesis
+
+Running NGCBUILD ...
+IPNAME:system_c09f12_01_xsg_core_config_wrapper
+INSTANCE:c09f12_01_xsg_core_config -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 249 -
+Running NGCBUILD
+IPNAME:system_c09f12_01_adc_snap0_bram_ramblk_wrapper
+INSTANCE:c09f12_01_adc_snap0_bram_ramblk -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 460 -
+Running NGCBUILD
+IPNAME:system_c09f12_01_adc_snap1_bram_ramblk_wrapper
+INSTANCE:c09f12_01_adc_snap1_bram_ramblk -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 550 -
+Running NGCBUILD
+IPNAME:system_c09f12_01_eq0_ramblk_wrapper INSTANCE:c09f12_01_eq0_ramblk -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 760 -
+Running NGCBUILD
+IPNAME:system_c09f12_01_eq1_ramblk_wrapper INSTANCE:c09f12_01_eq1_ramblk -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 790 -
+Running NGCBUILD
+IPNAME:system_c09f12_01_gbe0_wrapper INSTANCE:c09f12_01_gbe0 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 856 -
+Running NGCBUILD
+IPNAME:system_xaui_phy_0_wrapper INSTANCE:xaui_phy_0 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 900 -
+Running NGCBUILD
+IPNAME:system_c09f12_01_katadc0_wrapper INSTANCE:c09f12_01_katadc0 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 959 -
+Running NGCBUILD
+IPNAME:system_iic_adc0_wrapper INSTANCE:iic_adc0 -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1023 -
+Running NGCBUILD
+IPNAME:system_c09f12_01_snap_debug_bram_ramblk_wrapper
+INSTANCE:c09f12_01_snap_debug_bram_ramblk -
+/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/system.mhs line 1466 -
+Running NGCBUILD
+INFO:EDK:3509 - NCF files should not be modified as they will be regenerated.
+   If any constraint needs to be overridden, this should be done by modifying
+   the data/system.ucf file.
+
+Rebuilding cache ...
+
+Total run time: 821.00 seconds
