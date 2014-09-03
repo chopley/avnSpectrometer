@@ -1,0 +1,479 @@
+Release 14.7 - Bitgen P.20131013 (lin64)
+Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
+PMSPEC -- Overriding Xilinx file
+</opt/xilinx/14.7/ISE_DS/EDK/virtex5/data/virtex5.acd> with local file
+</opt/xilinx/14.7/ISE_DS/ISE/virtex5/data/virtex5.acd>
+Loading device for application Rf_Device from file '5vsx95t.nph' in environment
+/opt/xilinx/14.7/ISE_DS/ISE/:/opt/xilinx/14.7/ISE_DS/EDK.
+   "system" is an NCD, version 3.2, device xc5vsx95t, package ff1136, speed -1
+Opened constraints file system.pcf.
+
+Fri Aug  8 18:10:23 2014
+
+/opt/xilinx/14.7/ISE_DS/ISE/bin/lin64/unwrapped/bitgen -w -g TdoPin:PULLNONE -g DriveDone:No -g StartUpClk:CCLK -g DONE_cycle:4 -g GTS_cycle:2 -g TckPin:PULLUP -g TdiPin:PULLUP -g TmsPin:PULLUP -g DonePipe:No -g GWE_cycle:6 -g LCK_cycle:NoWait -g Security:NONE -g Persist:No -g binary:Yes system.ncd 
+
+Summary of Bitgen Options:
++----------------------+----------------------+
+| Option Name          | Current Setting      |
++----------------------+----------------------+
+| Compress             | (Not Specified)*     |
++----------------------+----------------------+
+| Readback             | (Not Specified)*     |
++----------------------+----------------------+
+| CRC                  | Enable*              |
++----------------------+----------------------+
+| DebugBitstream       | No*                  |
++----------------------+----------------------+
+| ConfigRate           | 2*                   |
++----------------------+----------------------+
+| StartupClk           | Cclk**               |
++----------------------+----------------------+
+| CclkPin              | Pullup*              |
++----------------------+----------------------+
+| DonePin              | Pullup*              |
++----------------------+----------------------+
+| HswapenPin           | Pullup*              |
++----------------------+----------------------+
+| M0Pin                | Pullup*              |
++----------------------+----------------------+
+| M1Pin                | Pullup*              |
++----------------------+----------------------+
+| M2Pin                | Pullup*              |
++----------------------+----------------------+
+| ProgPin              | Pullup*              |
++----------------------+----------------------+
+| InitPin              | Pullup*              |
++----------------------+----------------------+
+| CsPin                | Pullup*              |
++----------------------+----------------------+
+| DinPin               | Pullup*              |
++----------------------+----------------------+
+| BusyPin              | Pullup*              |
++----------------------+----------------------+
+| RdWrPin              | Pullup*              |
++----------------------+----------------------+
+| TckPin               | Pullup**             |
++----------------------+----------------------+
+| TdiPin               | Pullup**             |
++----------------------+----------------------+
+| TdoPin               | Pullnone             |
++----------------------+----------------------+
+| TmsPin               | Pullup**             |
++----------------------+----------------------+
+| UnusedPin            | Pulldown*            |
++----------------------+----------------------+
+| GWE_cycle            | 6**                  |
++----------------------+----------------------+
+| GTS_cycle            | 2                    |
++----------------------+----------------------+
+| OverTempPowerDown    | Disable*             |
++----------------------+----------------------+
+| LCK_cycle            | NoWait**             |
++----------------------+----------------------+
+| Match_cycle          | 2                    |
++----------------------+----------------------+
+| DONE_cycle           | 4**                  |
++----------------------+----------------------+
+| Persist              | No**                 |
++----------------------+----------------------+
+| DriveDone            | No**                 |
++----------------------+----------------------+
+| DonePipe             | No**                 |
++----------------------+----------------------+
+| Security             | None**               |
++----------------------+----------------------+
+| UserID               | 0xFFFFFFFF*          |
++----------------------+----------------------+
+| ActiveReconfig       | No*                  |
++----------------------+----------------------+
+| Partial              | (Not Specified)*     |
++----------------------+----------------------+
+| Encrypt              | No*                  |
++----------------------+----------------------+
+| Key0                 | pick*                |
++----------------------+----------------------+
+| StartCBC             | pick*                |
++----------------------+----------------------+
+| KeyFile              | (Not Specified)*     |
++----------------------+----------------------+
+| DCIUpdateMode        | AsRequired*          |
++----------------------+----------------------+
+| ConfigFallback       | Enable*              |
++----------------------+----------------------+
+| SelectMAPAbort       | Enable*              |
++----------------------+----------------------+
+| BPI_page_size        | 1*                   |
++----------------------+----------------------+
+| BPI_1st_read_cycle   | 1*                   |
++----------------------+----------------------+
+| JTAG_SysMon          | Enable*              |
++----------------------+----------------------+
+| TIMER_CFG            | None*                |
++----------------------+----------------------+
+| TIMER_USR            | None*                |
++----------------------+----------------------+
+| USR_ACCESS           | None*                |
++----------------------+----------------------+
+| TimeStamp            | Default*             |
++----------------------+----------------------+
+| IEEE1532             | No*                  |
++----------------------+----------------------+
+| Binary               | Yes                  |
++----------------------+----------------------+
+ *  Default setting.
+ ** The specified setting matches the default setting.
+
+There were 0 CONFIG constraint(s) processed from system.pcf.
+
+
+Running DRC.
+WARNING:PhysDesignRules:1841 - One or more GTPs are being used in this design.
+   Evaluate the SelectIO-To-GTP Crosstalk section of the Virtex-5 RocketIO GTP
+   Transceiver User Guide to ensure that the design SelectIO usage meets the
+   guidelines to minimize the impact on GTP performance. 
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real1_9c10afbb70/fft_biplex_real_4x0_74800c449d/bip
+   lex_core_ce6e11ad41/fft_stage_5_f0b8f37405/butterfly_direct_2f07c4f5b5/csub_e
+   0ab8779e9/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save power with this
+   DSP48E OPMODE input pin programming the USE_MULT attribute should be set to
+   NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real0_c512b4816a/fft_biplex_real_4x0_d1b89c22a9/bip
+   lex_core_ce6e11ad41/fft_stage_5_f0b8f37405/butterfly_direct_2f07c4f5b5/csub_e
+   0ab8779e9/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save power with this
+   DSP48E OPMODE input pin programming the USE_MULT attribute should be set to
+   NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real1_9c10afbb70/fft_biplex_real_4x0_74800c449d/bip
+   lex_core_ce6e11ad41/fft_stage_3_aa15e84fae/butterfly_direct_5c830c1bfc/csub_3
+   94eae4754/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save power with this
+   DSP48E OPMODE input pin programming the USE_MULT attribute should be set to
+   NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real0_c512b4816a/fft_biplex_real_4x0_d1b89c22a9/bip
+   lex_core_ce6e11ad41/fft_stage_3_aa15e84fae/butterfly_direct_5c830c1bfc/csub_3
+   94eae4754/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save power with this
+   DSP48E OPMODE input pin programming the USE_MULT attribute should be set to
+   NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real1_9c10afbb70/fft_biplex_real_4x0_74800c449d/bip
+   lex_core_ce6e11ad41/fft_stage_3_aa15e84fae/butterfly_direct_5c830c1bfc/cadd_b
+   d220e7516/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save power with this
+   DSP48E OPMODE input pin programming the USE_MULT attribute should be set to
+   NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real0_c512b4816a/fft_biplex_real_4x0_d1b89c22a9/bip
+   lex_core_ce6e11ad41/fft_stage_3_aa15e84fae/butterfly_direct_5c830c1bfc/cadd_b
+   d220e7516/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save power with this
+   DSP48E OPMODE input pin programming the USE_MULT attribute should be set to
+   NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real1_9c10afbb70/fft_biplex_real_4x0_74800c449d/bip
+   lex_core_ce6e11ad41/fft_stage_4_f91b655483/butterfly_direct_89ddf7e694/csub_0
+   39871f7ea/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save power with this
+   DSP48E OPMODE input pin programming the USE_MULT attribute should be set to
+   NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real0_c512b4816a/fft_biplex_real_4x0_d1b89c22a9/bip
+   lex_core_ce6e11ad41/fft_stage_4_f91b655483/butterfly_direct_89ddf7e694/csub_0
+   39871f7ea/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save power with this
+   DSP48E OPMODE input pin programming the USE_MULT attribute should be set to
+   NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real1_9c10afbb70/fft_direct_ff4fd4788b/butterfly2_0
+   _d3942396c3/csub_a30436b326/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save
+   power with this DSP48E OPMODE input pin programming the USE_MULT attribute
+   should be set to NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real0_c512b4816a/fft_direct_ee646f7bda/butterfly2_0
+   _d3942396c3/csub_a30436b326/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save
+   power with this DSP48E OPMODE input pin programming the USE_MULT attribute
+   should be set to NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real1_9c10afbb70/fft_biplex_real_4x0_74800c449d/bip
+   lex_core_ce6e11ad41/fft_stage_6_7e75795901/butterfly_direct_42faa5a3b6/cadd_3
+   f04234e6d/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save power with this
+   DSP48E OPMODE input pin programming the USE_MULT attribute should be set to
+   NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real0_c512b4816a/fft_biplex_real_4x0_d1b89c22a9/bip
+   lex_core_ce6e11ad41/fft_stage_6_7e75795901/butterfly_direct_42faa5a3b6/cadd_3
+   f04234e6d/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save power with this
+   DSP48E OPMODE input pin programming the USE_MULT attribute should be set to
+   NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real1_9c10afbb70/fft_direct_ff4fd4788b/butterfly1_0
+   _2b561cf47f/cadd_ec1b3ac481/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save
+   power with this DSP48E OPMODE input pin programming the USE_MULT attribute
+   should be set to NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real1_9c10afbb70/fft_direct_ff4fd4788b/butterfly1_1
+   _fe5e105b19/cadd_ec1b3ac481/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save
+   power with this DSP48E OPMODE input pin programming the USE_MULT attribute
+   should be set to NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real0_c512b4816a/fft_direct_ee646f7bda/butterfly1_0
+   _2b561cf47f/cadd_ec1b3ac481/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save
+   power with this DSP48E OPMODE input pin programming the USE_MULT attribute
+   should be set to NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real0_c512b4816a/fft_direct_ee646f7bda/butterfly1_1
+   _fe5e105b19/cadd_ec1b3ac481/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save
+   power with this DSP48E OPMODE input pin programming the USE_MULT attribute
+   should be set to NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real1_9c10afbb70/fft_biplex_real_4x0_74800c449d/bip
+   lex_core_ce6e11ad41/fft_stage_7_5823de238c/butterfly_direct_82622f77fc/cadd_c
+   438498f13/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save power with this
+   DSP48E OPMODE input pin programming the USE_MULT attribute should be set to
+   NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real0_c512b4816a/fft_biplex_real_4x0_d1b89c22a9/bip
+   lex_core_ce6e11ad41/fft_stage_7_5823de238c/butterfly_direct_82622f77fc/cadd_c
+   438498f13/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save power with this
+   DSP48E OPMODE input pin programming the USE_MULT attribute should be set to
+   NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real1_9c10afbb70/fft_biplex_real_4x0_74800c449d/bip
+   lex_core_ce6e11ad41/fft_stage_2_3adc821d91/butterfly_direct_57b07e077f/cadd_2
+   392e713d2/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save power with this
+   DSP48E OPMODE input pin programming the USE_MULT attribute should be set to
+   NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real0_c512b4816a/fft_biplex_real_4x0_d1b89c22a9/bip
+   lex_core_ce6e11ad41/fft_stage_2_3adc821d91/butterfly_direct_57b07e077f/cadd_2
+   392e713d2/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save power with this
+   DSP48E OPMODE input pin programming the USE_MULT attribute should be set to
+   NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real1_9c10afbb70/fft_direct_ff4fd4788b/butterfly2_1
+   _5ca2c00a71/cadd_c736eeb5a7/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save
+   power with this DSP48E OPMODE input pin programming the USE_MULT attribute
+   should be set to NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real0_c512b4816a/fft_direct_ee646f7bda/butterfly2_1
+   _5ca2c00a71/cadd_c736eeb5a7/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save
+   power with this DSP48E OPMODE input pin programming the USE_MULT attribute
+   should be set to NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real1_9c10afbb70/fft_biplex_real_4x0_74800c449d/bip
+   lex_core_ce6e11ad41/fft_stage_6_7e75795901/butterfly_direct_42faa5a3b6/csub_4
+   493c440dd/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save power with this
+   DSP48E OPMODE input pin programming the USE_MULT attribute should be set to
+   NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real0_c512b4816a/fft_biplex_real_4x0_d1b89c22a9/bip
+   lex_core_ce6e11ad41/fft_stage_6_7e75795901/butterfly_direct_42faa5a3b6/csub_4
+   493c440dd/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save power with this
+   DSP48E OPMODE input pin programming the USE_MULT attribute should be set to
+   NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real1_9c10afbb70/fft_biplex_real_4x0_74800c449d/bip
+   lex_core_ce6e11ad41/fft_stage_7_5823de238c/butterfly_direct_82622f77fc/csub_d
+   d1d1952b1/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save power with this
+   DSP48E OPMODE input pin programming the USE_MULT attribute should be set to
+   NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real0_c512b4816a/fft_biplex_real_4x0_d1b89c22a9/bip
+   lex_core_ce6e11ad41/fft_stage_7_5823de238c/butterfly_direct_82622f77fc/csub_d
+   d1d1952b1/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save power with this
+   DSP48E OPMODE input pin programming the USE_MULT attribute should be set to
+   NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real1_9c10afbb70/fft_biplex_real_4x0_74800c449d/bip
+   lex_core_ce6e11ad41/fft_stage_1_7a0acaf727/butterfly_direct_669af7fe17/cadd_5
+   17d36a131/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save power with this
+   DSP48E OPMODE input pin programming the USE_MULT attribute should be set to
+   NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real0_c512b4816a/fft_biplex_real_4x0_d1b89c22a9/bip
+   lex_core_ce6e11ad41/fft_stage_1_7a0acaf727/butterfly_direct_669af7fe17/cadd_5
+   17d36a131/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save power with this
+   DSP48E OPMODE input pin programming the USE_MULT attribute should be set to
+   NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real1_9c10afbb70/fft_biplex_real_4x0_74800c449d/bi_
+   real_unscr_4x_3b8b394f08/hilbert_dsp48e0_06dac88fd7/csub_c8fe90de98/dsp48e/ds
+   p48e_inst>:<DSP48E_DSP48E>.  To save power with this DSP48E OPMODE input pin
+   programming the USE_MULT attribute should be set to NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real1_9c10afbb70/fft_biplex_real_4x0_74800c449d/bi_
+   real_unscr_4x_3b8b394f08/hilbert_dsp48e1_806152ec77/csub_c8fe90de98/dsp48e/ds
+   p48e_inst>:<DSP48E_DSP48E>.  To save power with this DSP48E OPMODE input pin
+   programming the USE_MULT attribute should be set to NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real0_c512b4816a/fft_biplex_real_4x0_d1b89c22a9/bi_
+   real_unscr_4x_3b8b394f08/hilbert_dsp48e0_06dac88fd7/csub_c8fe90de98/dsp48e/ds
+   p48e_inst>:<DSP48E_DSP48E>.  To save power with this DSP48E OPMODE input pin
+   programming the USE_MULT attribute should be set to NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real0_c512b4816a/fft_biplex_real_4x0_d1b89c22a9/bi_
+   real_unscr_4x_3b8b394f08/hilbert_dsp48e1_806152ec77/csub_c8fe90de98/dsp48e/ds
+   p48e_inst>:<DSP48E_DSP48E>.  To save power with this DSP48E OPMODE input pin
+   programming the USE_MULT attribute should be set to NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real1_9c10afbb70/fft_direct_ff4fd4788b/butterfly2_0
+   _d3942396c3/cadd_21c3fcefd3/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save
+   power with this DSP48E OPMODE input pin programming the USE_MULT attribute
+   should be set to NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real0_c512b4816a/fft_direct_ee646f7bda/butterfly2_0
+   _d3942396c3/cadd_21c3fcefd3/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save
+   power with this DSP48E OPMODE input pin programming the USE_MULT attribute
+   should be set to NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real1_9c10afbb70/fft_biplex_real_4x0_74800c449d/bip
+   lex_core_ce6e11ad41/fft_stage_1_7a0acaf727/butterfly_direct_669af7fe17/csub_2
+   ad7cf465d/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save power with this
+   DSP48E OPMODE input pin programming the USE_MULT attribute should be set to
+   NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real0_c512b4816a/fft_biplex_real_4x0_d1b89c22a9/bip
+   lex_core_ce6e11ad41/fft_stage_1_7a0acaf727/butterfly_direct_669af7fe17/csub_2
+   ad7cf465d/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save power with this
+   DSP48E OPMODE input pin programming the USE_MULT attribute should be set to
+   NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real1_9c10afbb70/fft_direct_ff4fd4788b/butterfly2_1
+   _5ca2c00a71/csub_82ad6e32e5/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save
+   power with this DSP48E OPMODE input pin programming the USE_MULT attribute
+   should be set to NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real0_c512b4816a/fft_direct_ee646f7bda/butterfly2_1
+   _5ca2c00a71/csub_82ad6e32e5/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save
+   power with this DSP48E OPMODE input pin programming the USE_MULT attribute
+   should be set to NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real1_9c10afbb70/fft_biplex_real_4x0_74800c449d/bip
+   lex_core_ce6e11ad41/fft_stage_5_f0b8f37405/butterfly_direct_2f07c4f5b5/cadd_3
+   411eb0e93/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save power with this
+   DSP48E OPMODE input pin programming the USE_MULT attribute should be set to
+   NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real0_c512b4816a/fft_biplex_real_4x0_d1b89c22a9/bip
+   lex_core_ce6e11ad41/fft_stage_5_f0b8f37405/butterfly_direct_2f07c4f5b5/cadd_3
+   411eb0e93/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save power with this
+   DSP48E OPMODE input pin programming the USE_MULT attribute should be set to
+   NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real1_9c10afbb70/fft_direct_ff4fd4788b/butterfly1_0
+   _2b561cf47f/csub_4fc2bae275/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save
+   power with this DSP48E OPMODE input pin programming the USE_MULT attribute
+   should be set to NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real1_9c10afbb70/fft_direct_ff4fd4788b/butterfly1_1
+   _fe5e105b19/csub_4fc2bae275/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save
+   power with this DSP48E OPMODE input pin programming the USE_MULT attribute
+   should be set to NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real0_c512b4816a/fft_direct_ee646f7bda/butterfly1_0
+   _2b561cf47f/csub_4fc2bae275/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save
+   power with this DSP48E OPMODE input pin programming the USE_MULT attribute
+   should be set to NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real0_c512b4816a/fft_direct_ee646f7bda/butterfly1_1
+   _fe5e105b19/csub_4fc2bae275/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save
+   power with this DSP48E OPMODE input pin programming the USE_MULT attribute
+   should be set to NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real1_9c10afbb70/fft_biplex_real_4x0_74800c449d/bip
+   lex_core_ce6e11ad41/fft_stage_2_3adc821d91/butterfly_direct_57b07e077f/csub_6
+   6052e8c60/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save power with this
+   DSP48E OPMODE input pin programming the USE_MULT attribute should be set to
+   NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real0_c512b4816a/fft_biplex_real_4x0_d1b89c22a9/bip
+   lex_core_ce6e11ad41/fft_stage_2_3adc821d91/butterfly_direct_57b07e077f/csub_6
+   6052e8c60/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save power with this
+   DSP48E OPMODE input pin programming the USE_MULT attribute should be set to
+   NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real1_9c10afbb70/fft_biplex_real_4x0_74800c449d/bi_
+   real_unscr_4x_3b8b394f08/hilbert_dsp48e0_06dac88fd7/cadd_af6191b102/dsp48e/ds
+   p48e_inst>:<DSP48E_DSP48E>.  To save power with this DSP48E OPMODE input pin
+   programming the USE_MULT attribute should be set to NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real1_9c10afbb70/fft_biplex_real_4x0_74800c449d/bi_
+   real_unscr_4x_3b8b394f08/hilbert_dsp48e1_806152ec77/cadd_af6191b102/dsp48e/ds
+   p48e_inst>:<DSP48E_DSP48E>.  To save power with this DSP48E OPMODE input pin
+   programming the USE_MULT attribute should be set to NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real0_c512b4816a/fft_biplex_real_4x0_d1b89c22a9/bi_
+   real_unscr_4x_3b8b394f08/hilbert_dsp48e0_06dac88fd7/cadd_af6191b102/dsp48e/ds
+   p48e_inst>:<DSP48E_DSP48E>.  To save power with this DSP48E OPMODE input pin
+   programming the USE_MULT attribute should be set to NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real0_c512b4816a/fft_biplex_real_4x0_d1b89c22a9/bi_
+   real_unscr_4x_3b8b394f08/hilbert_dsp48e1_806152ec77/cadd_af6191b102/dsp48e/ds
+   p48e_inst>:<DSP48E_DSP48E>.  To save power with this DSP48E OPMODE input pin
+   programming the USE_MULT attribute should be set to NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real1_9c10afbb70/fft_biplex_real_4x0_74800c449d/bip
+   lex_core_ce6e11ad41/fft_stage_4_f91b655483/butterfly_direct_89ddf7e694/cadd_7
+   759bd259b/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save power with this
+   DSP48E OPMODE input pin programming the USE_MULT attribute should be set to
+   NONE.
+INFO:PhysDesignRules:1515 - Issue with pin connections and/or configuration on
+   block:<c09f12_01_XSG_core_config/c09f12_01_XSG_core_config/c09f12_01_x0/coars
+   e_a91220dfb7/fft_wideband_real0_c512b4816a/fft_biplex_real_4x0_d1b89c22a9/bip
+   lex_core_ce6e11ad41/fft_stage_4_f91b655483/butterfly_direct_89ddf7e694/cadd_7
+   759bd259b/dsp48e/dsp48e_inst>:<DSP48E_DSP48E>.  To save power with this
+   DSP48E OPMODE input pin programming the USE_MULT attribute should be set to
+   NONE.
+DRC detected 0 errors and 1 warnings.  Please see the previously displayed
+individual error or warning messages for more details.
+Creating bit map...
+Saving bit stream in "system.bit".
+Saving bit stream in "system.bin".
+Bitstream generation is complete.

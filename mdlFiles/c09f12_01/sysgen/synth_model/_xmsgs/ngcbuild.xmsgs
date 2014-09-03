@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- IMPORTANT: This is an internal file that has been generated
+     by the Xilinx ISE software.  Any direct editing or
+     changes made to this file may result in unpredictable
+     behavior or data corruption.  It is strongly advised that
+     users do not edit the contents of this file. -->
+<messages>
+<msg type="warning" file="NgdBuild" num="1341" delta="new" >Design module &quot;<arg fmt="%s" index="1">/data/casper/mlib_devel_cbass/c09f12_01/sysgen/synth_model/dmg_72_9ddb0dccfe86828e.ngc</arg>&quot; contains no instances.
+</msg>
+
+<msg type="warning" file="NgdBuild" num="1341" delta="new" >Design module &quot;<arg fmt="%s" index="1">/data/casper/mlib_devel_cbass/c09f12_01/sysgen/synth_model/dmg_72_9ddb0dccfe86828e.ngc</arg>&quot; contains no instances.
+</msg>
+
+</messages>
+

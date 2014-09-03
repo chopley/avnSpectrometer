@@ -1,0 +1,552 @@
+Release 14.7 - xst P.20131013 (lin64)
+Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
+--> 
+Parameter TMPDIR set to /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/synthesis/xst_temp_dir/
+
+
+Total REAL time to Xst completion: 0.00 secs
+Total CPU time to Xst completion: 0.04 secs
+ 
+--> 
+
+TABLE OF CONTENTS
+  1) Synthesis Options Summary
+  2) HDL Compilation
+  3) Design Hierarchy Analysis
+  4) HDL Analysis
+  5) HDL Synthesis
+     5.1) HDL Synthesis Report
+  6) Advanced HDL Synthesis
+     6.1) Advanced HDL Synthesis Report
+  7) Low Level Synthesis
+  8) Partition Report
+  9) Final Report
+	9.1) Device utilization summary
+	9.2) Partition Resource Summary
+	9.3) TIMING REPORT
+
+
+=========================================================================
+*                      Synthesis Options Summary                        *
+=========================================================================
+---- Source Parameters
+Input Format                       : MIXED
+Input File Name                    : "system_opb_katadccontroller_0_wrapper_xst.prj"
+Verilog Include Directory          : {"/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/pcores/" "/opt/xilinx/14.7/ISE_DS/EDK/hw/XilinxBFMinterface/pcores/" "/opt/xilinx/14.7/ISE_DS/EDK/hw/XilinxProcessorIPLib/pcores/" }
+
+---- Target Parameters
+Target Device                      : xc5vsx95tff1136-1
+Output File Name                   : "../implementation/system_opb_katadccontroller_0_wrapper.ngc"
+
+---- Source Options
+Top Module Name                    : system_opb_katadccontroller_0_wrapper
+
+---- Target Options
+Add IO Buffers                     : NO
+
+---- General Options
+Optimization Goal                  : speed
+Netlist Hierarchy                  : as_optimized
+Optimization Effort                : 1
+Hierarchy Separator                : /
+
+---- Other Options
+Cores Search Directories           : {../implementation}
+
+=========================================================================
+
+
+=========================================================================
+*                          HDL Compilation                              *
+=========================================================================
+Compiling verilog file "/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/pcores/opb_katadccontroller_v1_00_a/hdl/verilog/opb_katadccontroller.v" in library opb_katadccontroller_v1_00_a
+Compiling verilog file "/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/pcores/opb_katadccontroller_v1_00_a/hdl/verilog/opb_attach.v" in library opb_katadccontroller_v1_00_a
+Module <opb_katadccontroller> compiled
+Compiling verilog file "/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/pcores/opb_katadccontroller_v1_00_a/hdl/verilog/serial_config.v" in library opb_katadccontroller_v1_00_a
+Module <opb_attach> compiled
+Compiling verilog file "/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/pcores/opb_katadccontroller_v1_00_a/hdl/verilog/autoconfig.v" in library opb_katadccontroller_v1_00_a
+Module <serial_config> compiled
+Module <autoconfig> compiled
+Compiling verilog file "../hdl/system_opb_katadccontroller_0_wrapper.v" in library work
+Module <system_opb_katadccontroller_0_wrapper> compiled
+No errors in compilation
+Analysis of file <"system_opb_katadccontroller_0_wrapper_xst.prj"> succeeded.
+ 
+
+=========================================================================
+*                     Design Hierarchy Analysis                         *
+=========================================================================
+Analyzing hierarchy for module <system_opb_katadccontroller_0_wrapper> in library <work>.
+
+Analyzing hierarchy for module <opb_katadccontroller> in library <opb_katadccontroller_v1_00_a> with parameters.
+	AUTOCONFIG_0 = "00000000000000000000000000000001"
+	AUTOCONFIG_1 = "00000000000000000000000000000001"
+	C_BASEADDR = "00000000000000100000000000000000"
+	C_FAMILY = "virtex5"
+	C_HIGHADDR = "00000000000000101111111111111111"
+	C_OPB_AWIDTH = "00000000000000000000000000100000"
+	C_OPB_DWIDTH = "00000000000000000000000000100000"
+	INTERLEAVED_0 = "00000000000000000000000000000000"
+	INTERLEAVED_1 = "00000000000000000000000000000000"
+
+Analyzing hierarchy for module <opb_attach> in library <opb_katadccontroller_v1_00_a> with parameters.
+	C_BASEADDR = "00000000000000100000000000000000"
+	C_HIGHADDR = "00000000000000101111111111111111"
+	C_OPB_AWIDTH = "00000000000000000000000000100000"
+	C_OPB_DWIDTH = "00000000000000000000000000100000"
+
+Analyzing hierarchy for module <serial_config> in library <opb_katadccontroller_v1_00_a> with parameters.
+	CONFIG_CLKWAIT = "00000000000000000000000000000001"
+	CONFIG_DATA = "00000000000000000000000000000010"
+	CONFIG_FINISH = "00000000000000000000000000000011"
+	CONFIG_IDLE = "00000000000000000000000000000000"
+
+Analyzing hierarchy for module <autoconfig> in library <opb_katadccontroller_v1_00_a> with parameters.
+	ENABLE = "00000000000000000000000000000001"
+	INTERLEAVED = "00000000000000000000000000000000"
+	REG_COUNT = "1001"
+	STATE_BUSY = "00000000000000000000000000000001"
+	STATE_DONE = "00000000000000000000000000000010"
+	STATE_IDLE = "00000000000000000000000000000000"
+
+
+=========================================================================
+*                            HDL Analysis                               *
+=========================================================================
+Analyzing top module <system_opb_katadccontroller_0_wrapper>.
+Module <system_opb_katadccontroller_0_wrapper> is correct for synthesis.
+ 
+Analyzing module <opb_katadccontroller> in library <opb_katadccontroller_v1_00_a>.
+	AUTOCONFIG_0 = 32'sb00000000000000000000000000000001
+	AUTOCONFIG_1 = 32'sb00000000000000000000000000000001
+	C_BASEADDR = 32'b00000000000000100000000000000000
+	C_FAMILY = "virtex5"
+	C_HIGHADDR = 32'b00000000000000101111111111111111
+	C_OPB_AWIDTH = 32'sb00000000000000000000000000100000
+	C_OPB_DWIDTH = 32'sb00000000000000000000000000100000
+	INTERLEAVED_0 = 32'sb00000000000000000000000000000000
+	INTERLEAVED_1 = 32'sb00000000000000000000000000000000
+Module <opb_katadccontroller> is correct for synthesis.
+ 
+    Set user-defined property "IOB =  TRUE" for signal <adc0_reset_iob>.
+    Set user-defined property "IOB =  TRUE" for signal <adc1_reset_iob>.
+Analyzing module <opb_attach> in library <opb_katadccontroller_v1_00_a>.
+	C_BASEADDR = 32'b00000000000000100000000000000000
+	C_HIGHADDR = 32'b00000000000000101111111111111111
+	C_OPB_AWIDTH = 32'sb00000000000000000000000000100000
+	C_OPB_DWIDTH = 32'sb00000000000000000000000000100000
+Module <opb_attach> is correct for synthesis.
+ 
+Analyzing module <serial_config> in library <opb_katadccontroller_v1_00_a>.
+	CONFIG_CLKWAIT = 32'sb00000000000000000000000000000001
+	CONFIG_DATA = 32'sb00000000000000000000000000000010
+	CONFIG_FINISH = 32'sb00000000000000000000000000000011
+	CONFIG_IDLE = 32'sb00000000000000000000000000000000
+Module <serial_config> is correct for synthesis.
+ 
+Analyzing module <autoconfig> in library <opb_katadccontroller_v1_00_a>.
+	ENABLE = 32'sb00000000000000000000000000000001
+	INTERLEAVED = 32'sb00000000000000000000000000000000
+	REG_COUNT = 4'b1001
+	STATE_BUSY = 32'sb00000000000000000000000000000001
+	STATE_DONE = 32'sb00000000000000000000000000000010
+	STATE_IDLE = 32'sb00000000000000000000000000000000
+Module <autoconfig> is correct for synthesis.
+ 
+
+=========================================================================
+*                           HDL Synthesis                               *
+=========================================================================
+
+Performing bidirectional port resolution...
+
+Synthesizing Unit <opb_attach>.
+    Related source file is "/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/pcores/opb_katadccontroller_v1_00_a/hdl/verilog/opb_attach.v".
+WARNING:Xst:647 - Input <OPB_DBus<16:19>> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:647 - Input <OPB_DBus<24:25>> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:647 - Input <OPB_DBus<28:29>> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:647 - Input <OPB_seqAddr> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:646 - Signal <opb_addr<31:4>> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <opb_addr<1:0>> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+    Found 4-bit register for signal <adc0_config_addr_reg>.
+    Found 16-bit register for signal <adc0_config_data_reg>.
+    Found 1-bit register for signal <adc0_config_start_reg>.
+    Found 1-bit register for signal <adc0_dcm_psen_reg>.
+    Found 1-bit register for signal <adc0_dcm_psincdec_reg>.
+    Found 1-bit register for signal <adc0_reset_hold>.
+    Found 1-bit register for signal <adc0_reset_reg>.
+    Found 4-bit register for signal <adc1_config_addr_reg>.
+    Found 16-bit register for signal <adc1_config_data_reg>.
+    Found 1-bit register for signal <adc1_config_start_reg>.
+    Found 1-bit register for signal <adc1_dcm_psen_reg>.
+    Found 1-bit register for signal <adc1_dcm_psincdec_reg>.
+    Found 1-bit register for signal <adc1_reset_hold>.
+    Found 1-bit register for signal <adc1_reset_reg>.
+    Found 32-bit comparator greatequal for signal <addr_match$cmp_ge0000> created at line 51.
+    Found 32-bit comparator lessequal for signal <addr_match$cmp_le0000> created at line 51.
+    Found 1-bit register for signal <opb_ack>.
+    Found 32-bit subtractor for signal <opb_addr>.
+    Summary:
+	inferred  51 D-type flip-flop(s).
+	inferred   1 Adder/Subtractor(s).
+	inferred   2 Comparator(s).
+Unit <opb_attach> synthesized.
+
+
+Synthesizing Unit <serial_config>.
+    Related source file is "/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/pcores/opb_katadccontroller_v1_00_a/hdl/verilog/serial_config.v".
+    Found 4-bit up counter for signal <clk_counter>.
+    Found 32-bit register for signal <config_data_shift>.
+    Found 5-bit register for signal <config_progress>.
+    Found 5-bit adder for signal <config_progress$addsub0000> created at line 50.
+    Found 2-bit register for signal <state>.
+    Summary:
+	inferred   1 Counter(s).
+	inferred  39 D-type flip-flop(s).
+	inferred   1 Adder/Subtractor(s).
+Unit <serial_config> synthesized.
+
+
+Synthesizing Unit <autoconfig>.
+    Related source file is "/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/pcores/opb_katadccontroller_v1_00_a/hdl/verilog/autoconfig.v".
+    Found finite state machine <FSM_0> for signal <AUTO_ENABLE_generate.config_state>.
+    -----------------------------------------------------------------------
+    | States             | 3                                              |
+    | Transitions        | 5                                              |
+    | Inputs             | 2                                              |
+    | Outputs            | 2                                              |
+    | Clock              | clk                       (rising_edge)        |
+    | Reset              | rst                       (positive)           |
+    | Reset type         | synchronous                                    |
+    | Reset State        | 00                                             |
+    | Encoding           | automatic                                      |
+    | Implementation     | automatic                                      |
+    -----------------------------------------------------------------------
+    Found 1-bit register for signal <AUTO_ENABLE_generate.config_start_reg>.
+    Found 4-bit comparator greatequal for signal <AUTO_ENABLE_generate.config_start_reg$cmp_ge0000> created at line 59.
+    Found 4-bit up counter for signal <AUTO_ENABLE_generate.progress>.
+    Found 1-bit register for signal <AUTO_ENABLE_generate.waiting>.
+    Summary:
+	inferred   1 Finite State Machine(s).
+	inferred   1 Counter(s).
+	inferred   2 D-type flip-flop(s).
+	inferred   1 Comparator(s).
+Unit <autoconfig> synthesized.
+
+
+Synthesizing Unit <opb_katadccontroller>.
+    Related source file is "/data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/pcores/opb_katadccontroller_v1_00_a/hdl/verilog/opb_katadccontroller.v".
+WARNING:Xst:647 - Input <adc0_clk> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:647 - Input <adc1_clk> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+    Found 8-bit down counter for signal <adc0_reset_counter>.
+    Found 1-bit register for signal <adc0_reset_iob>.
+    Found 8-bit down counter for signal <adc1_reset_counter>.
+    Found 1-bit register for signal <adc1_reset_iob>.
+    Summary:
+	inferred   2 Counter(s).
+	inferred   2 D-type flip-flop(s).
+Unit <opb_katadccontroller> synthesized.
+
+
+Synthesizing Unit <system_opb_katadccontroller_0_wrapper>.
+    Related source file is "../hdl/system_opb_katadccontroller_0_wrapper.v".
+Unit <system_opb_katadccontroller_0_wrapper> synthesized.
+
+
+=========================================================================
+HDL Synthesis Report
+
+Macro Statistics
+# Adders/Subtractors                                   : 3
+ 32-bit subtractor                                     : 1
+ 5-bit adder                                           : 2
+# Counters                                             : 6
+ 4-bit up counter                                      : 4
+ 8-bit down counter                                    : 2
+# Registers                                            : 57
+ 1-bit register                                        : 49
+ 2-bit register                                        : 2
+ 32-bit register                                       : 2
+ 4-bit register                                        : 2
+ 5-bit register                                        : 2
+# Comparators                                          : 4
+ 32-bit comparator greatequal                          : 1
+ 32-bit comparator lessequal                           : 1
+ 4-bit comparator greatequal                           : 2
+
+=========================================================================
+
+=========================================================================
+*                       Advanced HDL Synthesis                          *
+=========================================================================
+
+Analyzing FSM <FSM_0> for best encoding.
+Optimizing FSM <opb_katadccontroller_0/autoconfig_adc0/AUTO_ENABLE_generate.config_state/FSM> on signal <AUTO_ENABLE_generate.config_state[1:2]> with gray encoding.
+Optimizing FSM <opb_katadccontroller_0/autoconfig_adc1/AUTO_ENABLE_generate.config_state/FSM> on signal <AUTO_ENABLE_generate.config_state[1:2]> with gray encoding.
+-------------------
+ State | Encoding
+-------------------
+ 00    | 00
+ 01    | 01
+ 10    | 11
+-------------------
+
+=========================================================================
+Advanced HDL Synthesis Report
+
+Macro Statistics
+# FSMs                                                 : 1
+# Adders/Subtractors                                   : 3
+ 4-bit subtractor                                      : 1
+ 5-bit adder                                           : 2
+# Counters                                             : 6
+ 4-bit up counter                                      : 4
+ 8-bit down counter                                    : 2
+# Registers                                            : 135
+ Flip-Flops                                            : 135
+# Comparators                                          : 4
+ 32-bit comparator greatequal                          : 1
+ 32-bit comparator lessequal                           : 1
+ 4-bit comparator greatequal                           : 2
+
+=========================================================================
+
+=========================================================================
+*                         Low Level Synthesis                           *
+=========================================================================
+
+Optimizing unit <system_opb_katadccontroller_0_wrapper> ...
+
+Optimizing unit <opb_attach> ...
+
+Optimizing unit <serial_config> ...
+
+Optimizing unit <autoconfig> ...
+
+Optimizing unit <opb_katadccontroller> ...
+
+Mapping all equations...
+Building and optimizing final netlist ...
+INFO:Xst:2261 - The FF/Latch <opb_katadccontroller_0/autoconfig_adc0/AUTO_ENABLE_generate.config_state_FSM_FFd2> in Unit <system_opb_katadccontroller_0_wrapper> is equivalent to the following FF/Latch, which will be removed : <opb_katadccontroller_0/autoconfig_adc1/AUTO_ENABLE_generate.config_state_FSM_FFd2> 
+
+Final Macro Processing ...
+
+=========================================================================
+Final Register Report
+
+Macro Statistics
+# Registers                                            : 170
+ Flip-Flops                                            : 170
+
+=========================================================================
+
+=========================================================================
+*                           Partition Report                            *
+=========================================================================
+
+Partition Implementation Status
+-------------------------------
+
+  No Partitions were found in this design.
+
+-------------------------------
+
+=========================================================================
+*                            Final Report                               *
+=========================================================================
+Final Results
+Top Level Output File Name         : ../implementation/system_opb_katadccontroller_0_wrapper.ngc
+Output Format                      : ngc
+Optimization Goal                  : speed
+Keep Hierarchy                     : no
+
+Design Statistics
+# IOs                              : 129
+
+Cell Usage :
+# BELS                             : 270
+#      GND                         : 1
+#      INV                         : 17
+#      LUT1                        : 2
+#      LUT2                        : 8
+#      LUT3                        : 24
+#      LUT4                        : 25
+#      LUT5                        : 41
+#      LUT6                        : 121
+#      MUXCY                       : 14
+#      VCC                         : 1
+#      XORCY                       : 16
+# FlipFlops/Latches                : 170
+#      FD                          : 4
+#      FDE                         : 116
+#      FDR                         : 26
+#      FDRE                        : 2
+#      FDRS                        : 4
+#      FDS                         : 2
+#      FDSE                        : 16
+=========================================================================
+
+Device utilization summary:
+---------------------------
+
+Selected Device : 5vsx95tff1136-1 
+
+
+Slice Logic Utilization: 
+ Number of Slice Registers:             168  out of  58880     0%  
+ Number of Slice LUTs:                  238  out of  58880     0%  
+    Number used as Logic:               238  out of  58880     0%  
+
+Slice Logic Distribution: 
+ Number of LUT Flip Flop pairs used:    267
+   Number with an unused Flip Flop:      99  out of    267    37%  
+   Number with an unused LUT:            29  out of    267    10%  
+   Number of fully used LUT-FF pairs:   139  out of    267    52%  
+   Number of unique control sets:        25
+
+IO Utilization: 
+ Number of IOs:                         129
+ Number of bonded IOBs:                   0  out of    640     0%  
+    IOB Flip Flops/Latches:               2
+
+Specific Feature Utilization:
+
+---------------------------
+Partition Resource Summary:
+---------------------------
+
+  No Partitions were found in this design.
+
+---------------------------
+
+
+=========================================================================
+TIMING REPORT
+
+NOTE: THESE TIMING NUMBERS ARE ONLY A SYNTHESIS ESTIMATE.
+      FOR ACCURATE TIMING INFORMATION PLEASE REFER TO THE TRACE REPORT
+      GENERATED AFTER PLACE-and-ROUTE.
+
+Clock Information:
+------------------
+-----------------------------------+----------------------------------------------------------------------------------------+-------+
+Clock Signal                       | Clock buffer(FF name)                                                                  | Load  |
+-----------------------------------+----------------------------------------------------------------------------------------+-------+
+adc0_psclk                         | NONE(opb_katadccontroller_0/autoconfig_adc0/AUTO_ENABLE_generate.config_state_FSM_FFd2)| 170   |
+-----------------------------------+----------------------------------------------------------------------------------------+-------+
+INFO:Xst:2169 - HDL ADVISOR - Some clock signals were not automatically buffered by XST with BUFG/BUFR resources. Please use the buffer_type constraint in order to insert these buffers to the clock signals to help prevent skew problems.
+
+Asynchronous Control Signals Information:
+----------------------------------------
+No asynchronous control signals found in this design
+
+Timing Summary:
+---------------
+Speed Grade: -1
+
+   Minimum period: 2.680ns (Maximum Frequency: 373.134MHz)
+   Minimum input arrival time before clock: 3.730ns
+   Maximum output required time after clock: 2.096ns
+   Maximum combinational path delay: 0.827ns
+
+Timing Detail:
+--------------
+All values displayed in nanoseconds (ns)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'adc0_psclk'
+  Clock period: 2.680ns (frequency: 373.134MHz)
+  Total number of paths / destination ports: 1901 / 223
+-------------------------------------------------------------------------
+Delay:               2.680ns (Levels of Logic = 3)
+  Source:            opb_katadccontroller_0/serial_config_adc0/clk_counter_0 (FF)
+  Destination:       opb_katadccontroller_0/serial_config_adc0/config_data_shift_1 (FF)
+  Source Clock:      adc0_psclk rising
+  Destination Clock: adc0_psclk rising
+
+  Data Path: opb_katadccontroller_0/serial_config_adc0/clk_counter_0 to opb_katadccontroller_0/serial_config_adc0/config_data_shift_1
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDR:C->Q              8   0.471   0.827  opb_katadccontroller_0/serial_config_adc0/clk_counter_0 (opb_katadccontroller_0/serial_config_adc0/clk_counter_0)
+     LUT4:I0->O            9   0.094   0.524  opb_katadccontroller_0/serial_config_adc0/clk_done1_1 (opb_katadccontroller_0/serial_config_adc0/clk_done1)
+     LUT4:I3->O            1   0.094   0.576  opb_katadccontroller_0/serial_config_adc0/config_data_shift_mux0000<1>_SW0 (N28)
+     LUT6:I4->O            1   0.094   0.000  opb_katadccontroller_0/serial_config_adc0/config_data_shift_mux0000<1> (opb_katadccontroller_0/serial_config_adc0/config_data_shift_mux0000<1>)
+     FDE:D                    -0.018          opb_katadccontroller_0/serial_config_adc0/config_data_shift_1
+    ----------------------------------------
+    Total                      2.680ns (0.753ns logic, 1.927ns route)
+                                       (28.1% logic, 71.9% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'adc0_psclk'
+  Total number of paths / destination ports: 1267 / 200
+-------------------------------------------------------------------------
+Offset:              3.730ns (Levels of Logic = 3)
+  Source:            OPB_ABus<14> (PAD)
+  Destination:       opb_katadccontroller_0/opb_attach_inst/adc0_dcm_psen_reg (FF)
+  Destination Clock: adc0_psclk rising
+
+  Data Path: OPB_ABus<14> to opb_katadccontroller_0/opb_attach_inst/adc0_dcm_psen_reg
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     LUT6:I0->O            3   0.094   1.080  opb_katadccontroller_0/opb_attach_inst/addr_match34 (opb_katadccontroller_0/opb_attach_inst/addr_match34)
+     LUT6:I0->O            3   0.094   0.721  opb_katadccontroller_0/opb_attach_inst/addr_match105 (opb_katadccontroller_0/opb_attach_inst/addr_match)
+     LUT6:I3->O            2   0.094   0.341  opb_katadccontroller_0/opb_attach_inst/adc0_dcm_psen_reg_or0000 (opb_katadccontroller_0/opb_attach_inst/adc0_dcm_psen_reg_or0000)
+     FDR:R                     0.573          opb_katadccontroller_0/opb_attach_inst/adc0_dcm_psen_reg
+    ----------------------------------------
+    Total                      3.730ns (1.588ns logic, 2.142ns route)
+                                       (42.6% logic, 57.4% route)
+
+=========================================================================
+Timing constraint: Default OFFSET OUT AFTER for Clock 'adc0_psclk'
+  Total number of paths / destination ports: 103 / 37
+-------------------------------------------------------------------------
+Offset:              2.096ns (Levels of Logic = 2)
+  Source:            opb_katadccontroller_0/serial_config_adc1/state_1 (FF)
+  Destination:       Sl_DBus<31> (PAD)
+  Source Clock:      adc0_psclk rising
+
+  Data Path: opb_katadccontroller_0/serial_config_adc1/state_1 to Sl_DBus<31>
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FDR:C->Q             43   0.471   0.705  opb_katadccontroller_0/serial_config_adc1/state_1 (opb_katadccontroller_0/serial_config_adc1/state_1)
+     LUT2:I0->O            5   0.094   0.732  opb_katadccontroller_0/serial_config_adc1/config_progress_mux0000<0>21 (opb_katadccontroller_0/adc1_config_idle)
+     LUT6:I3->O            0   0.094   0.000  opb_katadccontroller_0/opb_attach_inst/Sl_DBus<31>1 (Sl_DBus<31>)
+    ----------------------------------------
+    Total                      2.096ns (0.659ns logic, 1.437ns route)
+                                       (31.4% logic, 68.6% route)
+
+=========================================================================
+Timing constraint: Default path analysis
+  Total number of paths / destination ports: 48 / 24
+-------------------------------------------------------------------------
+Delay:               0.827ns (Levels of Logic = 1)
+  Source:            OPB_ABus<28> (PAD)
+  Destination:       Sl_DBus<2> (PAD)
+
+  Data Path: OPB_ABus<28> to Sl_DBus<2>
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     LUT6:I0->O            0   0.094   0.000  opb_katadccontroller_0/opb_attach_inst/Sl_DBus<3>11 (Sl_DBus<3>)
+    ----------------------------------------
+    Total                      0.827ns (0.827ns logic, 0.000ns route)
+                                       (100.0% logic, 0.0% route)
+
+=========================================================================
+
+
+Total REAL time to Xst completion: 6.00 secs
+Total CPU time to Xst completion: 5.18 secs
+ 
+--> 
+
+
+Total memory usage is 555536 kilobytes
+
+Number of errors   :    0 (   0 filtered)
+Number of warnings :    8 (   0 filtered)
+Number of infos    :    2 (   0 filtered)
+
