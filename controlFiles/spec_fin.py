@@ -13,7 +13,7 @@ Author: Charles Copley, August 2014.
 #TODO: add support for ADC histogram plotting.
 #TODO: add support for determining ADC input level 
 
-import corr,time,numpy,struct,sys,logging,pylab,matplotlib,bitstring,curses,pdb
+import corr,time,numpy,struct,sys,logging,pylab,matplotlib,bitstring,curses
 
 katcp_port=7147
 run = 0
@@ -373,166 +373,164 @@ def drawDataCallback():
 
 
 if __name__ == '__main__':
-		from optparse import OptionParser
-		p = OptionParser()
-		p.set_usage('spectrometer.py <ROACH_HOSTNAME_or_IP> [options]')
-		p.set_description(__doc__)
-		#p.add_option('-l', '--acc_len', dest='acc_len', type='int',default=2*(2**28)/2048,
-				#help='Set the number of vectors to accumulate between dumps. default is 2*(2^28)/2048, or just under 2 seconds.')
-		#p.add_option('-g', '--gain', dest='gain', type='int',default=0xffffffff,
-				#help='Set the digital gain (6bit quantisation scalar). Default is 0xffffffff (max), good for wideband noise. Set lower for CW tones.')
-		p.add_option('-s', '--skip', dest='skip', action='store_true',
-										help='Skip reprogramming the FPGA and configuring EQ.')
-		p.add_option('-b', '--bof', dest='boffile',type='str', default='',
-										help='Specify the bof file to load')
-		p.add_option('-p', '--parameter', dest='stokesp', type='str', default='',
-										help='Specify the Stokes parameter')
-		opts, args = p.parse_args(sys.argv[1:])
+    from optparse import OptionParser
+    p = OptionParser()
+    p.set_usage('spectrometer.py <ROACH_HOSTNAME_or_IP> [options]')
+    p.set_description(__doc__)
+    #p.add_option('-l', '--acc_len', dest='acc_len', type='int',default=2*(2**28)/2048,
+        #help='Set the number of vectors to accumulate between dumps. default is 2*(2^28)/2048, or just under 2 seconds.')
+    #p.add_option('-g', '--gain', dest='gain', type='int',default=0xffffffff,
+        #help='Set the digital gain (6bit quantisation scalar). Default is 0xffffffff (max), good for wideband noise. Set lower for CW tones.')
+    p.add_option('-s', '--skip', dest='skip', action='store_true',
+        help='Skip reprogramming the FPGA and configuring EQ.')
+    p.add_option('-b', '--bof', dest='boffile',type='str', default='',
+        help='Specify the bof file to load')
+    p.add_option('-p', '--parameter', dest='stokesp', type='str', default='',
+        help='Specify the Stokes parameter')
+    opts, args = p.parse_args(sys.argv[1:])
 
-		if args==[]:
-				print 'Please specify a ROACH board. Run with the -h flag to see all options.\nExiting.'
-				exit()
-		else:
-				roach = args[0] 
-		if opts.boffile != '':
-						bitstream = opts.boffile
-		if opts.stokesp != '':
-						sparameter = opts.stokesp
+    if args==[]:
+        print 'Please specify a ROACH board. Run with the -h flag to see all options.\nExiting.'
+        exit()
+    else:
+        roach = args[0] 
+    if opts.boffile != '':
+        bitstream = opts.boffile
+    if opts.stokesp != '':
+        sparameter = opts.stokesp
 
 # What to be shown on X axis while ploting
 # ifch means if the X axis is channel number
 
-		try:
-						loggers = []
-						lh=corr.log_handlers.DebugLogHandler()
-						logger = logging.getLogger(roach)
-						logger.addHandler(lh)
-						logger.setLevel(10)
-						bitstream="c09f12_01_2014_Aug_08_1735.bof"
+try:
+    loggers = []
+    lh=corr.log_handlers.DebugLogHandler()
+    logger = logging.getLogger(roach)
+    logger.addHandler(lh)
+    logger.setLevel(10)
 
-								##use this bitstream for testing
-						print('Connecting to server %s on port %i... '%(roach,katcp_port)),
-						fpga = corr.katcp_wrapper.FpgaClient(roach, katcp_port, timeout=10,logger=logger)
-						time.sleep(1)
+	  bitstream="c09f12_01_2014_Aug_08_1735.bof"
 
-						if fpga.is_connected():
-								print 'ok\n'
-						else:
-								print 'ERROR connecting to server %s on port %i.\n'%(roach,katcp_port)
-								exit_fail()
+    print('Connecting to server %s on port %i... '%(roach,katcp_port)),
+    fpga = corr.katcp_wrapper.FpgaClient(roach, katcp_port, timeout=10,logger=logger)
+    time.sleep(1)
 
-						print '------------------------'
-						print 'Programming FPGA with %s...' %bitstream,
-						if not opts.skip:
-								fpga.progdev(bitstream)
-								print 'done'
-						else:
-								print 'Skipped.'
+    if fpga.is_connected():
+        print 'ok\n'
+    else:
+        print 'ERROR connecting to server %s on port %i.\n'%(roach,katcp_port)
+        exit_fail()
 
-						time.sleep(4)
+    print '------------------------'
+    print 'Programming FPGA with %s...' %bitstream,
+    if not opts.skip:
+        fpga.progdev(bitstream)
+        print 'done'
+    else:
+        print 'Skipped.'
+    
+    time.sleep(4)
+    
+    sum_adc0 = fpga.read_uint('adc_sum_sq0')
+    fpga.write_int('fft_shift_coars',255) 
+    print 'Configuring overflow',
+		clockSpeed=fpga.est_brd_clk()
+		##for the coarse FFT the layout is debug_chan 22-27, debug_chan_sel 21, debu_pol_sel 20,coarse_chan_select 10-19,fftShift 0-10
+    ##choose the debug channel
+		debug_chan=25
+		#do we get data from the channel or just get value 1?
+		debug_chan_sel=1
+		##which of the two polarizations do we choose?
+		debug_pol_sel=0
+		coarse_chan_select=25
+		fine_chan_select=25
+		fftShift=255
+		
 
-						sum_adc0 = fpga.read_uint('adc_sum_sq0')
-						print 'Configuring overflow',
-						clockSpeed=fpga.est_brd_clk()
-						##for the coarse FFT the layout is debug_chan 22-27, debug_chan_sel 21, debu_pol_sel 20,coarse_chan_select 10-19,fftShift 0-10
-						##choose the debug channel
-						debug_chan=25
-						#do we get data from the channel or just get value 1?
-						debug_chan_sel=1
-						##which of the two polarizations do we choose?
-						debug_pol_sel=0
-						coarse_chan_select=25
-						fine_chan_select=25
-						fftShift=255
+	# control register is set up as debug_snap_select 25-27, N/A 24, fine_tvg_en 21, adv_tvg 20, fd_fs_tvg 19, packetizer tvg 18, ct_tvg 17, tvg_en 16, fancy_en 11, adc_protect_enable 10, gbe_en 9 , gbe_rst 8, clr_status 3, ar 2, man_sync 1, sys_rst 0
+## snap selections coarse72, fine_128, quant_16, ct_64, xiaui_128, gbetx0_128, buffer_72,finepfb_72
+		fpga.write_int('control',0<<25) 
+		fpga.write_int('snap_debug_ctrl',0)
+		##addrs=numpy.uint32(struct.unpack('>1024l',fpga.read('snap_debug_addr',4096,0)))
+		data=numpy.uint32(struct.unpack('>1024l',fpga.read('snap_debug_bram',4096,0)))
+		##set up the coarse control register
+		fpga.write_int('coarse_ctrl',debug_chan<<22|debug_chan_sel<<21|debug_pol_sel<<20,coarse_chan_select<<10|fftShift<<0) 
+		fpga.write_int('fine_ctrl',fine_chan_select) 
+     pps_count = fpga.read_uint('pps_count')
 
+		
+		#fpga.write_int('q_fft',0b101001010010) 
+    #fpga.write_int('p_fft',0b00000000)
+    #fpga.write_int('q_fft',0b00000000)
+    print 'done' 
 
-					# control register is set up as debug_snap_select 25-27, N/A 24, fine_tvg_en 21, adv_tvg 20, fd_fs_tvg 19, packetizer tvg 18, ct_tvg 17, tvg_en 16, fancy_en 11, adc_protect_enable 10, gbe_en 9 , gbe_rst 8, clr_status 3, ar 2, man_sync 1, sys_rst 0
-				## snap selections coarse72, fine_128, quant_16, ct_64, xiaui_128, gbetx0_128, buffer_72,finepfb_72
-						fpga.write_int('control',0<<25) 
-						fpga.write_int('snap_debug_ctrl',0)
-						##addrs=numpy.uint32(struct.unpack('>1024l',fpga.read('snap_debug_addr',4096,0)))
-						data=numpy.uint32(struct.unpack('>1024l',fpga.read('snap_debug_bram',4096,0)))
-						##set up the coarse control register
-						fpga.write_int('coarse_ctrl',debug_chan<<22|debug_chan_sel<<21|debug_pol_sel<<20,coarse_chan_select<<10|fftShift<<0) 
-						fpga.write_int('fine_ctrl',fine_chan_select) 
-						pps_count = fpga.read_uint('pps_count')
+    print 'Configuring accumulation period...',
+    #fpga.write_int('sync_gen_sync_period_var',81920*8000)
+    #fpga.write_int('sync_gen_sync_period_sel', 1)
+    print 'done'
 
-
-						#fpga.write_int('q_fft',0b101001010010) 
-						#fpga.write_int('p_fft',0b00000000)
-						#fpga.write_int('q_fft',0b00000000)
-						print 'done' 
-
-						print 'Configuring accumulation period...',
-						#fpga.write_int('sync_gen_sync_period_var',81920*8000)
-						#fpga.write_int('sync_gen_sync_period_sel', 1)
-						print 'done'
-
-						#print 'Set digital gain...',
-						#fpga.write_int('gain_I',0x0fffffff)
-						#fpga.write_int('gain_V',0x0fffffff)
-						#fpga.write_int('gain_U',0x0fffffff)
-						#fpga.write_int('gain_Q',0x0fffffff)
-						#print 'done'
-
-
-						print 'enable ADC lines',
-						#fpga.write_int('q_en', 1)
-						#fpga.write_int('p_en', 1)
-						print 'done'
-
-						print 'Set attenuation',
-						#fpga.write_int('q_atten',0b0) 
-						#fpga.write_int('p_atten',0b0)
-						print 'done'
-
-						print 'Sync',
-						#fpga.write_int('sync_gen_sync', 1)
-						#fpga.write_int('sync_gen_sync', 0)
-						print 'done'
-
-						print 'setup',
-						ifch = False
-						logprint = True
-						loggain = 1
-						maxfr = 400.0
-						xaxis = numpy.arange(0.0, maxfr, maxfr*1./4096)
-						print 'done'
-
-						'''screen = curses.initscr()
-						curses.noecho()
-						curses.curs_set(0)
-						screen.keypad(1) 
-						screen.addstr("Test\n\n")
-						screen.refresh() 
-						'''
-						#pdb.set_trace()
-						fpga.write_int('snap_debug_ctrl',1<<2)
-						ttest=numpy.uint32(struct.unpack('>1024l',fpga.read('snap_debug_bram',4096,0)))
-					##	prev_integration = fpga.read_uint('acc_num')
+    #print 'Set digital gain...',
+    #fpga.write_int('gain_I',0x0fffffff)
+    #fpga.write_int('gain_V',0x0fffffff)
+    #fpga.write_int('gain_U',0x0fffffff)
+    #fpga.write_int('gain_Q',0x0fffffff)
+    #print 'done'
 
 
-						# set up the figure with a subplot for each polarisation to be plotted
-						#fig = matplotlib.pyplot.figure()
-						#ax = fig.add_subplot(4,1,1)
+    print 'enable ADC lines',
+    #fpga.write_int('q_en', 1)
+    #fpga.write_int('p_en', 1)
+    print 'done'
 
-						# start the process
-						#fig.canvas.manager.window.after(1000, drawDataCallback)
-						#matplotlib.pyplot.show()
-						#while (1): 
-						#   get_data()
-						print 'loop start'
-					##	drawDataLoop()
-						#drawData_animate()
-						#curses.endwin()
-						print 'Exiting...'
+    print 'Set attenuation',
+    #fpga.write_int('q_atten',0b0) 
+    #fpga.write_int('p_atten',0b0)
+    print 'done'
+
+    print 'Sync',
+    #fpga.write_int('sync_gen_sync', 1)
+    #fpga.write_int('sync_gen_sync', 0)
+    print 'done'
+
+    print 'setup',
+    ifch = False
+    logprint = True
+    loggain = 1
+    maxfr = 400.0
+    xaxis = numpy.arange(0.0, maxfr, maxfr*1./4096)
+    print 'done'
+
+    '''screen = curses.initscr()
+    curses.noecho()
+    curses.curs_set(0)
+    screen.keypad(1) 
+    screen.addstr("Test\n\n")
+    screen.refresh() 
+    '''
+    prev_integration = fpga.read_uint('acc_num')
+    
+
+    # set up the figure with a subplot for each polarisation to be plotted
+    #fig = matplotlib.pyplot.figure()
+    #ax = fig.add_subplot(4,1,1)
+
+    # start the process
+    #fig.canvas.manager.window.after(1000, drawDataCallback)
+    #matplotlib.pyplot.show()
+    #while (1): 
+    #   get_data()
+    print 'loop start'
+    drawDataLoop()
+    #drawData_animate()
+    #curses.endwin()
+    print 'Exiting...'
 
 
-		except KeyboardInterrupt:
-				#curses.endwin()
-			exit_clean()
-		except:
-				#curses.endwin()
-			exit_fail()
+except KeyboardInterrupt:
+    #curses.endwin()
+    exit_clean()
+except:
+    #curses.endwin()
+    exit_fail()
 
 exit_clean()
