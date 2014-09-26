@@ -1,2 +1,0 @@
-verilog opb_register_simulink2ppc_v1_00_a /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/pcores/opb_register_simulink2ppc_v1_00_a/hdl/verilog/opb_register_simulink2ppc.v
-verilog work ../hdl/system_c09f12_01_mcount_lsw_wrapper.v

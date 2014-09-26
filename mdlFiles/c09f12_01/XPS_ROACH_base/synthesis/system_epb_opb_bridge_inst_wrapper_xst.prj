@@ -1,2 +1,0 @@
-verilog epb_opb_bridge_v1_00_a /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/pcores/epb_opb_bridge_v1_00_a/hdl/verilog/epb_opb_bridge.v
-verilog work ../hdl/system_epb_opb_bridge_inst_wrapper.v

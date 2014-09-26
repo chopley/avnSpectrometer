@@ -1,8 +1,0 @@
-verilog kat_adc_iic_controller_v1_00_a /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/pcores/kat_adc_iic_controller_v1_00_a/hdl/verilog/kat_adc_iic_controller.v
-verilog kat_adc_iic_controller_v1_00_a /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/pcores/kat_adc_iic_controller_v1_00_a/hdl/verilog/miic_ops.v
-verilog kat_adc_iic_controller_v1_00_a /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/pcores/kat_adc_iic_controller_v1_00_a/hdl/verilog/gain_set.v
-verilog kat_adc_iic_controller_v1_00_a /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/pcores/kat_adc_iic_controller_v1_00_a/hdl/verilog/opb_attach.v
-verilog kat_adc_iic_controller_v1_00_a /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/pcores/kat_adc_iic_controller_v1_00_a/hdl/verilog/cpu_op_fifo.v
-verilog kat_adc_iic_controller_v1_00_a /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/pcores/kat_adc_iic_controller_v1_00_a/hdl/verilog/fab_op_fifo.v
-verilog kat_adc_iic_controller_v1_00_a /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/pcores/kat_adc_iic_controller_v1_00_a/hdl/verilog/rx_fifo.v
-verilog work ../hdl/system_iic_adc0_wrapper.v

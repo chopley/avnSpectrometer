@@ -1,2 +1,0 @@
-VHDL gpio_simulink2ext_v1_00_a /data/casper/mlib_devel_cbass/c09f12_01/XPS_ROACH_base/pcores/gpio_simulink2ext_v1_00_a/hdl/vhdl/gpio_simulink2ext.vhd
-vhdl work ../hdl/system_c09f12_01_leds_roach_gpioa0_wrapper.vhd

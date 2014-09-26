@@ -1,9 +1,0 @@
-{
-  'accum' => 'SELECT Accumulator virtex5 Xilinx,_Inc. 11.0',
-  'addsub' => 'SELECT Adder_Subtracter virtex5 Xilinx,_Inc. 11.0',
-  'counter' => 'SELECT Binary_Counter virtex5 Xilinx,_Inc. 11.0',
-  'dpram' => 'SELECT Block_Memory_Generator virtex5 Xilinx,_Inc. 7.2',
-  'spram' => 'SELECT Block_Memory_Generator virtex5 Xilinx,_Inc. 7.2',
-  'sprom' => 'SELECT Block_Memory_Generator virtex5 Xilinx,_Inc. 7.2',
-  'xfft_v7_0' => 'SELECT Fast_Fourier_Transform virtex5 Xilinx,_Inc. 7.0'
-}
