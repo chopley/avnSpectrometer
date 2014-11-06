@@ -6,7 +6,7 @@ This script demonstrates programming an FPGA, configuring 10GbE cores and checki
 Author: Jason Manley, August 2009.
 Updated for CASPER 2013 workshop. This tut needs a rework to use new snap blocks and auto bit unpack.
 '''
-import numpy,corr, time, struct, sys, logging, socket
+import numpy,corr, time, struct, sys, logging, socket,pylab
 
 #Decide where we're going to send the data, and from which addresses:
 dest_ip  =10*(2**24) + 0*(2**16) + 0*(2**8) + 1
@@ -23,25 +23,71 @@ tx_snap = 'snap_gbe0_tx'
 rx_snap = 'snap_gbe3_rx'
 
 tx_core_name = 'gbe0'
+test_core_bram = 'qdrBram'
+test_QDRReg = 'testQDR'
+test_fineFFT= 'vals_testQDR'
 
+#boffile='c09f12_01_avn_acc_2014_Oct_17_1548.bof'
+#boffile='c09f12_01_avn_coffs_2014_Oct_15_1722.bof'
+#boffile='c09f12_01_avn_acc_2014_Oct_20_1431.bof'
+#boffile = 'c09f12_01_avn_coffs_2014_Oct_15_1534.bof'
+#boffile='c09f12_01_avn311014_2014_Oct_31_1406.bof'
+#boffile = 'c09f12_01_avn_2014_Oct_13_1031.bof'
 #boffile = 'c09f12_01_2014_Aug_08_1735.bof'
-boffile = 'c09f12_01_avn_2014_Sep_25_1503.bof'
+#boffile = 'c09f12_01_avn_2014_Sep_25_1503.bof'
+#boffile = 'c09f12_01_avn_2014_Oct_31_1038.bof'
+boffile = 'c09f12_01_2012_Dec_12_2202.bof'
 fpga=[]
 
 def bramw(fpga,bname,odata,samples=1024):
 		b_0=struct.pack('>'+str(samples)+'h',*odata)
 		fpga.blindwrite(bname,b_0)
 
-def setGainCoefficients(fpga):
-				a=numpy.ones(2**12)
+def bramwUnsignedLong(fpga,bname,odata,samples=1024):
+		b_0=struct.pack('>'+str(samples)+'I',*odata)
+		fpga.blindwrite(bname,b_0)
+
+def setFineFFTCoefficients(fpga,val):
+				a=numpy.ones(2**12)*1
+				a[0:4000]=0
+				fpga.write_int('quantisation_quant_v0_sel',val)
+				fpga.write_int('quantisation_quant_v1_sel',val)
+				bramw(fpga,'quantisation_quant_v0_Re1_val',a,2**12)
+				bramw(fpga,'quantisation_quant_v0_Im1_val',a,2**12)
+				bramw(fpga,'quantisation_quant_v1_Real1_val',a,2**12)
+				bramw(fpga,'quantisation_quant_v1_Imag1_val',a,2**12)
 				##the coefficients are written as 16 bit numbers.
 				##eq0 has real0,imag0, and eq1 has real1, imag1
-				a[10:11]=0.
-				a[6:7]=0.
-				a[2:3]=0.
-				bramw(fpga,'eq0',a,2**12)
-				bramw(fpga,'eq1',a,2**12)
+				#a=numpy.arange(0,2**12,1)
+#				a[3845:3850]=[1,2,3,2,5]
 
+def setQDRCoefficients(fpga,val):
+				a=numpy.zeros(2**12)
+				fpga.write_int(test_QDRReg,val)
+				##the coefficients are written as 16 bit numbers.
+				##eq0 has real0,imag0, and eq1 has real1, imag1
+				#a=numpy.arange(0,2**12,1)
+#				a[3845:3850]=[1,2,3,2,5]
+				bramw(fpga,'qdrBram',a,2**12)
+				bramw(fpga,'qdrBram',a,2**12)
+
+def setGainCoefficients(fpga):
+				#set the gain coefficients
+				a=numpy.ones(2**12)
+				a[:]=15
+				#[10:500]=0
+
+				##the coefficients are written as 16 bit numbers.
+				##eq0 has real0,imag0, and eq1 has real1, imag1
+#				a[10:11]=0.
+#				a[6:7]=0.
+#				a[2:3]=0.
+				bramwUnsignedLong(fpga,'eq0',a,2**12)
+				bramwUnsignedLong(fpga,'eq1',a,2**12)
+
+def readBram(fpga,bram,size):
+				a=fpga.read(bram,size,0)
+				return a
 def exit_fail():
     print 'FAILURE DETECTED. Log entries:\n',lh.printMessages()
 #    try:
@@ -148,7 +194,11 @@ try:
     sys.stdout.flush()
     fpga.write_int('gbe_ip0',dest_ip)
     fpga.write_int('gbe_port',fabric_port)
+    fpga.write_int('coarse_ctrl',128<<10|1)
+    fpga.write_int('fine_ctrl',0)
     setGainCoefficients(fpga)
+    #setQDRCoefficients(fpga,0)
+    #setFineFFTCoefficients(fpga,1)
 		#print 'done'
 		#bramw('eq1',b0,2**6)
     print 'Resetting cores and counters...',
@@ -157,7 +207,7 @@ try:
   #  fpga.write_int('rst', 0)
     print 'done'
 
-    time.sleep(2)
+    time.sleep(1)
 
     if opts.arp:
         print '\n\n==============================='
@@ -177,12 +227,58 @@ try:
     print '------------------------'
     print 'Triggering snap captures...',
     sys.stdout.flush()
-    fpga.write_int('control',1<<9)
+   # fpga.write_int('accumulationLength',487)
+   # fpga.write_int('accumulationLength',10000)
+
+    #fpga.write_int('control',1<<9|1<<16|1<<18)
+    #fpga.write_int('control',1<<9|1<<10|1<<16|1<<17)
+    fpga.write_int('control',1<<9|1<<10|0<<25|1<<2|1<<1)
+    fpga.write_int('control',1<<9|1<<10|0<<25)
+    fpga.write_int('snap_debug_ctrl',1)
+    fpga.write_int('adc_ctrl0',1<<31|63)
+    fpga.write_int('adc_ctrl1',1<<31|63)
+   # accum=fpga.read_uint('d1_accum_readAccumulation')
+    #%hile accum==accumNew:
+    # %    accumNew=fpga.read_uint('d1_accum_readAccumulation')
+						
+   # print accum
+    time.sleep(1)
+
+   # aa_h=numpy.uint32(struct.unpack('>1024l',fpga.read('d1_accum_ch1_lsb',4096,0)))
+   # aa_l=numpy.uint32(struct.unpack('>1024l',fpga.read('d1_accum_ch1_msb',4096,0)))
+   # accum=fpga.read_uint('d1_accum_readAccumulation')
+   # print accum
+  #  print aa_h,aa_l
+  #  pylab.plot(aa_h)
+   # pylab.show()
+    time.sleep(1)
+  #  aa_h=numpy.uint32(struct.unpack('>1024l',fpga.read('d1_accum_ch1_lsb',4096,0)))
+  #  aa_l=numpy.uint32(struct.unpack('>1024l',fpga.read('d1_accum_ch1_msb',4096,0)))
+  #  accum=fpga.read_uint('d1_accum_readAccumulation')
+  #  print accum
+  #  print aa_h,aa_l
+    while 1:
+						adc0=fpga.read_uint('adc_sum_sq0')
+						adc1=fpga.read_uint('adc_sum_sq1')
+						fpga.write_int('snap_debug_ctrl',1)
+						time.sleep(0.5)
+						fpga.write_int('snap_debug_ctrl',0)
+						a=readBram(fpga,'snap_debug_bram',16*1024)
+						a_0=struct.unpack('>16384B',a)
+						fstatus0=fpga.read_uint('fstatus0')
+						fstatus1=fpga.read_uint('fstatus1')
+						fft1=numpy.array(a_0[0:16])
+						odd=numpy.array(a_0[11:15])
+						even=numpy.array(a_0[7:11])
+						real1=numpy.int(fft1[14])+numpy.int(fft1[13])<<8 +numpy.int(fft1[1]&0x03)<<16
+						#imag1=(odd[2]>>2)+odd[1]<<8 + odd[0]<<16
+						#power =abs(real1+j*imag1)
+						
+						print adc0,adc1,fstatus0,fstatus1,a_0[0:16],real1
+						time.sleep(1)
+
     time.sleep(2)
     fpga.write_int('control',0)
-   # fpga.write_int(rx_snap+'_ctrl',0)
-   # fpga.write_int(tx_snap+'_ctrl',1)
-   # fpga.write_int(rx_snap+'_ctrl',1)
     print 'done'
 
     print 'Enabling output...',
