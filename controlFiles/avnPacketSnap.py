@@ -26,6 +26,20 @@ snap_fengine_debug_coarse_fft = construct.BitStruct(snap_debug,
 								construct.BitField("d1_r", 18),
 								construct.BitField("d1_i", 18))
 
+# the xaui snap block on the f-engine - this is just after packetisation
+snap_fengine_xaui = construct.BitStruct("snap_debug",
+					    construct.Padding(128 - 1 - 3 - 1 - 1 - 3 - 64),
+					    construct.Flag("link_down"),
+					    construct.Padding(3),
+					    construct.Flag("mrst"),
+					    construct.Padding(1),
+					    construct.Flag("eof"),
+					    construct.Flag("sync"),
+					    construct.Flag("hdr_valid"),
+					    construct.BitField("data", 64))
+
+
+
 def bin2fp(bits, m = 8, e = 7): 
      if m > 32: 
          raise RuntimeError('Unsupported fixed format: %i.%i' % (m,e)) 
@@ -146,7 +160,7 @@ try:
     fpga.write_int('coarse_ctrl',1<<20|31)
     fpga.write_int('fine_ctrl',0)
 		
-    fpga.write_int('control',1<<9|1<<10|0<<25)
+    fpga.write_int('control',1<<9|1<<10|4<<25) #4 is for Xaui
 
     while 1:
 						adc0=fpga.read_uint('adc_sum_sq0')
@@ -162,20 +176,13 @@ try:
 						fpga.write_int('snap_debug_ctrl',1) #bring this high to trigger capture
 						fpga.write_int('snap_debug_ctrl',0) #and take it low again
 						time.sleep(1.0)
-				#		snap_stat2=fpga.read_uint('snap_debug_status')
-				#	a=readBram(fpga,'snap_debug_bram',8*1024)
-				#	print 'a',a
-				#		a_0=struct.unpack('>16384b',a)
 						adc_0=struct.unpack('>4096b',adc)
-						repeater = construct.GreedyRange(snap_fengine_debug_coarse_fft)
+						repeater = construct.GreedyRange(snap_fengine_xaui)
 						bram_dmp=dict()
-						bram_dmp['data']=[]
-						bram_dmp['data'].append(fpga.read('snap_debug_bram',8192))
-					#	print bram_dmp['data']
-						d=bram_dmp['data'][0]
-						tt=repeater.parse(d)
+						#dd= fpga.read('snap_debug_bram',8192)
+						#dd0=struct.unpack('>8192b',dd)
 						val=numpy.zeros(512)
-						for i in range(0,100):
+						for i in range(0,200):
 										rd=[]
 										bram_dmp['data']=[]
 										bram_dmp['data'].append(fpga.read('snap_debug_bram',8192))
@@ -183,31 +190,25 @@ try:
 										tt=repeater.parse(d)
 										fpga.write_int('snap_debug_ctrl',1) #bring this high to trigger capture
 										fpga.write_int('snap_debug_ctrl',0) #and take it low again
-					#					print numpy.size(val),numpy.size(numpy.array(rd))
 										for a in tt:
-																		coarsed=[]
-																		aa=(a['d0_r'])
-																		ab=(a['d0_i'])
-																		shift = 32 - 18
-																		if(aa>131072):
-																						aa=aa-262144
-																		if(ab>131072):
-																						ab=ab-262144
-																	#	print aa,ab
-																		aa = aa<<(shift)
-																		ab = ab<<(shift)
-																		m=18
-																		e=17+shift
-																		power =  abs((float(aa)/(2**e)+(1j*float(ab)/(2**e))))
-																		rd.append(power)
-										val=val+numpy.array(rd)
-					#	print len(rd)
-						#print rd
+															xiau=[]
+															aa=a['data']
+															real=aa&0x0f
+															imag=(aa>>4)&0x0f
+															if(real>=8):
+																			real=real-16
+															if(imag>=8):
+																			imag=imag-16
+															power=abs(real+1j*imag)
+															rd.append(power)
+										val=val+numpy.array(rd)					
+						print len(rd)
 						pylab.ion()
 						pylab.clf()
 						pylab.plot(val,'b')
 						pylab.draw()
-						#print tt
+						#tt=repeater.parse(d)
+						val=numpy.zeros(512)
 						fstatus0=fpga.read_uint('fstatus0')
 						fstatus1=fpga.read_uint('fstatus1')
 						print adc0,adc1,fstatus0,fstatus1,snap_stat1,pps_count,clock_freq,snap_statadc

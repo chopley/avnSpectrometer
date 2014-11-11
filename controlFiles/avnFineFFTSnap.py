@@ -19,12 +19,12 @@ test_fineFFT= 'vals_testQDR'
 
 fpga=[]
 snap_debug='snap_debug'
-snap_fengine_debug_coarse_fft = construct.BitStruct(snap_debug,
-								construct.Padding(128 - (4*18)),
-								construct.BitField("d0_r", 18),
-								construct.BitField("d0_i", 18),
-								construct.BitField("d1_r", 18),
-								construct.BitField("d1_i", 18))
+snap_fengine_debug_fine_fft = construct.BitStruct(snap_debug,
+								construct.Padding(128 - (4*31)),
+								construct.BitField("d0_r", 31),
+								construct.BitField("d0_i", 31),
+								construct.BitField("d1_r", 31),
+								construct.BitField("d1_i", 31))
 
 def bin2fp(bits, m = 8, e = 7): 
      if m > 32: 
@@ -143,10 +143,10 @@ try:
     fpga.write_int('adc_snap0_ctrl',1)
     fpga.write_int('adc_ctrl0',1<<31|10)
     fpga.write_int('adc_ctrl1',1<<31|10)
-    fpga.write_int('coarse_ctrl',1<<20|31)
+    fpga.write_int('coarse_ctrl',128<<20|31)
     fpga.write_int('fine_ctrl',0)
 		
-    fpga.write_int('control',1<<9|1<<10|0<<25)
+    fpga.write_int('control',1<<9|1<<10|1<<25)
 
     while 1:
 						adc0=fpga.read_uint('adc_sum_sq0')
@@ -167,7 +167,7 @@ try:
 				#	print 'a',a
 				#		a_0=struct.unpack('>16384b',a)
 						adc_0=struct.unpack('>4096b',adc)
-						repeater = construct.GreedyRange(snap_fengine_debug_coarse_fft)
+						repeater = construct.GreedyRange(snap_fengine_debug_fine_fft)
 						bram_dmp=dict()
 						bram_dmp['data']=[]
 						bram_dmp['data'].append(fpga.read('snap_debug_bram',8192))
@@ -188,15 +188,15 @@ try:
 																		coarsed=[]
 																		aa=(a['d0_r'])
 																		ab=(a['d0_i'])
-																		shift = 32 - 18
-																		if(aa>131072):
-																						aa=aa-262144
-																		if(ab>131072):
-																						ab=ab-262144
-																	#	print aa,ab
+																		shift = 32 - 31
+																		if(aa>1073741824):
+																						aa=aa-2147483648
+																		if(ab>1073741824):
+																						ab=ab-2147483648
+																		print aa,ab
 																		aa = aa<<(shift)
 																		ab = ab<<(shift)
-																		m=18
+																		m=31
 																		e=17+shift
 																		power =  abs((float(aa)/(2**e)+(1j*float(ab)/(2**e))))
 																		rd.append(power)
@@ -206,6 +206,7 @@ try:
 						pylab.ion()
 						pylab.clf()
 						pylab.plot(val,'b')
+						pylab.grid()
 						pylab.draw()
 						#print tt
 						fstatus0=fpga.read_uint('fstatus0')
