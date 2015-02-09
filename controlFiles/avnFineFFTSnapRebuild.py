@@ -153,6 +153,9 @@ try:
     fpga.write_int('fine_ctrl',0)
 		
     fpga.write_int('control',1<<9|1<<10|1<<25)
+    fpga.write_int('accumLength',5) #bring this high to trigger capture
+    acc_cnt_old=0
+    acc_cnt=0
 
     while 1:
 						adc0=fpga.read_uint('adc_sum_sq0')
@@ -168,6 +171,11 @@ try:
 						fpga.write_int('snap_debug_ctrl',1) #bring this high to trigger capture
 						fpga.write_int('snap_debug_ctrl',0) #and take it low again
 						time.sleep(0.1)
+						while(acc_cnt==acc_cnt_old):
+										acc_cnt=fpga.read_uint('acc_count')
+						accumulation=readBram(fpga,'pol0',8*4096)
+						acc0=struct.unpack('>4096Q',accumulation)
+						acc_cnt_old=acc_cnt				
 				#		snap_stat2=fpga.read_uint('snap_debug_status')
 				#	a=readBram(fpga,'snap_debug_bram',8*1024)
 				#	print 'a',a
@@ -209,16 +217,19 @@ try:
 										val=val+numpy.array(rd)
 					#	print len(rd)
 						#print rd
+						pylab.close()
+						pylab.close()
 						pylab.ion()
-						pylab.clf()
 						pylab.plot(val,'b')
+						pylab.figure()
+						pylab.plot(numpy.array(acc0))
 						pylab.grid()
 						pylab.draw()
 						#print tt
-						fstatus0=fpga.read_uint('fstatus0')
-						fstatus1=fpga.read_uint('fstatus1')
+						fstatus0=0
+						fstatus1=0
 						print adc0,adc1,fstatus0,fstatus1,snap_stat1,pps_count,clock_freq,snap_statadc
-						time.sleep(0.1)
+						time.sleep(2.0)
 
     time.sleep(2)
     fpga.write_int('control',0)

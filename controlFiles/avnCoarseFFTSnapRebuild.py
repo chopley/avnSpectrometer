@@ -1,9 +1,4 @@
 #!/bin/env ipython
-#this will default to a frequency around 197.75MHz input
-# python initAVNFFT.py 'catseye'
-# python avnFineFFTSnap.py 'catseye'
-#This can be set up on the valon (on output 2) using a.set_frequency(8,197.750,1). Note the third argument is important to set the correct
-#channel spacing
 
 import numpy,corr, time, struct, sys, logging, socket,pylab,construct
 
@@ -24,12 +19,12 @@ test_fineFFT= 'vals_testQDR'
 
 fpga=[]
 snap_debug='snap_debug'
-snap_fengine_debug_fine_fft = construct.BitStruct(snap_debug,
-								construct.Padding(128 - (4*31)),
-								construct.BitField("d0_r", 31),
-								construct.BitField("d0_i", 31),
-								construct.BitField("d1_r", 31),
-								construct.BitField("d1_i", 31))
+snap_fengine_debug_coarse_fft = construct.BitStruct(snap_debug,
+								construct.Padding(128 - (4*18)),
+								construct.BitField("d0_r", 18),
+								construct.BitField("d0_i", 18),
+								construct.BitField("d1_r", 18),
+								construct.BitField("d1_i", 18))
 
 def bin2fp(bits, m = 8, e = 7): 
      if m > 32: 
@@ -148,17 +143,27 @@ try:
     fpga.write_int('adc_snap0_ctrl',1)
     fpga.write_int('adc_ctrl0',1<<31|10)
     fpga.write_int('adc_ctrl1',1<<31|10)
-    fpga.write_int('coarse_ctrl',126<<10|31)
-    fpga.write_int('snap_debug_trig_offset',35500)
+    fpga.write_int('coarse_ctrl',1<<20|126<<21|31)
     fpga.write_int('fine_ctrl',0)
 		
-    fpga.write_int('control',1<<9|1<<10|1<<25)
+    fpga.write_int('control',1<<9|1<<10|0<<25)
+    fpga.write_int('accumLength',200) #bring this high to trigger capture
+    acc_cnt_old=0
+    acc_cnt=0
 
     while 1:
 						adc0=fpga.read_uint('adc_sum_sq0')
 						adc1=fpga.read_uint('adc_sum_sq1')
+						print adc0,adc1
 						adc=readBram(fpga,'adc_snap1_bram',4*1024)
 						snap_stat1=fpga.read_uint('snap_debug_status')
+						while(acc_cnt==acc_cnt_old):
+										acc_cnt=fpga.read_uint('acc_count')
+						accumulation=readBram(fpga,'pol0',8*4096)
+						accumulation2=readBram(fpga,'pol1',8*4096)
+						acc0=struct.unpack('>4096Q',accumulation)
+						acc2=struct.unpack('>4096Q',accumulation2)
+						acc_cnt_old=acc_cnt				
 						snap_statadc=fpga.read_uint('adc_snap1_status')
 						pps_count=fpga.read_uint('pps_count')
 						clock_freq=fpga.read_uint('clk_frequency')
@@ -167,13 +172,13 @@ try:
 						fpga.write_int('adc_snap1_ctrl',0)
 						fpga.write_int('snap_debug_ctrl',1) #bring this high to trigger capture
 						fpga.write_int('snap_debug_ctrl',0) #and take it low again
-						time.sleep(0.1)
+						time.sleep(1.0)
 				#		snap_stat2=fpga.read_uint('snap_debug_status')
 				#	a=readBram(fpga,'snap_debug_bram',8*1024)
 				#	print 'a',a
 				#		a_0=struct.unpack('>16384b',a)
 						adc_0=struct.unpack('>4096b',adc)
-						repeater = construct.GreedyRange(snap_fengine_debug_fine_fft)
+						repeater = construct.GreedyRange(snap_fengine_debug_coarse_fft)
 						bram_dmp=dict()
 						bram_dmp['data']=[]
 						bram_dmp['data'].append(fpga.read('snap_debug_bram',8192))
@@ -181,7 +186,7 @@ try:
 						d=bram_dmp['data'][0]
 						tt=repeater.parse(d)
 						val=numpy.zeros(512)
-						for i in range(0,10):
+						for i in range(0,100):
 										rd=[]
 										bram_dmp['data']=[]
 										bram_dmp['data'].append(fpga.read('snap_debug_bram',8192))
@@ -194,31 +199,39 @@ try:
 																		coarsed=[]
 																		aa=(a['d0_r'])
 																		ab=(a['d0_i'])
-																		shift = 32 - 31
-																		if(aa>1073741824):
-																						aa=aa-2147483648
-																		if(ab>1073741824):
-																						ab=ab-2147483648
-																		print aa,ab
+																		shift = 32 - 18
+																		if(aa>131072):
+																						aa=aa-262144
+																		if(ab>131072):
+																						ab=ab-262144
+																	#	print aa,ab
 																		aa = aa<<(shift)
 																		ab = ab<<(shift)
-																		m=31
+																		m=18
 																		e=17+shift
 																		power =  abs((float(aa)/(2**e)+(1j*float(ab)/(2**e))))
 																		rd.append(power)
 										val=val+numpy.array(rd)
 					#	print len(rd)
 						#print rd
+						pylab.close()
+						pylab.close()
 						pylab.ion()
 						pylab.clf()
+						pylab.figure()
 						pylab.plot(val,'b')
-						pylab.grid()
+						pylab.figure()
+						pylab.plot(numpy.array(acc0))
+						pylab.hold('true')
+						pylab.plot(numpy.array(acc2),'g.')
 						pylab.draw()
 						#print tt
-						fstatus0=fpga.read_uint('fstatus0')
-						fstatus1=fpga.read_uint('fstatus1')
-						print adc0,adc1,fstatus0,fstatus1,snap_stat1,pps_count,clock_freq,snap_statadc
-						time.sleep(0.1)
+						#fstatus0=fpga.read_uint('fstatus0')
+						#fstatus1=fpga.read_uint('fstatus1')
+						fstatus0=0
+						fstatus1=0
+						print adc0,adc1,fstatus0,fstatus1,snap_stat1,pps_count,clock_freq,snap_statadc,acc0,acc_cnt
+						time.sleep(1.0)
 
     time.sleep(2)
     fpga.write_int('control',0)
