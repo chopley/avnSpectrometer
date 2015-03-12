@@ -37,7 +37,7 @@ if __name__ == '__main__':
     from optparse import OptionParser
     
     p = OptionParser()
-    p.set_usage('python initAVNFFT.py <ROACH_HOSTNAME_or_IP> [options]')
+    p.set_usage('python initRoach.py <ROACH_HOSTNAME_or_IP> [options]')
     p.set_description(__doc__)
     p.add_option('', '--noprogram', dest='noprogram', action='store_true',
         help='Don\'t write the boffile to the FPGA.')  
@@ -78,6 +78,7 @@ try:
     
     if verbose:
         print('Connecting to ROACH %s... '%(roach)),
+        sys.stdout.flush()
     fpga = corr.katcp_wrapper.FpgaClient(roach, katcp_port, logger=logger)
     time.sleep(1)
     
