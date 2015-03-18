@@ -11,10 +11,12 @@ are enabled.
 # 06 March 2015 - First proper working version created by James Smith.
 # Originally adapted (somewhat) from Jason Manley's script for Tutorial 3.
 
-import corr, time, sys, logging
+import corr, time, sys, logging, struct
 import avn_spectrometer as avn # Uses v0.1 of avn_spectrometer.py
 
-boffile = 'c09f12_12avn_2015_Feb_25_1753.bof'
+boffile = 'c09f12_12avn_2015_Feb_25_1753.bof' # Original working bof file. A bit slow but we're confident of the data that it produces.
+#boffile = 'c09f12_16avn_2015_Mar_11_1756.bof' # Charles's modified one. Reads snap blocks more frequently but somehow misaligns the data. I (JNS) modified it sligtly to try and rectify this but then timing wouldn't work, and I haven't had the courage to face that hurdle quite yet.
+
 katcp_port = 7147
 adc_atten = 10
 verbose = False
@@ -35,12 +37,12 @@ def exit_clean():
 
 if __name__ == '__main__':
     from optparse import OptionParser
-    
+
     p = OptionParser()
     p.set_usage('python initRoach.py <ROACH_HOSTNAME_or_IP> [options]')
     p.set_description(__doc__)
     p.add_option('', '--noprogram', dest='noprogram', action='store_true',
-        help='Don\'t write the boffile to the FPGA.')  
+        help='Don\'t write the boffile to the FPGA.')
     p.add_option('-v', '--verbose', dest = 'verbose', action='store_true',
         help='Show verbose information on what\'s happening')
     p.add_option('-b', '--boffile', dest='bof', type='str', default=boffile,
@@ -68,27 +70,27 @@ if __name__ == '__main__':
         else:
             print 'Please enter an attenuation number between 0 and 63 (inclusive).\nExiting.'
             exit()
-    
+
 try:
     #Logging for debug purposes in the event of a crash
     lh = corr.log_handlers.DebugLogHandler()
     logger = logging.getLogger(roach)
     logger.addHandler(lh)
     logger.setLevel(10)
-    
+
     if verbose:
         print('Connecting to ROACH %s... '%(roach)),
         sys.stdout.flush()
     fpga = corr.katcp_wrapper.FpgaClient(roach, katcp_port, logger=logger)
     time.sleep(1)
-    
+
     if fpga.is_connected():
         if verbose:
             print 'ok\n'
     else:
         print 'ERROR connecting to server %s.\n'%(roach)
         exit_fail()
-    
+
     if not opts.noprogram:
         if verbose:
             print '------------------------'
@@ -112,7 +114,7 @@ try:
     fpga.write_int('snap_debug_ctrl', 1<<0)
     fpga.write_int('adc_snap0_ctrl',  1<<0)
     fpga.write_int('adc_snap1_ctrl',  1<<0)
-    
+
     # adc_ctrl bit description:
     # MSB (31) - enable (goes through an AND gate with adc_protect_disable from 'control' register)
     # 6 LSBs - atten control - how much the ADC input should be attenuated.
@@ -121,22 +123,22 @@ try:
         sys.stdout.flush()
     fpga.write_int('adc_ctrl0',1<<31|adc_atten)
     fpga.write_int('adc_ctrl1',1<<31|adc_atten)
-    
+
     control_reg = avn.control_reg_bitstruct.parse('\x00\x00\x00\x00') # Just create a blank one to use...
     # Pulse arm and clr_status high, along with setting gbe_enable and adc_protect_disable high
     control_reg.gbe_enable = True
     control_reg.adc_protect_disable = True
     control_reg.clr_status = True
     control_reg.arm = True
-    fpga.write_int('control', avn.return_uint32(avn.control_reg_bitstruct.build(control_reg)))
-    
+    fpga.write_int('control', struct.unpack('>I', avn.control_reg_bitstruct.build(control_reg))[0])
+
     control_reg.clr_status = False
     control_reg.arm = False
-    fpga.write_int('control', avn.return_uint32(avn.control_reg_bitstruct.build(control_reg)))
+    fpga.write_int('control', struct.unpack('>I',avn.control_reg_bitstruct.build(control_reg))[0])
     # The control register doesn't need to be written to anymore except in the case of debugging.
     # It switches TVGs and selects which debug stream snap gets sent to the snap block.
     # Can also be used to reset everything.
-    
+
     if verbose:
         print 'ROACH %s armed and ready.'%(roach)
         sys.stdout.flush()
