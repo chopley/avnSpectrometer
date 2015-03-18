@@ -6,20 +6,24 @@ Module with stuff related to controlling the AVN c09f12 spectrometer
 """
 
 # Revision history:
+# 0.4 - Revised both the Coarse and the Fine FFT snap functions to retrieve and return both polarities. Also included snap triggering functionality within the aforementioned functions, so that the user doesn't have to do it manually.
 # 0.3 - Modified power function to return abs(square()) values instead of just square() to ensure positive outputs.
 # 0.2 - Updated by James Smith to include the fine FFT debug snap relevant bits. In this revision we discovered that the coarse FFT only retrieves one polarisation at a time, but the fine data is interleaved with both polarisations (I on 0, 2, etc. and Q on 1, 3, etc.) This version of the script doesn't do anything with them except retrieve and plot.
 # 0.1 - Created by James Smith, contains functions relating to initialising the FPGA
 #       and the coarse FFT debug snap scripts.
 
 import corr, construct, numpy, time, struct
-version_string = '0.3 (no date yet)'
+version_string = '0.4 (18 March 2015)'
 
-snap_size = 8192 # Bytes, I think.
-snap_word_size = 128 # Bits
-coarse_fft_size = 256
-fine_fft_size = 4096/4
+snap_size = 8192 # Bytes, 65536 bits, 128-bit individual datum length * 512 in most cases. BitStructs describing these detailed below.
+snap_word_size = 128 # Bits. See above comment.
+coarse_fft_size = 256 # Frequency bins
+fine_fft_size = 4096 # Frequency bins
+offset_shift_size = snap_size # For the fine FFT, when the whole thing can't be measured at once.
+num_offset_shifts = 8 # In case this later needs to be changed, perhaps for a different size fine FFT.
 
 # Bitstruct to control the control register on the ROACH
+# Each bit documented on Google Drive.
 control_reg_bitstruct = construct.BitStruct('control_reg',
     construct.Padding(4),                           #28-31
     construct.BitField('debug_snap_select',3),      #25-27
@@ -101,7 +105,7 @@ def uint2sint_fine(uint):
 def ri2power(r, i, exp = 0):
     '''Return power (r^2 + i^2) given a real and imaginary variable
     '''
-    return float(numpy.abs((numpy.square(r) + numpy.square(i))/(2**exp))) # Without the abs() this sometimes returned negative numbers. Wierdly, because it shouldn't have.
+    return float(numpy.abs((numpy.square(r) + numpy.square(i))/(2**exp))) # Without the abs() this sometimes returned negative numbers. No idea why, possibly something done wrong in previous iterations. Not too expensive computationally though so left in for the time being.
 
 def trigger_snap(fpga, verbose=False):
     '''Write a posedge to the 'snap_debug_ctrl' register on the FPGA in order to start it up, then wait for it to be ready.
@@ -122,18 +126,20 @@ def trigger_snap(fpga, verbose=False):
 
 def retrieve_coarse_FFT_snap(fpga, exp=17, verbose=False, tone_detection_level=1):
     '''Retrieve coarse FFT data from the fpga.
-    Returns a numpy array with floating-point data in it, four frames' worth.
+    Returns two numpy arrays with floating-point data, four frames' worth of LCP and RCP in that order.
 
     @fpga is a corr.katcp_wrapper.FpgaClient object
     @exp is the power of 2 by which the power levels are divided before they're added to the accumulator
     @tone_detection_level is only important if verbose is true, because it'll flag a signal of greater value than whatever its value is (arbitrarily 1). Useful for debugging, if a tone from a synthesiser is input to the ADCs.
     '''
-    #Charles had exp at 17 so I'm tentatively keeping it there...
+    # Default exp=17 selected heuristically, no specific reason for it at this stage.
 
     # LCP first
 
     if verbose:
         print 'Configuring control register to pass coarseFFT data to the snap_debug block...'
+    # GENERAL REGISTER WRITING PROCEDURE: Read the value of the control register so that only the necessary bits are changed,
+    # modify the bits necessary, and write the number back into the register.
     control_reg = control_reg_bitstruct.parse(struct.pack('>I',fpga.read_uint('control')))
     control_reg.debug_snap_select = debug_snap_select['coarse_72']
     fpga.write_int('control', struct.unpack('>I', control_reg_bitstruct.build(control_reg))[0])
@@ -149,7 +155,7 @@ def retrieve_coarse_FFT_snap(fpga, exp=17, verbose=False, tone_detection_level=1
     if verbose:
         print 'Retrieving coarse FFT LCP snap data...'
     num_array = []
-    LCP_accumulator = numpy.zeros(coarse_fft_size)
+    LCP = numpy.zeros(coarse_fft_size)
     trigger_snap(fpga, verbose=verbose)
     bram_data = snap_coarse_repeater.parse(fpga.read('snap_debug_bram',snap_size))
 
@@ -157,10 +163,10 @@ def retrieve_coarse_FFT_snap(fpga, exp=17, verbose=False, tone_detection_level=1
         num_array.append(ri2power(uint2sint_coarse(a['d0_r']), uint2sint_coarse(a['d0_i']), exp=exp))
         num_array.append(ri2power(uint2sint_coarse(a['d1_r']), uint2sint_coarse(a['d1_i']), exp=exp))
 
-    LCP_accumulator += numpy.array(num_array[0:256])
-    LCP_accumulator += numpy.array(num_array[256:512])
-    LCP_accumulator += numpy.array(num_array[512:768])
-    LCP_accumulator += numpy.array(num_array[768:1024])
+    LCP += numpy.array(num_array[0:256])
+    LCP += numpy.array(num_array[256:512])
+    LCP += numpy.array(num_array[512:768])
+    LCP += numpy.array(num_array[768:1024])
 
     # Now for the RCP
 
@@ -175,7 +181,7 @@ def retrieve_coarse_FFT_snap(fpga, exp=17, verbose=False, tone_detection_level=1
     if verbose:
         print 'Retrieving coarse FFT RCP snap data...'
     num_array = []
-    RCP_accumulator = numpy.zeros(coarse_fft_size)
+    RCP = numpy.zeros(coarse_fft_size)
     trigger_snap(fpga, verbose=verbose)
     bram_data = snap_coarse_repeater.parse(fpga.read('snap_debug_bram',snap_size))
 
@@ -183,60 +189,74 @@ def retrieve_coarse_FFT_snap(fpga, exp=17, verbose=False, tone_detection_level=1
         num_array.append(ri2power(uint2sint_coarse(a['d0_r']), uint2sint_coarse(a['d0_i']), exp=exp))
         num_array.append(ri2power(uint2sint_coarse(a['d1_r']), uint2sint_coarse(a['d1_i']), exp=exp))
 
-    RCP_accumulator += numpy.array(num_array[0:256])
-    RCP_accumulator += numpy.array(num_array[256:512])
-    RCP_accumulator += numpy.array(num_array[512:768])
-    RCP_accumulator += numpy.array(num_array[768:1024])
-
-
+    RCP += numpy.array(num_array[0:256])
+    RCP += numpy.array(num_array[256:512])
+    RCP += numpy.array(num_array[512:768])
+    RCP += numpy.array(num_array[768:1024])
 
     if verbose:
-        for i in range(0,len(LCP_accumulator)):
-            if LCP_accumulator[i] > tone_detection_level:
-                print "Tone detected,LCP, bin %d, %f"%(i, LCP_accumulator[i])
-            if RCP_accumulator[i] > tone_detection_level:
-                print "Tone detected,RCP, bin %d, %f"%(i, LCP_accumulator[i])
+        for i in range(0,len(LCP)):
+            if LCP[i] > tone_detection_level:
+                print "Tone detected,LCP, bin %d, %f"%(i, LCP[i])
+            if RCP[i] > tone_detection_level:
+                print "Tone detected,RCP, bin %d, %f"%(i, LCP[i])
         print 'Coarse FFT snap retrieval complete.'
 
-    return LCP_accumulator, RCP_accumulator
+    return LCP, RCP
 
-# TODO: This function needs fixing!!!!! It's using the _size_ variable all wrongly.
-# There's a perfectly good reason for this, I just haven't updated it as such yet, because I've only just recently figured out properly how it works.
-
-def retrieve_fine_FFT_snap(fpga, exp=17, verbose=False, tone_detection_level=1000):
+def retrieve_fine_FFT_snap(fpga, coarse_channel, exp=17, verbose=False, tone_detection_level=1000):
     '''Retrieve fine FFT data from the fpga.
-    Returns a numpy array with floating-point data in it, half a frame's worth.
+    Returns two fft_length numpy arrays, LCP and RCP, in that order.
 
-    @exp is the power of 2 by which the power levels are divided before they're added to the accumulator
     @tone_detection_level is only important if verbose is true, because it'll flag a signal of greater value than whatever its value is (arbitrarily 1). Useful for debugging, if a tone from a synthesiser is input to the ADCs.
+    @exp As in the coarse function, this is the power of two by which the numbers are divided before they come out, otherwise they get very very large.
     '''
 
     if verbose:
-        print 'Retrieving fine FFT snap data...'
+        print 'Configuring control to pass fine_128 channel to snap...'
+        sys.stdout.flush()
+    control_reg = control_reg_bitstruct.parse(struct.pack('>I',fpga.read_uint('control')))
+    control_reg.debug_snap_select = debug_snap_select['fine_128']
+    fpga.write_int('control', struct.unpack('>I',control_reg_bitstruct.build(control_reg))[0])
 
-    num_array = []
-    accumulator = numpy.zeros(fine_fft_size)
-    trigger_snap(fpga, verbose=verbose)
-    bram_data = snap_fine_repeater.parse(fpga.read('snap_debug_bram',snap_size))
+    if verbose:
+        print 'Configuring coarse_ctrl to pass channel %d...'%(coarse_channel)
+        sys.stdout.flush()
+    coarse_ctrl_reg = coarse_ctrl_reg_bitstruct.parse('\x00\x00\x00\x00')
+    coarse_ctrl_reg.coarse_chan_select = coarse_channel
+    coarse_ctrl_reg.coarse_fft_shift = 341 # 101010101 in binary
+    fpga.write_int('coarse_ctrl', struct.unpack('>I', coarse_ctrl_reg_bitstruct.build(coarse_ctrl_reg))[0])
 
-    for a in bram_data:
-        num_array.append(ri2power(uint2sint_fine(a['d0_r']), uint2sint_fine(a['d0_i']), exp=exp))
+   # Still don't know about this one. Need to characterise properly.
+    fpga.write_int('fine_ctrl',0)
+
+    LCP = []
+    RCP = []
+
+    for offset_shift_counter in range(0,num_offset_shifts):
         if verbose:
-            print '%d elements captured'%(len(num_array))
-            if (ri2power(uint2sint_fine(a['d0_r']), uint2sint_fine(a['d0_i']), exp=17) > tone_detection_level):
-                print 'Tone detected, bin %d, %f' %(len(num_array) - 1, num_array[-1])
-        num_array.append(ri2power(uint2sint_fine(a['d1_r']), uint2sint_fine(a['d1_i']), exp=exp))
-        if verbose:
-            print '%d elements captured'%(len(num_array))
-            if ((ri2power(uint2sint_fine(a['d1_r']), uint2sint_fine(a['d1_i']), exp=17)) > tone_detection_level):
-                print 'Tone detected, bin %d, %f' %(len(num_array) - 1, num_array[-1])
+            print 'Section %d'%(offset_shift_counter)
+        fpga.write_int('snap_debug_trig_offset',offset_shift_counter*offset_shift_size)
+        trigger_snap(fpga, verbose=verbose)
+        bram_data = snap_fine_repeater.parse(fpga.read('snap_debug_bram',snap_size))
 
-    accumulator += numpy.array(num_array)
+        for a in bram_data:
+            LCP.append(ri2power(uint2sint_fine(a['d0_r']), uint2sint_fine(a['d0_i']), exp=exp))
+            RCP.append(ri2power(uint2sint_fine(a['d1_r']), uint2sint_fine(a['d1_i']), exp=exp))
+            if verbose:
+                print '%d LCP/RCP elements captured'%(len(LCP))
+                if ((ri2power(uint2sint_fine(a['d0_r']), uint2sint_fine(a['d0_i']), exp=17)) > tone_detection_level):
+                    print 'Tone detected, LCP fine bin %d, %f' %(len(LCP) - 1, LCP[-1])
+                if ((ri2power(uint2sint_fine(a['d1_r']), uint2sint_fine(a['d1_i']), exp=17)) > tone_detection_level):
+                    print 'Tone detected, RCP fine bin %d, %f' %(len(RCP) - 1, RCP[-1])
+
+    LCP = numpy.array(LCP)
+    RCP = numpy.array(RCP)
 
     if verbose:
         print 'Fine FFT snap retrieval complete.'
 
-    return accumulator
+    return LCP, RCP
 
 
 if __name__ == '__main__':
