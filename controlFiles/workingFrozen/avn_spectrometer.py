@@ -12,7 +12,7 @@ Module with stuff related to controlling the AVN c09f12 spectrometer
 # 0.1 - Created by James Smith, contains functions relating to initialising the FPGA
 #       and the coarse FFT debug snap scripts.
 
-import corr, construct, numpy, time, struct
+import corr, construct, numpy, time, struct, sys
 version_string = '0.4 (18 March 2015)'
 
 snap_size = 8192 # Bytes, 65536 bits, 128-bit individual datum length * 512 in most cases. BitStructs describing these detailed below.
