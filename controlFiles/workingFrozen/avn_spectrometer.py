@@ -204,7 +204,7 @@ def retrieve_coarse_FFT_snap(fpga, exp=17, verbose=False, tone_detection_level=1
 
     return LCP, RCP
 
-def retrieve_fine_FFT_snap(fpga, coarse_channel, exp=17, verbose=False, tone_detection_level=1000):
+def retrieve_fine_FFT_snap(fpga, coarse_channel, exp=17, verbose=False, tone_detection_level=10000):
     '''Retrieve fine FFT data from the fpga.
     Returns two fft_length numpy arrays, LCP and RCP, in that order.
 
