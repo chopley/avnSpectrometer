@@ -1,6 +1,10 @@
 #!/bin/env ipython
 
-"""Displays a debug-version of the AVN wideband spectrometer, with data
+"""
+NOTE: Deprecated - this script's functionality has been incorporated into the Broad script with the -n flag.
+It has none of the newer features.
+
+Displays a debug-version of the AVN wideband spectrometer, with data
 from the coarse FFT and a selected fine FFT channel. The data is retrieved
 via the snap_debug block.
 """

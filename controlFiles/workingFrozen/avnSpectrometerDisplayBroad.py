@@ -3,24 +3,42 @@
 """Displays a debug-version of the AVN wideband spectrometer, with data
 from the coarse FFT and a selected fine FFT channel. The data is retrieved
 via the snap_debug block.
+
+Suggested usage:
+python avnSpectrometerDisplayBroad.py <roachname> -c <channel> -e -v -T <snap recording interval>
+Other options and explanation for the above can be obtained by:
+python avnSpectrometerDisplayBroad.py --help
 """
 
 # Revision History:
 # 17 March 2015 - James Smith - Initial version, assembled from three other scripts which I'd written previously for doing just this.
 # 19 March 2015 - James Smith - Adapted to display a wider array of fine FFT samples, mostly for debugging purposes.
+# 23 March 2015 - James Smith - Added the following functionality:
+#   - write the results out to text files,
+#   - turn on or off broad snapping (i.e. snap only the selected channel and not the four around it),
+#   - read from the ADC's snap blocks, not graphing that but writing it to log files, and
+#   - reading from and logging a few of the status registers with each capture.
 
-import corr, time, sys, logging, struct, numpy
+
+import corr, time, sys, logging, struct, numpy, os
 import avn_spectrometer as avn # Uses v0.4 of avn_spectrometer.py
 import matplotlib.pyplot as plt
 
-boffile = 'c09f12_12avn_2015_Feb_25_1753.bof' # Original working bof file. A bit slow but we're confident of the data that it produces.
+#boffile = 'c09f12_12avn_2015_Feb_25_1753.bof' # Original working bof file. A bit slow but we're confident of the data that it produces.
 #boffile = 'c09f12_16avn_2015_Mar_11_1756.bof' # Charles's modified one. Reads snap blocks more frequently but somehow misaligns the data. I (JNS) modified it sligtly to try and rectify this but then timing wouldn't work, and I haven't had the courage to face that hurdle quite yet.
+#boffile = 'c09f12_17avn_2015_Mar_13_1459.bof' #Faster but blocks misaligned still.
+#boffile = 'c09f12_20avn_2015_Mar_23_1236.bof' #Still two bins out, but this time on the other side.
+boffile = 'c09f12_21avn_2015_Mar_23_1645.bof' # Correct bin!
+
 
 katcp_port = 7147
-adc_atten = 5
+adc_atten = 0
 verbose = False
 accumulation_length = 1 # For the time being. Once we figure out how to make the boffile faster we can do some longer accumulations.
 even_scales = False # Whether to display the adjacent fine FFT information on even scales. Otherwise each graph autoscales individually and it can be hard to compare them at a glance.
+narrow = False
+logfiles = True
+recording_interval = 60 # seconds
 
 def exit_fail():
     print 'FAILURE DETECTED. Log entries:\n', lh.printMessages()
@@ -45,19 +63,25 @@ if __name__ == '__main__':
     p.add_option('', '--noprogram', dest='noprogram', action='store_true',
         help='Don\'t write the boffile to the FPGA.')
     p.add_option('-v', '--verbose', dest = 'verbose', action='store_true',
-        help='Show verbose information on what\'s happening')
+        help='Show verbose information on what\'s happening, default off.')
     p.add_option('-b', '--boffile', dest='bof', type='str', default=boffile,
-        help='Specify the bof file to load')
+        help='Specify the bof file to load, default is %s'%(boffile))
     p.add_option('-p', '--katcpport', dest='kcp', type='int', default=katcp_port,
-        help='Specify the KatCP port through which to communicate with the ROACH, default 7147')
+        help='Specify the KatCP port through which to communicate with the ROACH, default %d'%(katcp_port))
     p.add_option('-t', '--atten', dest='atn', type='int', default=adc_atten,
-        help='Specify the amount by which the ADC should attenuate the input power, with zero being unattenuated and 63 being the maximum of 31.5 dB, in 0.5 dB steps. default 10 (5 dB)')
+        help='Specify the amount by which the ADC should attenuate the input power, with zero being unattenuated and 63 being the maximum of 31.5 dB, in 0.5 dB steps. default %d (%s dB) '%(adc_atten, str(adc_atten*0.5)))
     p.add_option('-a', '--acclen', dest='accum_len', type='int', default=accumulation_length,
-        help='Specify the number of accumlations to do before plotting, default %d'%(accumulation_length))
+        help='Specify the number of accumlations to do before plotting and recording, default %d'%(accumulation_length))
     p.add_option('-c', '--coarsechan', dest='coarse_chan', type='int',
         help='Specify the coarse channel from which to make the fine FFT')
     p.add_option('-e', '--evenscales', dest='evenscales', action='store_true',
-        help='Display the adjacent fine FFT output on even scales.')
+        help='Display the adjacent fine FFT output on even scales, otherwise each graph autoscales itself.')
+    p.add_option('-l', '--no-logging', dest='nolog', action='store_true',
+        help='Turn off logging to textfiles, on by default.')
+    p.add_option('-n', '--narrow', dest='narrow', action='store_true',
+        help='Turn off the multiple-channel snap option, will reduce amount of channels visible but will snap faster. Appropriate for when you want the data to come through quickly, not so much of an issue when T is long, unless there are concerns about the amount of data produced (about 1.2 MB per capture).')
+    p.add_option('-T', '--time', dest='time', type='int', default=recording_interval,
+        help='Define the interval (in seconds) at which everything must be snapped, default %d seconds.'%(recording_interval))
     opts, args = p.parse_args(sys.argv[1:])
 
     if args==[]:
@@ -71,6 +95,10 @@ if __name__ == '__main__':
         katcp_port = opts.kcp
     if opts.verbose:
         verbose = True
+    if opts.narrow:
+        narrow = True
+    if opts.nolog:
+        logfiles = False
     if opts.accum_len != '':
         accumulation_length = opts.accum_len
     if opts.atn != '':
@@ -86,6 +114,12 @@ if __name__ == '__main__':
         exit()
     if opts.evenscales:
        even_scales = True
+    if opts.time != '':
+        if opts.time >= 1:
+            recording_interval = opts.time
+        else:
+            print 'Please enter a positive integer for the recording interval.\nExiting...'
+            exit()
 
 try:
     #Logging for debug purposes in the event of a crash
@@ -142,15 +176,33 @@ try:
     control_reg.arm = False
     fpga.write_int('control', struct.unpack('>I',avn.control_reg_bitstruct.build(control_reg))[0])
 
-
+    if logfiles:
+        if not os.path.isdir('results'):
+            os.mkdir('results')
 
     if verbose:
         print 'ROACH %s armed and ready.'%(roach)
         sys.stdout.flush()
 
     plt.ion()
+    timestamp = ''
+    previous_recording = time.time()
 
     while 1:
+        previous_recording = time.time()
+
+        # Probably a good idea to record these things before everything else starts
+        board_clock_estimate = fpga.est_brd_clk()
+        clock_frequency = fpga.read_uint('clk_frequency')
+        pps_count = fpga.read_uint('pps_count')
+        fstatus0 = avn.register_fengine_fstatus.parse(struct.pack('>I',fpga.read_uint('fstatus0')))
+        fstatus1 = avn.register_fengine_fstatus.parse(struct.pack('>I',fpga.read_uint('fstatus1')))
+
+        if logfiles:
+            timestamp = str(int(time.time())) + ' - ' + time.ctime()
+            os.mkdir('results/' + timestamp)
+            if verbose:
+                print 'Recording results in directory %s'%('results/' + timestamp)
 
         LCP_coarse_accumulator = numpy.zeros(avn.coarse_fft_size)
         RCP_coarse_accumulator = numpy.zeros(avn.coarse_fft_size)
@@ -180,15 +232,46 @@ try:
             RCP_coarse_accumulator += RCP_coarse_data
 
             # Sit back and relax. This one is going to take a while.
-            for j in [-2,-1,0,1,2]:
-                LCP_fine_data, RCP_fine_data = avn.retrieve_fine_FFT_snap(fpga, coarse_channel + j, verbose=verbose)
-                if verbose:
-                    print 'debug data fine: %f'%(LCP_fine_data[2]) # The 2 is a bit arbitrary, just so see if there's a number there.
-                LCP_fine_accumulator[j + 2] += LCP_fine_data
-                RCP_fine_accumulator[j + 2] += RCP_fine_data
+            if narrow:
+                LCP_fine_data, RCP_fine_data = avn.retrieve_fine_FFT_snap(fpga, coarse_channel, verbose=verbose)
+                LCP_fine_accumulator[2] += LCP_fine_data
+                RCP_fine_accumulator[2] += RCP_fine_data
+
+            else:
+                for j in [-2,-1,0,1,2]:
+                    LCP_fine_data, RCP_fine_data = avn.retrieve_fine_FFT_snap(fpga, coarse_channel + j, verbose=verbose)
+                    if verbose:
+                        print 'debug data fine: %f'%(LCP_fine_data[2]) # The 2 is a bit arbitrary, just so see if there's a number there.
+                    LCP_fine_accumulator[j + 2] += LCP_fine_data
+                    RCP_fine_accumulator[j + 2] += RCP_fine_data
+
+        LCP_timestream, RCP_timestream = avn.retrieve_adc_snap(fpga, verbose=verbose)
 
         plt.close('all')
-        fig = plt.figure(figsize=(23,12)) # Fills most of the screen
+        #fig = plt.figure(figsize=(23,12)) # Fills most of the screen
+        fig = plt.figure(figsize=(18,12)) # Smaller so that terminal can still be seen
+
+        if logfiles:
+            numpy.savetxt('results/' + timestamp + '/coarse_LCP', LCP_coarse_accumulator)
+            numpy.savetxt('results/' + timestamp + '/coarse_RCP', RCP_coarse_accumulator)
+            numpy.savetxt('results/' + timestamp + '/fine_LCP', LCP_fine_accumulator)
+            numpy.savetxt('results/' + timestamp + '/fine_RCP', RCP_fine_accumulator)
+            numpy.savetxt('results/' + timestamp + '/adc_LCP', LCP_timestream)
+            numpy.savetxt('results/' + timestamp + '/adc_RCP', RCP_timestream)
+
+            f = open('results/' + timestamp + '/status_registers','w')
+
+            f.write('board_clock_estimate: %d\n'%(board_clock_estimate))
+            f.write('clock_frequency: %d\n'%(clock_frequency))
+            f.write('pps_count: %d\n'%(pps_count))
+
+            f.write('fstatus0:\n')
+            f.write(str(fstatus0) + '\n')
+
+            f.write('fstatus1:\n')
+            f.write(str(fstatus1) + '\n')
+
+            f.close()
 
         ax = []
         ax.append(plt.subplot2grid((3,5), (0,0), colspan=5))    # 0 - coarse FFT
@@ -205,14 +288,14 @@ try:
         ax[0].set_xlim(0, avn.coarse_fft_size-1)
         ax[0].xaxis.set_ticks(numpy.arange(0,avn.coarse_fft_size))
 
-        if (coarse_channel - 2) >=  0:
+        if (coarse_channel - 2) >=  0 and not narrow:
             ax[1].plot(LCP_fine_accumulator[0], 'b-')
             ax[1].plot(RCP_fine_accumulator[0], 'r-')
             ax[1].set_xlim(0, avn.fine_fft_size-1)
             ax[1].set_title('Fine ch %d'%(coarse_channel - 2))
             ax[1].xaxis.set_ticklabels([])
 
-        if (coarse_channel - 1) >= 0:
+        if (coarse_channel - 1) >= 0 and not narrow:
             ax[2].plot(LCP_fine_accumulator[1], 'b-')
             ax[2].plot(RCP_fine_accumulator[1], 'r-')
             ax[2].set_xlim(0, avn.fine_fft_size-1)
@@ -225,14 +308,14 @@ try:
         ax[3].set_title('Fine ch %d'%(coarse_channel))
         ax[3].xaxis.set_ticklabels([])
 
-        if (coarse_channel + 1) < avn.fine_fft_size:
+        if (coarse_channel + 1) < avn.fine_fft_size and not narrow:
             ax[4].plot(LCP_fine_accumulator[3], 'b-')
             ax[4].plot(RCP_fine_accumulator[3], 'r-')
             ax[4].set_xlim(0, avn.fine_fft_size-1)
             ax[4].set_title('Fine ch %d'%(coarse_channel + 1))
             ax[4].xaxis.set_ticklabels([])
 
-        if (coarse_channel + 2) < avn.fine_fft_size - 1:
+        if (coarse_channel + 2) < avn.fine_fft_size - 1 and not narrow:
             ax[5].plot(LCP_fine_accumulator[4], 'b-')
             ax[5].plot(RCP_fine_accumulator[4], 'r-')
             ax[5].set_xlim(0, avn.fine_fft_size-1)
@@ -244,14 +327,16 @@ try:
         ax[6].set_xlim(0, avn.fine_fft_size-1)
         ax[6].set_title('Fine FFT channel %d'%(coarse_channel))
 
-        if even_scales:
+        if even_scales and not narrow:
             ax[1].set_ylim(ax[3].get_ylim())
             ax[2].set_ylim(ax[3].get_ylim())
             ax[4].set_ylim(ax[3].get_ylim())
             ax[5].set_ylim(ax[3].get_ylim())
 
         plt.draw()
-        time.sleep(3)
+
+        while (previous_recording + recording_interval > time.time()):
+            time.sleep(1)
 
 except KeyboardInterrupt:
     exit_clean()

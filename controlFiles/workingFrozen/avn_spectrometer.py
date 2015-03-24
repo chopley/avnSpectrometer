@@ -6,6 +6,7 @@ Module with stuff related to controlling the AVN c09f12 spectrometer
 """
 
 # Revision history:
+# 0.5 - Added a few misc things to enable capturing some more data from the ROACH for debugging and commissioning purposes. No changes to existing stuff.
 # 0.4 - Revised both the Coarse and the Fine FFT snap functions to retrieve and return both polarities. Also included snap triggering functionality within the aforementioned functions, so that the user doesn't have to do it manually.
 # 0.3 - Modified power function to return abs(square()) values instead of just square() to ensure positive outputs.
 # 0.2 - Updated by James Smith to include the fine FFT debug snap relevant bits. In this revision we discovered that the coarse FFT only retrieves one polarisation at a time, but the fine data is interleaved with both polarisations (I on 0, 2, etc. and Q on 1, 3, etc.) This version of the script doesn't do anything with them except retrieve and plot.
@@ -17,6 +18,7 @@ version_string = '0.4 (18 March 2015)'
 
 snap_size = 8192 # Bytes, 65536 bits, 128-bit individual datum length * 512 in most cases. BitStructs describing these detailed below.
 snap_word_size = 128 # Bits. See above comment.
+snap_size_adc = 4096
 coarse_fft_size = 256 # Frequency bins
 fine_fft_size = 4096 # Frequency bins
 offset_shift_size = snap_size # For the fine FFT, when the whole thing can't be measured at once.
@@ -68,22 +70,53 @@ coarse_ctrl_reg_bitstruct = construct.BitStruct('coarse_ctrl',
 # Bitstruct for pulling coarse FFT data from the debug snap block.
 snap_fengine_debug_coarse_fft = construct.BitStruct('snap_debug',
     construct.Padding(snap_word_size - (4*18)),
-    construct.BitField("d0_r", 18),
-    construct.BitField("d0_i", 18),
-    construct.BitField("d1_r", 18), # Worth noting here that d0 and d1 are neigbouring even and odd samples from a SINGLE polarity,
-    construct.BitField("d1_i", 18)) # in contrast to the fine block.
+    construct.BitField('d0_r', 18),
+    construct.BitField('d0_i', 18),
+    construct.BitField('d1_r', 18), # Worth noting here that d0 and d1 are neigbouring even and odd samples from a SINGLE polarity,
+    construct.BitField('d1_i', 18)) # in contrast to the fine block.
 
 snap_coarse_repeater = construct.GreedyRange(snap_fengine_debug_coarse_fft)
 
 # Bitstruct for pulling fine FFT data from the debug snap block
 snap_fengine_debug_fine_fft = construct.BitStruct('snap_debug',
     construct.Padding(snap_word_size - (4*31)),
-    construct.BitField("d0_r", 31),
-    construct.BitField("d0_i", 31), # In this block, d0 is a sample from the ADC's I input (LCP), while
-    construct.BitField("d1_r", 31), # d1 is a sample from the ADC's Q input (RCP).
-    construct.BitField("d1_i", 31))
+    construct.BitField('d0_r', 31),
+    construct.BitField('d0_i', 31), # In this block, d0 is a sample from the ADC's I input (LCP), while
+    construct.BitField('d1_r', 31), # d1 is a sample from the ADC's Q input (RCP).
+    construct.BitField('d1_i', 31))
 
 snap_fine_repeater = construct.GreedyRange(snap_fengine_debug_fine_fft)
+
+# Bitstruct for getting stuff from the ADC snap blocks
+snap_fengine_adc = construct.BitStruct('adc_snap',
+    construct.BitField('d0_0', 8), # 1st sample (they arrive 4-at-a-time of 8-bit samples, remember?
+    construct.BitField('d0_1', 8), # 2nd sample
+    construct.BitField('d0_2', 8), # 3rd sample
+    construct.BitField('d0_3', 8), # 4th sample
+    construct.BitField('d1_0', 8), # 5th sample
+    construct.BitField('d1_1', 8), # 6th sample
+    construct.BitField('d1_2', 8), # 7th sample
+    construct.BitField('d1_3', 8)) # 8th sample
+
+snap_fengine_adc_repeater = construct.GreedyRange(snap_fengine_adc)
+
+# f-engine status
+register_fengine_fstatus = construct.BitStruct('fstatus0',
+    construct.BitField('coarse_bits', 5),       # 27-31 2^x - the number of points in the coarse FFT.
+    construct.BitField('fine_bits', 5),         # 22-26 2^y - the number of points in the fine FFT.
+    construct.BitField('sync_val', 2),          # 20-21 On which ADC cycle did the sync happen?
+    construct.Padding(2),                       # 18-19
+    construct.Flag('xaui_lnkdn'),               # 17    The 10GBE link is down.
+    construct.Flag('xaui_over'),                # 16    The 10GBE link has overflows.
+    construct.Padding(9),                       # 7-15
+    construct.Flag('clk_err'),                  # 6     The board frequency is calculated out of bounds.
+    construct.Flag('adc_disabled'),             # 5     The ADC has been disabled.
+    construct.Flag('ct_error'),                 # 4     There is a QDR error from the corner-turner.
+    construct.Flag('adc_overrange'),            # 3     The ADC is reporting over-ranging.
+    construct.Flag('fine_fft_overrange'),       # 2     Not used currently.
+    construct.Flag('coarse_fft_overrange'),     # 1     The coarse FFT is over-range.
+    construct.Flag('quant_overrange'))          # 0     The quantiser is over-range.
+
 
 def uint2sint_coarse(uint):
     '''Return the correct signed value interpreted from the value interpreted as unsigned from the ROACH using the bit-lengths of the coarse FFT. Necessary because of signed values getting concatenated together to come through via the snap blocks.
@@ -111,17 +144,17 @@ def trigger_snap(fpga, verbose=False):
     '''Write a posedge to the 'snap_debug_ctrl' register on the FPGA in order to start it up, then wait for it to be ready.
     '''
     if verbose:
-        print "Triggering positive edge on snap_debug/ctrl..."
+        print 'Triggering positive edge on snap_debug/ctrl...'
     fpga.write_int('snap_debug_ctrl',1) #bring this high to trigger capture
     time.sleep(1e-6)
     fpga.write_int('snap_debug_ctrl',0) #and take it low again
     snap_status = fpga.read_uint('snap_debug_status')
     if verbose:
-        print "Waiting for snap to be ready..."
+        print 'Waiting for snap to be ready...'
     while snap_status <> 16384:
         snap_status = fpga.read_uint('snap_debug_status')
     if verbose:
-        print "Snap ready, proceed..."
+        print 'Snap ready, proceed...'
 
 
 def retrieve_coarse_FFT_snap(fpga, exp=17, verbose=False, tone_detection_level=1):
@@ -197,9 +230,9 @@ def retrieve_coarse_FFT_snap(fpga, exp=17, verbose=False, tone_detection_level=1
     if verbose:
         for i in range(0,len(LCP)):
             if LCP[i] > tone_detection_level:
-                print "Tone detected,LCP, bin %d, %f"%(i, LCP[i])
+                print 'Tone detected,LCP, bin %d, %f'%(i, LCP[i])
             if RCP[i] > tone_detection_level:
-                print "Tone detected,RCP, bin %d, %f"%(i, LCP[i])
+                print 'Tone detected,RCP, bin %d, %f'%(i, LCP[i])
         print 'Coarse FFT snap retrieval complete.'
 
     return LCP, RCP
@@ -258,6 +291,88 @@ def retrieve_fine_FFT_snap(fpga, coarse_channel, exp=17, verbose=False, tone_det
 
     return LCP, RCP
 
+def retrieve_adc_snap(fpga, verbose=False):
+    '''Retrieve the raw ADC data from the ADC snap blocks.
+    '''
+    if verbose:
+        print 'Triggering positive edge on adc_snap0 and 1/ctrl...'
+    fpga.write_int('adc_snap0_ctrl',1) #bring this high to trigger capture
+    fpga.write_int('adc_snap1_ctrl',1)
+    time.sleep(1e-6)
+    fpga.write_int('adc_snap0_ctrl',0) #and take it low again
+    fpga.write_int('adc_snap1_ctrl',0)
+    snap_status = fpga.read_uint('adc_snap0_status')
+    if verbose:
+        print 'Waiting for snap to be ready...'
+    while snap_status <> 4096: # It's a bit smaller in this block.
+        snap_status = fpga.read_uint('adc_snap0_status')
+    adc_LCP = snap_fengine_adc_repeater.parse(fpga.read('adc_snap0_bram',snap_size_adc))
+
+    snap_status = fpga.read_uint('adc_snap1_status') # Just in case the other one isn't ready at the same time.
+    while snap_status <> 4096:
+        snap_status = fpga.read_uint('adc_snap1_status')
+    adc_RCP = snap_fengine_adc_repeater.parse(fpga.read('adc_snap1_bram',snap_size_adc))
+
+    if verbose:
+        print 'Snap complete.'
+
+
+    LCP_timestream = []
+    RCP_timestream = []
+
+    for a in adc_LCP:
+        LCP_timestream.append(a.d0_0)
+        if (LCP_timestream[-1] > 2**7):
+            LCP_timestream[-1] -= 2**8
+        LCP_timestream.append(a.d0_1)
+        if (LCP_timestream[-1] > 2**7):
+            LCP_timestream[-1] -= 2**8
+        LCP_timestream.append(a.d0_2)
+        if (LCP_timestream[-1] > 2**7):
+            LCP_timestream[-1] -= 2**8
+        LCP_timestream.append(a.d0_3)
+        if (LCP_timestream[-1] > 2**7):
+            LCP_timestream[-1] -= 2**8
+        LCP_timestream.append(a.d1_0)
+        if (LCP_timestream[-1] > 2**7):
+            LCP_timestream[-1] -= 2**8
+        LCP_timestream.append(a.d1_1)
+        if (LCP_timestream[-1] > 2**7):
+            LCP_timestream[-1] -= 2**8
+        LCP_timestream.append(a.d1_2)
+        if (LCP_timestream[-1] > 2**7):
+            LCP_timestream[-1] -= 2**8
+        LCP_timestream.append(a.d1_3)
+        if (LCP_timestream[-1] > 2**7):
+            LCP_timestream[-1] -= 2**8
+
+    for a in adc_RCP:
+        RCP_timestream.append(a.d0_0)
+        if (LCP_timestream[-1] > 2**7):
+            LCP_timestream[-1] -= 2**8
+        RCP_timestream.append(a.d0_1)
+        if (LCP_timestream[-1] > 2**7):
+            LCP_timestream[-1] -= 2**8
+        RCP_timestream.append(a.d0_2)
+        if (LCP_timestream[-1] > 2**7):
+            LCP_timestream[-1] -= 2**8
+        RCP_timestream.append(a.d0_3)
+        if (LCP_timestream[-1] > 2**7):
+            LCP_timestream[-1] -= 2**8
+        RCP_timestream.append(a.d1_0)
+        if (LCP_timestream[-1] > 2**7):
+            LCP_timestream[-1] -= 2**8
+        RCP_timestream.append(a.d1_1)
+        if (LCP_timestream[-1] > 2**7):
+            LCP_timestream[-1] -= 2**8
+        RCP_timestream.append(a.d1_2)
+        if (LCP_timestream[-1] > 2**7):
+            LCP_timestream[-1] -= 2**8
+        RCP_timestream.append(a.d1_3)
+        if (LCP_timestream[-1] > 2**7):
+            LCP_timestream[-1] -= 2**8
+
+    return LCP_timestream, RCP_timestream
 
 if __name__ == '__main__':
     print 'This is version %s of the avn_spectrometer module.'%(version_string)
