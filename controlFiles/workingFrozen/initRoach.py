@@ -8,6 +8,7 @@ are enabled.
 # Usage can be easily obtained by running 'python initRoach.py --help'
 
 # Revision History:
+# 26 March 2015 - Q&D addition of source and destination IP variables to write to the ROACH, so that the UDP works properly.
 # 06 March 2015 - First proper working version created by James Smith.
 # Originally adapted (somewhat) from Jason Manley's script for Tutorial 3.
 
@@ -20,6 +21,12 @@ boffile = 'c09f12_12avn_2015_Feb_25_1753.bof' # Original working bof file. A bit
 katcp_port = 7147
 adc_atten = 10
 verbose = False
+
+#Really in order to be thorough, these should be editable through the command line options, but I can't think of a good way to parse them at the moment.
+dest_ip = 10<<24 | 0<<16 | 0<<8 | 3<<0
+fabric_port = 60000
+source_ip = 10<<24 | 0<<16 | 0<<8 | 2<<0
+mac_base = 2<<40 | 2<<32
 
 def exit_fail():
     print 'FAILURE DETECTED. Log entries:\n', lh.printMessages()
@@ -123,6 +130,15 @@ try:
         sys.stdout.flush()
     fpga.write_int('adc_ctrl0',1<<31|adc_atten)
     fpga.write_int('adc_ctrl1',1<<31|adc_atten)
+
+    if verbose:
+        print 'Setting 10GbE source and destination addresses...'
+    fpga.write_int('gbe_ip0',dest_ip)
+    fpga.write_int('gbe_port',fabric_port)
+
+    if verbose:
+        print 'Enabling 10GbE...'
+    fpga.tap_start('tap0','gbe0', mac_base+source_ip, source_ip, fabric_port)
 
     control_reg = avn.control_reg_bitstruct.parse('\x00\x00\x00\x00') # Just create a blank one to use...
     # Pulse arm and clr_status high, along with setting gbe_enable and adc_protect_disable high
