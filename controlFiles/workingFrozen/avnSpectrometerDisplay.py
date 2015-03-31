@@ -92,6 +92,8 @@ try:
     logger.addHandler(lh)
     logger.setLevel(10)
 
+    print 'Warning! This script is deprecated and no longer maintained.'
+
     if verbose:
         print('Connecting to ROACH %s... '%(roach)),
         sys.stdout.flush()

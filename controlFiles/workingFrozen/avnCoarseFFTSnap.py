@@ -87,29 +87,30 @@ try:
 
     plt.ion()
 
-    while 1:
-        LCP_accumulator = numpy.zeros(avn.coarse_fft_size)
-        RCP_accumulator = numpy.zeros(avn.coarse_fft_size)
+    LCP_accumulator = numpy.zeros(avn.coarse_fft_size)
+    RCP_accumulator = numpy.zeros(avn.coarse_fft_size)
 
-        for i in range(0,accumulation_length):
-            if verbose:
-                print "Beginning accumulation %d..."%(i)
-                sys.stdout.flush()
+    for i in range(0,accumulation_length):
+        if verbose:
+            print "Beginning accumulation %d..."%(i)
+            sys.stdout.flush()
 
-            LCP_data, RCP_data = avn.retrieve_coarse_FFT_snap(fpga, verbose=verbose)
+        LCP_data, RCP_data = avn.retrieve_coarse_FFT_snap(fpga, verbose=verbose)
 
-            LCP_accumulator += LCP_data
-            RCP_accumulator += RCP_data
+        LCP_accumulator += LCP_data
+        RCP_accumulator += RCP_data
 
-        plt.close('all')
-        f = plt.figure()
-        ax = f.add_subplot(111)
-        ax.plot(numpy.arange(avn.coarse_fft_size), LCP_accumulator, 'b-')
-        ax.plot(numpy.arange(avn.coarse_fft_size), RCP_accumulator, 'r-')
-        ax.set_title('Coarse FFT')
-        ax.set_xlim(-1, avn.coarse_fft_size)
-        ax.grid()
-        plt.draw() # Use this instead of show(). For some reason.
+    plt.close('all')
+    f = plt.figure()
+    ax = f.add_subplot(111)
+    ax.plot(numpy.arange(avn.coarse_fft_size), LCP_accumulator, 'b-')
+    ax.plot(numpy.arange(avn.coarse_fft_size), RCP_accumulator, 'r-')
+    ax.set_title('Coarse FFT')
+    ax.set_xlim(-1, avn.coarse_fft_size)
+    ax.grid()
+    plt.draw() # Use this instead of show(). For some reason.
+
+    f = raw_input('press enter to continue')
 
 except KeyboardInterrupt:
     exit_clean()

@@ -8,7 +8,8 @@ Module with stuff related to controlling the AVN c09f12 spectrometer
 # Revision history:
 # 0.5 - Added a few misc things to enable capturing some more data from the ROACH for debugging and commissioning purposes. No changes to existing stuff.
 # 0.4 - Revised both the Coarse and the Fine FFT snap functions to retrieve and return both polarities. Also included snap triggering functionality within the aforementioned functions, so that the user doesn't have to do it manually.
-# 0.3 - Modified power function to return abs(square()) values instead of just square() to ensure positive outputs.
+# 0.3 - Modified power function to return abs(square()) values instead of just
+#       square() to ensure positive outputs.
 # 0.2 - Updated by James Smith to include the fine FFT debug snap relevant bits. In this revision we discovered that the coarse FFT only retrieves one polarisation at a time, but the fine data is interleaved with both polarisations (I on 0, 2, etc. and Q on 1, 3, etc.) This version of the script doesn't do anything with them except retrieve and plot.
 # 0.1 - Created by James Smith, contains functions relating to initialising the FPGA
 #       and the coarse FFT debug snap scripts.
@@ -27,25 +28,25 @@ num_offset_shifts = 8 # In case this later needs to be changed, perhaps for a di
 # Bitstruct to control the control register on the ROACH
 # Each bit documented on Google Drive.
 control_reg_bitstruct = construct.BitStruct('control_reg',
-    construct.Padding(4),                           #28-31
-    construct.BitField('debug_snap_select',3),      #25-27
-    construct.Padding(3),                           #22-24
-    construct.Flag('fine_tvg_en'),                  #21
-    construct.Flag('adc_tvg'),                      #20
-    construct.Flag('fd_fs_tvg'),                    #19
-    construct.Flag('packetiser_tvg'),               #18
-    construct.Flag('ct_tvg'),                       #17
-    construct.Flag('tvg_en'),                       #16
-    construct.Padding(4),                           #12-15
-    construct.Flag('fancy_en'),                     #11
-    construct.Flag('adc_protect_disable'),          #10
-    construct.Flag('gbe_enable'),                   #09
-    construct.Flag('gbe_rst'),                      #08
-    construct.Padding(4),                           #04-07
-    construct.Flag('clr_status'),                   #03
-    construct.Flag('arm'),                          #02
-    construct.Flag('man_sync'),                     #01
-    construct.Flag('sys_rst') )                     #00
+    construct.Padding(4),                           # 28-31
+    construct.BitField('debug_snap_select',3),      # 25-27
+    construct.Padding(3),                           # 22-24
+    construct.Flag('fine_tvg_en'),                  # 21
+    construct.Flag('adc_tvg'),                      # 20
+    construct.Flag('fd_fs_tvg'),                    # 19
+    construct.Flag('packetiser_tvg'),               # 18
+    construct.Flag('ct_tvg'),                       # 17
+    construct.Flag('tvg_en'),                       # 16
+    construct.Padding(4),                           # 12-15
+    construct.Flag('fancy_en'),                     # 11
+    construct.Flag('adc_protect_disable'),          # 10
+    construct.Flag('gbe_enable'),                   # 09
+    construct.Flag('gbe_rst'),                      # 08
+    construct.Padding(4),                           # 04-07
+    construct.Flag('clr_status'),                   # 03
+    construct.Flag('arm'),                          # 02
+    construct.Flag('man_sync'),                     # 01
+    construct.Flag('sys_rst') )                     # 00
 
 # Dictionary for selecting the debug_snap_select bit
 debug_snap_select = {
@@ -87,6 +88,16 @@ snap_fengine_debug_fine_fft = construct.BitStruct('snap_debug',
 
 snap_fine_repeater = construct.GreedyRange(snap_fengine_debug_fine_fft)
 
+# Bitstruct for pulling quantiser data from the debug snap block.
+snap_fengine_debug_quant = construct.BitStruct('snap_debug',
+    construct.Padding(snap_word_size - 16),
+    construct.BitField('p0_r', 4),
+    construct.BitField('p0_i', 4),
+    construct.BitField('p1_r', 4),
+    construct.BitField('p1_i', 4))
+
+snap_fengine_debug_quant_repeater = construct.GreedyRange(snap_fengine_debug_quant)
+
 # Bitstruct for getting stuff from the ADC snap blocks
 snap_fengine_adc = construct.BitStruct('adc_snap',
     construct.BitField('d0_0', 8), # 1st sample (they arrive 4-at-a-time of 8-bit samples, remember?
@@ -122,7 +133,7 @@ def uint2sint_coarse(uint):
     '''Return the correct signed value interpreted from the value interpreted as unsigned from the ROACH using the bit-lengths of the coarse FFT. Necessary because of signed values getting concatenated together to come through via the snap blocks.
     '''
     sint = uint
-    if sint > 131072:
+    if sint >= 131072:
         sint -= 262144
     return sint
 
@@ -130,7 +141,7 @@ def uint2sint_fine(uint):
     '''Return the correct signed value interpreted from the value interpreted as unsigned from the ROACH using the bit-lengths of the fine FFT. Necessary because of signed values getting concatenated together to come through via the snap blocks.
     '''
     sint = uint
-    if sint > 1073741824:
+    if sint >= 1073741824:
         sint -= 2147483648
     return sint
 
@@ -322,57 +333,147 @@ def retrieve_adc_snap(fpga, verbose=False):
 
     for a in adc_LCP:
         LCP_timestream.append(a.d0_0)
-        if (LCP_timestream[-1] > 2**7):
+        if (LCP_timestream[-1] >= 2**7):
             LCP_timestream[-1] -= 2**8
         LCP_timestream.append(a.d0_1)
-        if (LCP_timestream[-1] > 2**7):
+        if (LCP_timestream[-1] >= 2**7):
             LCP_timestream[-1] -= 2**8
         LCP_timestream.append(a.d0_2)
-        if (LCP_timestream[-1] > 2**7):
+        if (LCP_timestream[-1] >= 2**7):
             LCP_timestream[-1] -= 2**8
         LCP_timestream.append(a.d0_3)
-        if (LCP_timestream[-1] > 2**7):
+        if (LCP_timestream[-1] >= 2**7):
             LCP_timestream[-1] -= 2**8
         LCP_timestream.append(a.d1_0)
-        if (LCP_timestream[-1] > 2**7):
+        if (LCP_timestream[-1] >= 2**7):
             LCP_timestream[-1] -= 2**8
         LCP_timestream.append(a.d1_1)
-        if (LCP_timestream[-1] > 2**7):
+        if (LCP_timestream[-1] >= 2**7):
             LCP_timestream[-1] -= 2**8
         LCP_timestream.append(a.d1_2)
-        if (LCP_timestream[-1] > 2**7):
+        if (LCP_timestream[-1] >= 2**7):
             LCP_timestream[-1] -= 2**8
         LCP_timestream.append(a.d1_3)
-        if (LCP_timestream[-1] > 2**7):
+        if (LCP_timestream[-1] >= 2**7):
             LCP_timestream[-1] -= 2**8
 
     for a in adc_RCP:
         RCP_timestream.append(a.d0_0)
-        if (LCP_timestream[-1] > 2**7):
+        if (LCP_timestream[-1] >= 2**7):
             LCP_timestream[-1] -= 2**8
         RCP_timestream.append(a.d0_1)
-        if (LCP_timestream[-1] > 2**7):
+        if (LCP_timestream[-1] >= 2**7):
             LCP_timestream[-1] -= 2**8
         RCP_timestream.append(a.d0_2)
-        if (LCP_timestream[-1] > 2**7):
+        if (LCP_timestream[-1] >= 2**7):
             LCP_timestream[-1] -= 2**8
         RCP_timestream.append(a.d0_3)
-        if (LCP_timestream[-1] > 2**7):
+        if (LCP_timestream[-1] >= 2**7):
             LCP_timestream[-1] -= 2**8
         RCP_timestream.append(a.d1_0)
-        if (LCP_timestream[-1] > 2**7):
+        if (LCP_timestream[-1] >= 2**7):
             LCP_timestream[-1] -= 2**8
         RCP_timestream.append(a.d1_1)
-        if (LCP_timestream[-1] > 2**7):
+        if (LCP_timestream[-1] >= 2**7):
             LCP_timestream[-1] -= 2**8
         RCP_timestream.append(a.d1_2)
-        if (LCP_timestream[-1] > 2**7):
+        if (LCP_timestream[-1] >= 2**7):
             LCP_timestream[-1] -= 2**8
         RCP_timestream.append(a.d1_3)
-        if (LCP_timestream[-1] > 2**7):
+        if (LCP_timestream[-1] >= 2**7):
             LCP_timestream[-1] -= 2**8
 
     return LCP_timestream, RCP_timestream
+
+def retrieve_quant_snap(fpga, coarse_channel, verbose=False):
+    '''Retrieve quantiser debug data from the FPGA.
+    '''
+
+    if verbose:
+        print 'Configuring control register to pass quantiser data to the snap_debug block...'
+    control_reg = control_reg_bitstruct.parse(struct.pack('>I',fpga.read_uint('control')))
+    control_reg.debug_snap_select = debug_snap_select['quant_16']
+    fpga.write_int('control', struct.unpack('>I', control_reg_bitstruct.build(control_reg))[0])
+
+    if verbose:
+        print 'Configuring coarse_ctrl to pass channel %d through...'%(coarse_channel)
+    coarse_ctrl_reg = coarse_ctrl_reg_bitstruct.parse('\x00\x00\x00\x00') # Starting a clean one here, previous data not of interest.
+    coarse_ctrl_reg.coarse_fft_shift = 341 # 341 translates to 0101010101 in binary.
+    coarse_ctrl_reg.coarse_chan_select = coarse_channel
+    fpga.write_int('coarse_ctrl',struct.unpack('>I', coarse_ctrl_reg_bitstruct .build(coarse_ctrl_reg))[0])
+    fpga.write_int
+
+    if verbose:
+        print 'Retrieving quantiser snap data...'
+    left_data = []
+    right_data = []
+
+    for offset_shift_counter in range(0,num_offset_shifts):
+        if verbose:
+            print 'Section %d'%(offset_shift_counter)
+        fpga.write_int('snap_debug_trig_offset',offset_shift_counter*offset_shift_size)
+        trigger_snap(fpga, verbose=verbose)
+        bram_data = snap_fengine_debug_quant_repeater .parse(fpga.read('snap_debug_bram',snap_size))
+
+        for a in bram_data:
+            left_r = a['p0_r']
+            if left_r >= 2**3:
+                left_r -= 2**4
+            left_i = a['p0_i']
+            if left_i >= 2**3:
+                left_i -= 2**4
+            left = left_r + left_i*1j
+            left_data.append(left)
+
+            right_r = a['p1_r']
+            if right_r >= 2**3:
+                right_r -= 2**4
+            right_i = a['p1_i']
+            if right_i >= 2**3:
+                right_i -= 2**4
+            right = right_r + right_i*1j
+            right_data.append(right)
+
+    print 'Quantiser snap retrieval complete.'
+
+    return left_data, right_data
+
+def calculate_RMS(data):
+    '''Return the RMS value of the data passed to it.
+    @data is frequency-domain data! See the following URL for an explanation of the subtle
+    difference between freq. and time-domain RMS calculation:
+    https://en.wikipedia.org/wiki/Root_mean_square#RMS_in_frequency_domain
+    '''
+    data_RMS = numpy.sqrt( (abs(data**2)).sum()/(len(data)**2) )
+    return data_RMS
+
+# This comes from the original corr files but I've modified it to take an extra parameter.
+def setGainCoefficients(fpga, coeffs):
+    '''Set gain coefficients for the quantiser.
+    '''
+
+    bramwUnsignedLong(fpga, 'eq0', coeffs, 2**12)
+    bramwUnsignedLong(fpga, 'eq1', coeffs, 2**12)
+
+## These functions come from Charles's scripts: I've copited them as-is and not really looked too closely.
+## I corrected the indentation and added docstrings though.
+def bramw(fpga,bname,odata,samples=1024):
+    '''Write 16-bit signed int data to the bram using blindwrite.
+    '''
+    b_0=struct.pack('>'+str(samples)+'h',*odata) # The asterisk unpacks the arguments: https://docs.python.org/2/tutorial/controlflow.html#unpacking-argument-lists
+    fpga.blindwrite(bname,b_0)
+
+def bramwUnsignedLong(fpga,bname,odata,samples=1024):
+    '''Write 32-bit unsigned int data to the bram.
+    '''
+    b_0=struct.pack('>'+str(samples)+'I',*odata)
+    fpga.blindwrite(bname,b_0)
+
+def readBram(fpga,bram,size):
+    '''Read @size amount of data from @bram on @fpga.
+    '''
+    a=fpga.read(bram,size,0)
+    return a
 
 if __name__ == '__main__':
     print 'This is version %s of the avn_spectrometer module.'%(version_string)

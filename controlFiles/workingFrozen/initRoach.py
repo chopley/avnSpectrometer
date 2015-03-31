@@ -12,21 +12,24 @@ are enabled.
 # 06 March 2015 - First proper working version created by James Smith.
 # Originally adapted (somewhat) from Jason Manley's script for Tutorial 3.
 
-import corr, time, sys, logging, struct
+import corr, time, sys, logging, struct, numpy
 import avn_spectrometer as avn # Uses v0.1 of avn_spectrometer.py
 
-boffile = 'c09f12_12avn_2015_Feb_25_1753.bof' # Original working bof file. A bit slow but we're confident of the data that it produces.
+#boffile = 'c09f12_12avn_2015_Feb_25_1753.bof' # Original working bof file. A bit slow but we're confident of the data that it produces.
 #boffile = 'c09f12_16avn_2015_Mar_11_1756.bof' # Charles's modified one. Reads snap blocks more frequently but somehow misaligns the data. I (JNS) modified it sligtly to try and rectify this but then timing wouldn't work, and I haven't had the courage to face that hurdle quite yet.
+boffile = 'c09f12_21avn_2015_Mar_23_1645.bof' # Updated faster one, correct alignment of bins.
 
 katcp_port = 7147
 adc_atten = 10
 verbose = False
 
-#Really in order to be thorough, these should be editable through the command line options, but I can't think of a good way to parse them at the moment.
+# Q&D but it works and it's easy enough to understand I think.
 dest_ip = 10<<24 | 0<<16 | 0<<8 | 3<<0
 fabric_port = 60000
 source_ip = 10<<24 | 0<<16 | 0<<8 | 2<<0
 mac_base = 2<<40 | 2<<32
+
+coarse_channel = 128
 
 def exit_fail():
     print 'FAILURE DETECTED. Log entries:\n', lh.printMessages()
@@ -151,9 +154,16 @@ try:
     control_reg.clr_status = False
     control_reg.arm = False
     fpga.write_int('control', struct.unpack('>I',avn.control_reg_bitstruct.build(control_reg))[0])
-    # The control register doesn't need to be written to anymore except in the case of debugging.
-    # It switches TVGs and selects which debug stream snap gets sent to the snap block.
-    # Can also be used to reset everything.
+
+    if verbose:
+        print 'Configuring coarse_ctrl register...'
+    coarse_ctrl_reg = avn.coarse_ctrl_reg_bitstruct.parse('\x00\x00\x00\x00') # Starting a clean one here, previous data not of interest.
+    coarse_ctrl_reg.coarse_chan_select = coarse_channel
+    coarse_ctrl_reg.coarse_fft_shift = 341 # 341 translates to 0101010101 in binary.
+    fpga.write_int('coarse_ctrl',struct.unpack('>I', avn.coarse_ctrl_reg_bitstruct.build(coarse_ctrl_reg))[0])
+    fpga.write_int('fine_ctrl',0)
+
+    avn.setGainCoefficients(fpga, numpy.ones(avn.fine_fft_size))
 
     if verbose:
         print 'ROACH %s armed and ready.'%(roach)

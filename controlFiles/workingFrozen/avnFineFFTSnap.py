@@ -82,32 +82,30 @@ try:
 
     plt.ion()
 
-    while 1:
-        LCP_accumulator = numpy.zeros(avn.fine_fft_size)
-        RCP_accumulator = numpy.zeros(avn.fine_fft_size)
+    LCP_accumulator = numpy.zeros(avn.fine_fft_size)
+    RCP_accumulator = numpy.zeros(avn.fine_fft_size)
 
-        for i in range(0,accumulation_length):
-            if verbose:
-                print 'Beginning accumulation %d...'%(i)
+    for i in range(0,accumulation_length):
+        if verbose:
+            print 'Beginning accumulation %d...'%(i)
 
-            LCP, RCP = avn.retrieve_fine_FFT_snap(fpga, coarse_channel, verbose=verbose)
-            LCP_accumulator += LCP
-            RCP_accumulator += RCP
+        LCP, RCP = avn.retrieve_fine_FFT_snap(fpga, coarse_channel, verbose=verbose)
+        LCP_accumulator += LCP
+        RCP_accumulator += RCP
 
-        plt.close()
-        f, axarr = plt.subplots(2)
-        #First plot: ADC input I (LCP)
-        axarr[0].plot(LCP_accumulator , 'b-')
-        axarr[0].set_title('LCP')
-        axarr[0].set_xlim(-1,avn.fine_fft_size)
-        #Second plot: ADC input Q (RCP)
-        axarr[1].plot(RCP_accumulator , 'r-')
-        axarr[1].set_title('RCP')
-        axarr[1].set_xlim(-1,avn.fine_fft_size)
-        plt.draw()
+    plt.close()
+    f, axarr = plt.subplots(2)
+    #First plot: ADC input I (LCP)
+    axarr[0].plot(LCP_accumulator , 'b-')
+    axarr[0].set_title('LCP')
+    axarr[0].set_xlim(-1,avn.fine_fft_size)
+    #Second plot: ADC input Q (RCP)
+    axarr[1].plot(RCP_accumulator , 'r-')
+    axarr[1].set_title('RCP')
+    axarr[1].set_xlim(-1,avn.fine_fft_size)
+    plt.draw()
 
-        # f = raw_input('press enter to continue') # In case you'd like to have the thing wait. Sometimes it can flash through the graph too quickly to be able to examine it properly.
-        time.sleep(1)
+    f = raw_input('press enter to continue') # In case you'd like to have the thing wait. Sometimes it can flash through the graph too quickly to be able to examine it properly.
 
 except KeyboardInterrupt:
     exit_clean()
