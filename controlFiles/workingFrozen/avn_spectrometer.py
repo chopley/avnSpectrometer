@@ -98,6 +98,16 @@ snap_fengine_debug_quant = construct.BitStruct('snap_debug',
 
 snap_fengine_debug_quant_repeater = construct.GreedyRange(snap_fengine_debug_quant)
 
+# Bitstruct for pulling corner-turner data from the debug snap block
+snap_fengine_debug_ct = construct.BitStruct('snap_debug',
+    construct.Padding(snap_word_size - 64),
+    construct.BitField("p00_r", 4), construct.BitField("p00_i", 4), construct.BitField("p10_r", 4), construct.BitField("p10_i", 4),
+    construct.BitField("p01_r", 4), construct.BitField("p01_i", 4), construct.BitField("p11_r", 4), construct.BitField("p11_i", 4),
+    construct.BitField("p02_r", 4), construct.BitField("p02_i", 4), construct.BitField("p12_r", 4), construct.BitField("p12_i", 4),
+    construct.BitField("p03_r", 4), construct.BitField("p03_i", 4), construct.BitField("p13_r", 4), construct.BitField("p13_i", 4))
+
+snap_fengine_debug_ct_repeater = construct.GreedyRange(snap_fengine_debug_ct)
+
 # Bitstruct for getting stuff from the ADC snap blocks
 snap_fengine_adc = construct.BitStruct('adc_snap',
     construct.BitField('d0_0', 8), # 1st sample (they arrive 4-at-a-time of 8-bit samples, remember?
@@ -111,7 +121,7 @@ snap_fengine_adc = construct.BitStruct('adc_snap',
 
 snap_fengine_adc_repeater = construct.GreedyRange(snap_fengine_adc)
 
-# f-engine status
+# status register
 register_fengine_fstatus = construct.BitStruct('fstatus0',
     construct.BitField('coarse_bits', 5),       # 27-31 2^x - the number of points in the coarse FFT.
     construct.BitField('fine_bits', 5),         # 22-26 2^y - the number of points in the fine FFT.
@@ -433,6 +443,115 @@ def retrieve_quant_snap(fpga, coarse_channel, verbose=False):
                 right_i -= 2**4
             right = right_r + right_i*1j
             right_data.append(right)
+
+    print 'Quantiser snap retrieval complete.'
+
+    return left_data, right_data
+
+def retrieve_ct_snap(fpga, coarse_channel, verbose=False):
+    '''Retrieve corner turner debug data from the FPGA.
+    '''
+
+    if verbose:
+        print 'Configuring control register to pass corner turner data to the snap_debug block...'
+    control_reg = control_reg_bitstruct.parse(struct.pack('>I',fpga.read_uint('control')))
+    control_reg.debug_snap_select = debug_snap_select['ct_64']
+    fpga.write_int('control', struct.unpack('>I', control_reg_bitstruct.build(control_reg))[0])
+
+    if verbose:
+        print 'Configuring coarse_ctrl to pass channel %d through...'%(coarse_channel)
+    coarse_ctrl_reg = coarse_ctrl_reg_bitstruct.parse('\x00\x00\x00\x00') # Starting a clean one here, previous data not of interest.
+    coarse_ctrl_reg.coarse_fft_shift = 341 # 341 translates to 0101010101 in binary.
+    coarse_ctrl_reg.coarse_chan_select = coarse_channel
+    fpga.write_int('coarse_ctrl',struct.unpack('>I', coarse_ctrl_reg_bitstruct .build(coarse_ctrl_reg))[0])
+    fpga.write_int
+
+    if verbose:
+        print 'Retrieving corner turner snap data...'
+    left_data = []
+    right_data = []
+
+    for offset_shift_counter in range(0,num_offset_shifts/4):
+        if verbose:
+            print 'Section %d'%(offset_shift_counter)
+        fpga.write_int('snap_debug_trig_offset',offset_shift_counter*offset_shift_size/4)
+        trigger_snap(fpga, verbose=verbose)
+        bram_data = snap_fengine_debug_ct_repeater.parse(fpga.read('snap_debug_bram',snap_size))
+
+        for a in bram_data: # Tedious process but I can't see a more elegant way of doing this at
+                            # the moment.
+            left_r = a['p00_r']
+            if left_r >= 8:
+                left_r -= 16
+            left_i = a['p00_i']
+            if left_i >= 8:
+                left_i -= 16
+            left = left_r + left_i*1j
+            left_data.append(left)
+
+            left_r = a['p01_r']
+            if left_r >= 8:
+                left_r -= 16
+            left_i = a['p01_i']
+            if left_i >= 8:
+                left_i -= 16
+            left = left_r + left_i*1j
+            left_data.append(left)
+
+            left_r = a['p02_r']
+            if left_r >= 8:
+                left_r -= 16
+            left_i = a['p02_i']
+            if left_i >= 8:
+                left_i -= 16
+            left = left_r + left_i*1j
+            left_data.append(left)
+
+            left_r = a['p03_r']
+            if left_r >= 8:
+                left_r -= 16
+            left_i = a['p03_i']
+            if left_i >= 8:
+                left_i -= 16
+            left = left_r + left_i*1j
+            left_data.append(left)
+
+            right_r = a['p10_r']
+            if right_r >= 8:
+                right_r -= 16
+            right_i = a['p10_i']
+            if right_i >= 8:
+                right_i -= 16
+            right = right_r + right_i*1j
+            right_data.append(right)
+
+            right_r = a['p11_r']
+            if right_r >= 8:
+                right_r -= 16
+            right_i = a['p11_i']
+            if right_i >= 8:
+                right_i -= 16
+            right = right_r + right_i*1j
+            right_data.append(right)
+
+            right_r = a['p12_r']
+            if right_r >= 8:
+                right_r -= 16
+            right_i = a['p12_i']
+            if right_i >= 8:
+                right_i -= 16
+            right = right_r + right_i*1j
+            right_data.append(right)
+
+            right_r = a['p13_r']
+            if right_r >= 8:
+                right_r -= 16
+            right_i = a['p13_i']
+            if right_i >= 8:
+                right_i -= 16
+            right = right_r + right_i*1j
+            right_data.append(right)
+
 
     print 'Quantiser snap retrieval complete.'
 

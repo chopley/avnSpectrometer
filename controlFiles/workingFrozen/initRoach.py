@@ -13,7 +13,7 @@ are enabled.
 # Originally adapted (somewhat) from Jason Manley's script for Tutorial 3.
 
 import corr, time, sys, logging, struct, numpy
-import avn_spectrometer as avn # Uses v0.1 of avn_spectrometer.py
+import avn_spectrometer as avn
 
 #boffile = 'c09f12_12avn_2015_Feb_25_1753.bof' # Original working bof file. A bit slow but we're confident of the data that it produces.
 #boffile = 'c09f12_16avn_2015_Mar_11_1756.bof' # Charles's modified one. Reads snap blocks more frequently but somehow misaligns the data. I (JNS) modified it sligtly to try and rectify this but then timing wouldn't work, and I haven't had the courage to face that hurdle quite yet.
@@ -30,6 +30,8 @@ source_ip = 10<<24 | 0<<16 | 0<<8 | 2<<0
 mac_base = 2<<40 | 2<<32
 
 coarse_channel = 128
+
+quantiser_gain = 15
 
 def exit_fail():
     print 'FAILURE DETECTED. Log entries:\n', lh.printMessages()
@@ -60,7 +62,9 @@ if __name__ == '__main__':
     p.add_option('-p', '--katcpport', dest='kcp', type='int', default=katcp_port,
         help='Specify the KatCP port through which to communicate with the ROACH, default 7147')
     p.add_option('-a', '--atten', dest='atn', type='int', default=adc_atten,
-        help='Specify the amount by which the ADC should attenuate the input power, with zero being unattenuated and 63 being the maximum of 31.5 dB, in 0.5 dB steps. default 10')
+        help='Specify the amount by which the ADC should attenuate the input power, with zero being unattenuated and 63 being the maximum of 31.5 dB, in 0.5 dB steps. default %d'%(adc_atten))
+    p.add_option('-g', '--gain', dest='gain', type='int', default=quantiser_gain,
+        help='Specify the quantiser gain coefficients. At the moment, this script assigns the same coefficient to all channels, default %d.'%())
     opts, args = p.parse_args(sys.argv[1:])
 
     if args==[]:
@@ -79,6 +83,12 @@ if __name__ == '__main__':
             adc_atten = opts.atn
         else:
             print 'Please enter an attenuation number between 0 and 63 (inclusive).\nExiting.'
+            exit()
+    if opts.gain != '':
+        if (opts.atn < 2**16) and (opts.atn >= 0):
+            quantiser_gain = opts.gain
+        else:
+            print 'Please enter a quantiser gain number between 0 and  %d (inclusive).\nExiting.'%(2**16)
             exit()
 
 try:
@@ -163,7 +173,7 @@ try:
     fpga.write_int('coarse_ctrl',struct.unpack('>I', avn.coarse_ctrl_reg_bitstruct.build(coarse_ctrl_reg))[0])
     fpga.write_int('fine_ctrl',0)
 
-    avn.setGainCoefficients(fpga, numpy.ones(avn.fine_fft_size))
+    avn.setGainCoefficients(fpga, numpy.ones(avn.fine_fft_size)*quantiser_gain)
 
     if verbose:
         print 'ROACH %s armed and ready.'%(roach)
