@@ -64,7 +64,7 @@ if __name__ == '__main__':
     p.add_option('-a', '--atten', dest='atn', type='int', default=adc_atten,
         help='Specify the amount by which the ADC should attenuate the input power, with zero being unattenuated and 63 being the maximum of 31.5 dB, in 0.5 dB steps. default %d'%(adc_atten))
     p.add_option('-g', '--gain', dest='gain', type='int', default=quantiser_gain,
-        help='Specify the quantiser gain coefficients. At the moment, this script assigns the same coefficient to all channels, default %d.'%())
+        help='Specify the quantiser gain coefficients. At the moment, this script assigns the same coefficient to all channels, default %d.'%(quantiser_gain))
     opts, args = p.parse_args(sys.argv[1:])
 
     if args==[]:
