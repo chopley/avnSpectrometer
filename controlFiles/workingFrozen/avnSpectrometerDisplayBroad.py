@@ -18,7 +18,9 @@ python avnSpectrometerDisplayBroad.py --help
 #   - turn on or off broad snapping (i.e. snap only the selected channel and not the four around it),
 #   - read from the ADC's snap blocks, not graphing that but writing it to log files, and
 #   - reading from and logging a few of the status registers with each capture.
-
+# 14 April 2015 - JNS - Exported a PNG of the plot at the end of each round of data collection
+#   - Changed text format to numpy binaries, uses only about 1/3 of the hard drive space.
+#   - Added recording of ADC attenuation level and which coarse channel is being passed as well.
 
 import corr, time, sys, logging, struct, numpy, os
 import avn_spectrometer as avn # Uses v0.4 of avn_spectrometer.py
@@ -252,15 +254,17 @@ try:
         fig = plt.figure(figsize=(18,12)) # Smaller so that terminal can still be seen
 
         if logfiles:
-            numpy.savetxt('results/' + timestamp + '/coarse_LCP', LCP_coarse_accumulator)
-            numpy.savetxt('results/' + timestamp + '/coarse_RCP', RCP_coarse_accumulator)
-            numpy.savetxt('results/' + timestamp + '/fine_LCP', LCP_fine_accumulator)
-            numpy.savetxt('results/' + timestamp + '/fine_RCP', RCP_fine_accumulator)
-            numpy.savetxt('results/' + timestamp + '/adc_LCP', LCP_timestream)
-            numpy.savetxt('results/' + timestamp + '/adc_RCP', RCP_timestream)
+            numpy.save('results/' + timestamp + '/coarse_LCP', LCP_coarse_accumulator)
+            numpy.save('results/' + timestamp + '/coarse_RCP', RCP_coarse_accumulator)
+            numpy.save('results/' + timestamp + '/fine_LCP', LCP_fine_accumulator)
+            numpy.save('results/' + timestamp + '/fine_RCP', RCP_fine_accumulator)
+            numpy.save('results/' + timestamp + '/adc_LCP', LCP_timestream)
+            numpy.save('results/' + timestamp + '/adc_RCP', RCP_timestream)
 
             f = open('results/' + timestamp + '/status_registers','w')
 
+            f.write('adc_atten: %d\n'%(adc_atten))
+            f.write('coarse_channel: %d\n'%(coarse_channel))
             f.write('board_clock_estimate: %d\n'%(board_clock_estimate))
             f.write('clock_frequency: %d\n'%(clock_frequency))
             f.write('pps_count: %d\n'%(pps_count))
@@ -272,6 +276,9 @@ try:
             f.write(str(fstatus1) + '\n')
 
             f.close()
+
+        # TODO: Try to get it to dynamically increase the adc_atten in response to a True flag on
+        # the fstatus registers perhaps?
 
         ax = []
         ax.append(plt.subplot2grid((3,5), (0,0), colspan=5))    # 0 - coarse FFT
@@ -286,7 +293,7 @@ try:
         ax[0].plot(RCP_coarse_accumulator, 'r-')
         ax[0].set_title('Coarse FFT')
         ax[0].set_xlim(0, avn.coarse_fft_size-1)
-        ax[0].xaxis.set_ticks(numpy.arange(0,avn.coarse_fft_size))
+        ax[0].xaxis.set_ticks(numpy.arange(0,avn.coarse_fft_size), 8)
 
         if (coarse_channel - 2) >=  0 and not narrow:
             ax[1].plot(LCP_fine_accumulator[0], 'b-')
@@ -333,6 +340,7 @@ try:
             ax[4].set_ylim(ax[3].get_ylim())
             ax[5].set_ylim(ax[3].get_ylim())
 
+        plt.savefig('results/' + timestamp + '.png')
         plt.draw()
 
         while (previous_recording + recording_interval > time.time()):
