@@ -9,7 +9,7 @@ Updated for CASPER 2013 workshop. This tut needs a rework to use new snap blocks
 import numpy,corr, time, struct, sys, logging, socket,pylab
 
 #Decide where we're going to send the data, and from which addresses:
-dest_ip  =10*(2**24) + 0*(2**16) + 0*(2**8) + 1
+dest_ip  =10*(2**24) + 0*(2**16) + 0*(2**8) + 3
 fabric_port=60000         
 source_ip= 10*(2**24) + 0*(2**16) + 0*(2**8) + 2
 mac_base=(2<<40) + (2<<32)
@@ -36,7 +36,9 @@ test_fineFFT= 'vals_testQDR'
 #boffile = 'c09f12_01_2014_Aug_08_1735.bof'
 #boffile = 'c09f12_01_avn_2014_Sep_25_1503.bof'
 #boffile = 'c09f12_01_avn_2014_Oct_31_1038.bof'
+#CJC commented out on 10 Feb 2015. Dec_12 bof file does work
 boffile = 'c09f12_01_2012_Dec_12_2202.bof'
+#boffile = 'c09f12_01_2014_Dec_04_1813.bof'
 fpga=[]
 
 def bramw(fpga,bname,odata,samples=1024):
@@ -158,14 +160,14 @@ try:
     print 'done'
 
     print '---------------------------'    
-    print 'Port 0 linkup: ',
+    print 'Port 0 linkup: '
     sys.stdout.flush()
    #gbe0_link=bool(fpga.read_int('gbe0_linkup'))
   # print gbe0_link
    #if not gbe0_link:
     #   print 'There is no cable plugged into port0. Please plug a cable between ports 0 and 3 to continue demo. Exiting.'
      #  exit_clean()
-    print 'Port 3 linkup: ',
+    print 'Port 3 linkup: '
     sys.stdout.flush()
    #gbe3_link=bool(fpga.read_int('gbe3_linkup'))
    #print gbe3_link
@@ -173,14 +175,14 @@ try:
    #    print 'There is no cable plugged into port3. Please plug a cable between ports 0 and 3 to continue demo. Exiting.'
    #    exit_clean()
 
-    print '---------------------------'
-    print 'Configuring receiver core...',
-    sys.stdout.flush()
+   # print '---------------------------'
+   # print 'Configuring receiver core...'
+   # sys.stdout.flush()
    #fpga.tap_start('tap0',rx_core_name,mac_base+dest_ip,dest_ip,fabric_port)
    #print 'done'
-   #print 'Configuring transmitter core...',
+    print 'Configuring transmitter core...',
     sys.stdout.flush()
-    fpga.tap_start('tap3',tx_core_name,mac_base+source_ip,source_ip,fabric_port)
+    fpga.tap_start('tap0',tx_core_name,mac_base+source_ip,source_ip,fabric_port)
     print 'done'
 
     print '---------------------------'
@@ -274,7 +276,7 @@ try:
 						#imag1=(odd[2]>>2)+odd[1]<<8 + odd[0]<<16
 						#power =abs(real1+j*imag1)
 						
-						print adc0,adc1,fstatus0,fstatus1,a_0[0:16],real1
+						print adc0,adc1,fstatus0,fstatus1,a_0[0:16]
 						time.sleep(1)
 
     time.sleep(2)

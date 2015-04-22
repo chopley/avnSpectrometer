@@ -80,6 +80,8 @@ try:
         print 'Writing control register with configuration data...'
         sys.stdout.flush()
 
+    foo_bar = avn.retrieve_coarse_FFT_snap(fpga) #to get rid of the ugly data which usually accompanies the first snap.
+
     left_data, right_data = avn.retrieve_ct_snap(fpga, 128, verbose=verbose)
     left_data = numpy.array(left_data)
     right_data = numpy.array(right_data)
@@ -96,6 +98,8 @@ try:
     f = plt.figure()
     ax = f.add_subplot(111)
     ax.plot(numpy.arange(avn.fine_fft_size), abs(left_data), 'b-')
+    ax.plot(numpy.arange(avn.fine_fft_size), abs(right_data), 'r-')
+    ax.xaxis.set_ticks(numpy.arange(0,avn.fine_fft_size,128))
     ax.set_title('Corner turner data')
     ax.grid()
     plt.draw() # Use this instead of show(). For some reason.

@@ -33,7 +33,9 @@ test_fineFFT= 'vals_testQDR'
 #boffile = 'c09f12_01_avn_2014_Oct_13_1031.bof'
 #boffile = 'c09f12_01_2014_Aug_08_1735.bof'
 #boffile = 'c09f12_01_avn_2014_Oct_31_1038.bof'
-boffile = 'c09f12_01_2012_Dec_12_2202.bof'
+boffile = 'c09f12_02_2014_Dec_05_1231.bof'
+#boffile = 'c09f12_01_2014_Nov_11_1411.bof'
+#boffile = 'c09f12_01_2014_Nov_11_1542.bof'
 fpga=[]
 
 def bramw(fpga,bname,odata,samples=1024):
@@ -223,47 +225,6 @@ try:
     #fpga.write_int('control',1<<9|1<<10|0<<25|1<<2|1<<3)
     fpga.write_int('control',1<<9|1<<10|0<<25)
 
-    time.sleep(1)
-    pylab.ion()
-    while 1:
-						#pga.write_int('control',0)
-						#fpga.write_int('control',1<<9|1<<10|0<<25)
-						#fpga.write_int('control',1<<9|1<<10|0<<25|1<<3)
-						adc0=fpga.read_uint('adc_sum_sq0')
-						adc1=fpga.read_uint('adc_sum_sq1')
-						adc=readBram(fpga,'adc_snap1_bram',4*1024)
-						snap_stat1=fpga.read_uint('snap_debug_status')
-						snap_statadc=fpga.read_uint('adc_snap1_status')
-						pps_count=fpga.read_uint('pps_count')
-						clock_freq=fpga.read_uint('clk_frequency')
-						fpga.write_int('adc_snap1_ctrl',0)
-						fpga.write_int('adc_snap1_ctrl',1)
-						fpga.write_int('adc_snap1_ctrl',0)
-					#	fpga.write_int('snap_debug_ctrl',0)
-						fpga.write_int('snap_debug_ctrl',1) #bring this high to trigger capture
-						fpga.write_int('snap_debug_ctrl',0) #and take it low again
-						time.sleep(1.2)
-						snap_stat2=fpga.read_uint('snap_debug_status')
-						a=readBram(fpga,'snap_debug_bram',16*1024)
-						print 'a',a
-						a_0=struct.unpack('>16384b',a)
-						adc_0=struct.unpack('>4096b',adc)
-						fstatus0=fpga.read_uint('fstatus0')
-						fstatus1=fpga.read_uint('fstatus1')
-						print adc0,adc1,fstatus0,fstatus1,a_0[0:100],snap_stat1,snap_stat2,pps_count,clock_freq,snap_statadc
-						pylab.clf()
-						pylab.plot(adc_0[0:20])
-						pylab.draw()
-						time.sleep(1)
-
-    time.sleep(2)
-    fpga.write_int('control',0)
-    print 'done'
-
-    print 'Enabling output...',
-    sys.stdout.flush()
-    #fpga.write_int('pkt_sim_enable', 1)
-    print 'done'
 
     time.sleep(2)
 

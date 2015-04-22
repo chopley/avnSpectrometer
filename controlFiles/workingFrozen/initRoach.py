@@ -12,12 +12,15 @@ are enabled.
 # 06 March 2015 - First proper working version created by James Smith.
 # Originally adapted (somewhat) from Jason Manley's script for Tutorial 3.
 
-import corr, time, sys, logging, struct, numpy
+import corr, time, sys, logging, struct
+import numpy as np
 import avn_spectrometer as avn
 
 #boffile = 'c09f12_12avn_2015_Feb_25_1753.bof' # Original working bof file. A bit slow but we're confident of the data that it produces.
 #boffile = 'c09f12_16avn_2015_Mar_11_1756.bof' # Charles's modified one. Reads snap blocks more frequently but somehow misaligns the data. I (JNS) modified it sligtly to try and rectify this but then timing wouldn't work, and I haven't had the courage to face that hurdle quite yet.
-boffile = 'c09f12_21avn_2015_Mar_23_1645.bof' # Updated faster one, correct alignment of bins.
+#boffile = 'c09f12_21avn_2015_Mar_23_1645.bof' # Updated faster one, correct alignment of bins.
+boffile = 'c09f12_22avn_2015_Apr_21_1313.bof' # corner turner output not 'interleaved' for several different X-engines. This makes the CT data easier to deal with.
+
 
 katcp_port = 7147
 adc_atten = 10
@@ -31,7 +34,7 @@ mac_base = 2<<40 | 2<<32
 
 coarse_channel = 128
 
-quantiser_gain = 15
+gain_factor = 1
 
 def exit_fail():
     print 'FAILURE DETECTED. Log entries:\n', lh.printMessages()
@@ -63,8 +66,8 @@ if __name__ == '__main__':
         help='Specify the KatCP port through which to communicate with the ROACH, default 7147')
     p.add_option('-a', '--atten', dest='atn', type='int', default=adc_atten,
         help='Specify the amount by which the ADC should attenuate the input power, with zero being unattenuated and 63 being the maximum of 31.5 dB, in 0.5 dB steps. default %d'%(adc_atten))
-    p.add_option('-g', '--gain', dest='gain', type='int', default=quantiser_gain,
-        help='Specify the quantiser gain coefficients. At the moment, this script assigns the same coefficient to all channels, default %d.'%(quantiser_gain))
+    p.add_option('-g', '--gain', dest='gain', type='int', default=gain_factor,
+        help='Specify the quantiser gain coefficients. At the moment, this script assigns the same coefficient to all channels, default %d. Only powers of 2 really useful.'%(gain_factor))
     opts, args = p.parse_args(sys.argv[1:])
 
     if args==[]:
@@ -157,6 +160,9 @@ try:
     # Pulse arm and clr_status high, along with setting gbe_enable and adc_protect_disable high
     control_reg.gbe_enable = True
     control_reg.adc_protect_disable = True
+    control_reg.tvg_en = True
+    #control_reg.ct_tvg = True
+    control_reg.fine_tvg_en = True
     control_reg.clr_status = True
     control_reg.arm = True
     fpga.write_int('control', struct.unpack('>I', avn.control_reg_bitstruct.build(control_reg))[0])
@@ -173,7 +179,10 @@ try:
     fpga.write_int('coarse_ctrl',struct.unpack('>I', avn.coarse_ctrl_reg_bitstruct.build(coarse_ctrl_reg))[0])
     fpga.write_int('fine_ctrl',0)
 
-    avn.setGainCoefficients(fpga, numpy.ones(avn.fine_fft_size)*quantiser_gain)
+    quantiser_gain = np.ones(avn.fine_fft_size, dtype=int)
+    quantiser_gain = np.left_shift(quantiser_gain, gain_factor)
+    quantiser_gain = np.bitwise_or(quantiser_gain, np.left_shift(quantiser_gain, 16))
+    avn.setGainCoefficients(fpga, quantiser_gain)
 
     if verbose:
         print 'ROACH %s armed and ready.'%(roach)

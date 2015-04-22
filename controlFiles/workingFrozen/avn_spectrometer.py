@@ -17,13 +17,18 @@ Module with stuff related to controlling the AVN c09f12 spectrometer
 import corr, construct, numpy, time, struct, sys
 version_string = '0.5 (24 March 2015)'
 
-snap_size = 8192 # Bytes, 65536 bits, 128-bit individual datum length * 512 in most cases. BitStructs describing these detailed below.
-snap_word_size = 128 # Bits. See above comment.
+snap_word_size = 128 # Bits.
+snap_size = 2**10 * snap_word_size / 8 # 2^10 = 1024 samples of 128 bits (/8 to get bytes).  BitStructs describing these detailed below.
 snap_size_adc = 4096
 coarse_fft_size = 256 # Frequency bins
 fine_fft_size = 4096 # Frequency bins
 offset_shift_size = snap_size # For the fine FFT, when the whole thing can't be measured at once.
-num_offset_shifts = 8 # In case this later needs to be changed, perhaps for a different size fine FFT.
+num_offset_shifts = 4 # In case this later needs to be changed, perhaps for a different size fine FFT.
+
+# Variables relevant only to the corner turner
+snaps_per_spectrum = 128
+channels_per_snap = 32
+words_per_channel = 32
 
 # Bitstruct to control the control register on the ROACH
 # Each bit documented on Google Drive.
@@ -155,6 +160,13 @@ def uint2sint_fine(uint):
         sint -= 2147483648
     return sint
 
+def us4(uint):
+    '''Return correct signed value for a 4-bit number.
+    '''
+    sint = uint
+    if sint >= 8:
+        sint -= 16
+    return sint
 
 def ri2power(r, i, exp = 0):
     '''Return power (r^2 + i^2) given a real and imaginary variable
@@ -419,6 +431,7 @@ def retrieve_quant_snap(fpga, coarse_channel, verbose=False):
     right_data = []
 
     for offset_shift_counter in range(0,num_offset_shifts):
+    #for offset_shift_counter in range(0,1):
         if verbose:
             print 'Section %d'%(offset_shift_counter)
         fpga.write_int('snap_debug_trig_offset',offset_shift_counter*offset_shift_size)
@@ -427,20 +440,20 @@ def retrieve_quant_snap(fpga, coarse_channel, verbose=False):
 
         for a in bram_data:
             left_r = a['p0_r']
-            if left_r >= 2**3:
-                left_r -= 2**4
+            if left_r >= 8:
+                left_r -= 16
             left_i = a['p0_i']
-            if left_i >= 2**3:
-                left_i -= 2**4
+            if left_i >= 8:
+                left_i -= 16
             left = left_r + left_i*1j
             left_data.append(left)
 
             right_r = a['p1_r']
-            if right_r >= 2**3:
-                right_r -= 2**4
+            if right_r >= 8:
+                right_r -= 16
             right_i = a['p1_i']
-            if right_i >= 2**3:
-                right_i -= 2**4
+            if right_i >= 8:
+                right_i -= 16
             right = right_r + right_i*1j
             right_data.append(right)
 
@@ -450,6 +463,7 @@ def retrieve_quant_snap(fpga, coarse_channel, verbose=False):
 
 def retrieve_ct_snap(fpga, coarse_channel, verbose=False):
     '''Retrieve corner turner debug data from the FPGA.
+    This function needs to be completely rewritten as I'd misunderstood the logic behind the thing with it.
     '''
 
     if verbose:
@@ -467,95 +481,45 @@ def retrieve_ct_snap(fpga, coarse_channel, verbose=False):
     fpga.write_int
 
     if verbose:
-        print 'Retrieving corner turner snap data...'
-    left_data = []
-    right_data = []
+        print 'Retrieving corner turner snap data... (Be patient. This may take a while.)'
+    spectrum_left = []
+    spectrum_right = []
 
-    for offset_shift_counter in range(0,num_offset_shifts/4):
+    for offset_shift_counter in range(0,snaps_per_spectrum):
         if verbose:
             print 'Section %d'%(offset_shift_counter)
-        fpga.write_int('snap_debug_trig_offset',offset_shift_counter*offset_shift_size/4)
+
+        fpga.write_int('snap_debug_trig_offset',offset_shift_counter*offset_shift_size)
         trigger_snap(fpga, verbose=verbose)
         bram_data = snap_fengine_debug_ct_repeater.parse(fpga.read('snap_debug_bram',snap_size))
 
-        for a in bram_data: # Tedious process but I can't see a more elegant way of doing this at
-                            # the moment.
-            left_r = a['p00_r']
-            if left_r >= 8:
-                left_r -= 16
-            left_i = a['p00_i']
-            if left_i >= 8:
-                left_i -= 16
-            left = left_r + left_i*1j
-            left_data.append(left)
+        for channel in range(0, channels_per_snap):
 
-            left_r = a['p01_r']
-            if left_r >= 8:
-                left_r -= 16
-            left_i = a['p01_i']
-            if left_i >= 8:
-                left_i -= 16
-            left = left_r + left_i*1j
-            left_data.append(left)
+            channel_left = 0+0j
+            channel_right = 0+0j
 
-            left_r = a['p02_r']
-            if left_r >= 8:
-                left_r -= 16
-            left_i = a['p02_i']
-            if left_i >= 8:
-                left_i -= 16
-            left = left_r + left_i*1j
-            left_data.append(left)
+            for word in range(0, words_per_channel):
+                current_index = channel*words_per_channel + word
 
-            left_r = a['p03_r']
-            if left_r >= 8:
-                left_r -= 16
-            left_i = a['p03_i']
-            if left_i >= 8:
-                left_i -= 16
-            left = left_r + left_i*1j
-            left_data.append(left)
+                p00 = us4(bram_data[current_index].p00_r) + us4(bram_data[current_index].p00_i)*1j
+                p01 = us4(bram_data[current_index].p01_r) + us4(bram_data[current_index].p01_i)*1j
+                p02 = us4(bram_data[current_index].p02_r) + us4(bram_data[current_index].p02_i)*1j
+                p03 = us4(bram_data[current_index].p03_r) + us4(bram_data[current_index].p03_i)*1j
+                channel_left += (p00 + p01 + p02 + p03)
 
-            right_r = a['p10_r']
-            if right_r >= 8:
-                right_r -= 16
-            right_i = a['p10_i']
-            if right_i >= 8:
-                right_i -= 16
-            right = right_r + right_i*1j
-            right_data.append(right)
+                p10 = us4(bram_data[current_index].p10_r) + us4(bram_data[current_index].p10_i)*1j
+                p11 = us4(bram_data[current_index].p11_r) + us4(bram_data[current_index].p11_i)*1j
+                p12 = us4(bram_data[current_index].p12_r) + us4(bram_data[current_index].p12_i)*1j
+                p13 = us4(bram_data[current_index].p13_r) + us4(bram_data[current_index].p13_i)*1j
+                channel_right += (p10 + p11 + p12 + p13)
 
-            right_r = a['p11_r']
-            if right_r >= 8:
-                right_r -= 16
-            right_i = a['p11_i']
-            if right_i >= 8:
-                right_i -= 16
-            right = right_r + right_i*1j
-            right_data.append(right)
+            spectrum_left.append(channel_left)
+            spectrum_right.append(channel_right)
 
-            right_r = a['p12_r']
-            if right_r >= 8:
-                right_r -= 16
-            right_i = a['p12_i']
-            if right_i >= 8:
-                right_i -= 16
-            right = right_r + right_i*1j
-            right_data.append(right)
+    if verbose:
+        print 'Corner turner snap retrieval complete.'
 
-            right_r = a['p13_r']
-            if right_r >= 8:
-                right_r -= 16
-            right_i = a['p13_i']
-            if right_i >= 8:
-                right_i -= 16
-            right = right_r + right_i*1j
-            right_data.append(right)
-
-
-    print 'Quantiser snap retrieval complete.'
-
-    return left_data, right_data
+    return spectrum_left, spectrum_right
 
 def calculate_RMS(data):
     '''Return the RMS value of the data passed to it.

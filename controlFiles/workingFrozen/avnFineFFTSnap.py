@@ -15,7 +15,8 @@ a.set_frequency(8,197.75,1) Note the third argument is important to set the corr
 # Updated: 18 March 2015 James Smith - modified the function to be more agnostic as to the size of the data that it's receiving from the fpga read functions. The correspondingly updated avn_spectrometer functions now return the entire 4096 points of the FFT.
 
 
-import numpy, corr, time, struct, sys, logging, socket, construct
+import corr, time, struct, sys, logging, socket, construct
+import numpy as np
 import avn_spectrometer as avn
 import matplotlib.pyplot as plt
 
@@ -82,8 +83,8 @@ try:
 
     plt.ion()
 
-    LCP_accumulator = numpy.zeros(avn.fine_fft_size)
-    RCP_accumulator = numpy.zeros(avn.fine_fft_size)
+    LCP_accumulator = np.zeros(avn.fine_fft_size)
+    RCP_accumulator = np.zeros(avn.fine_fft_size)
 
     for i in range(0,accumulation_length):
         if verbose:
@@ -99,10 +100,12 @@ try:
     axarr[0].plot(LCP_accumulator , 'b-')
     axarr[0].set_title('LCP')
     axarr[0].set_xlim(-1,avn.fine_fft_size)
+    axarr[0].xaxis.set_ticks(np.arange(0,avn.fine_fft_size,128))
     #Second plot: ADC input Q (RCP)
     axarr[1].plot(RCP_accumulator , 'r-')
     axarr[1].set_title('RCP')
     axarr[1].set_xlim(-1,avn.fine_fft_size)
+    axarr[1].xaxis.set_ticks(np.arange(0,avn.fine_fft_size,128))
     plt.draw()
 
     f = raw_input('press enter to continue') # In case you'd like to have the thing wait. Sometimes it can flash through the graph too quickly to be able to examine it properly.

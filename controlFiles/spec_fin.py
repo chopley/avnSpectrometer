@@ -409,7 +409,6 @@ try:
     logger.addHandler(lh)
     logger.setLevel(10)
 
-	  bitstream="c09f12_01_2014_Aug_08_1735.bof"
 
     print('Connecting to server %s on port %i... '%(roach,katcp_port)),
     fpga = corr.katcp_wrapper.FpgaClient(roach, katcp_port, timeout=10,logger=logger)
@@ -434,17 +433,17 @@ try:
     sum_adc0 = fpga.read_uint('adc_sum_sq0')
     fpga.write_int('fft_shift_coars',255) 
     print 'Configuring overflow',
-		clockSpeed=fpga.est_brd_clk()
+    clockSpeed=fpga.est_brd_clk()
 		##for the coarse FFT the layout is debug_chan 22-27, debug_chan_sel 21, debu_pol_sel 20,coarse_chan_select 10-19,fftShift 0-10
     ##choose the debug channel
-		debug_chan=25
+    debug_chan=25
 		#do we get data from the channel or just get value 1?
-		debug_chan_sel=1
+    debug_chan_sel=1
 		##which of the two polarizations do we choose?
-		debug_pol_sel=0
-		coarse_chan_select=25
-		fine_chan_select=25
-		fftShift=255
+    debug_pol_sel=0
+    coarse_chan_select=25
+    fine_chan_select=25
+    fftShift=255
 		
 
 	# control register is set up as debug_snap_select 25-27, N/A 24, fine_tvg_en 21, adv_tvg 20, fd_fs_tvg 19, packetizer tvg 18, ct_tvg 17, tvg_en 16, fancy_en 11, adc_protect_enable 10, gbe_en 9 , gbe_rst 8, clr_status 3, ar 2, man_sync 1, sys_rst 0

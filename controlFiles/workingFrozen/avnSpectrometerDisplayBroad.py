@@ -30,8 +30,8 @@ import matplotlib.pyplot as plt
 #boffile = 'c09f12_16avn_2015_Mar_11_1756.bof' # Charles's modified one. Reads snap blocks more frequently but somehow misaligns the data. I (JNS) modified it sligtly to try and rectify this but then timing wouldn't work, and I haven't had the courage to face that hurdle quite yet.
 #boffile = 'c09f12_17avn_2015_Mar_13_1459.bof' #Faster but blocks misaligned still.
 #boffile = 'c09f12_20avn_2015_Mar_23_1236.bof' #Still two bins out, but this time on the other side.
-boffile = 'c09f12_21avn_2015_Mar_23_1645.bof' # Correct bin!
-
+#boffile = 'c09f12_21avn_2015_Mar_23_1645.bof' # Correct bin!
+boffile = 'c09f12_22avn_2015_Apr_21_1313.bof' # corner turner output not 'interleaved' for several different X-engines. This makes the CT data easier to deal with.
 
 katcp_port = 7147
 adc_atten = 0

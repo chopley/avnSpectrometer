@@ -96,6 +96,8 @@ try:
     f = plt.figure()
     ax = f.add_subplot(111)
     ax.plot(numpy.arange(avn.fine_fft_size), abs(left_data), 'b-')
+    ax.plot(numpy.arange(avn.fine_fft_size), abs(right_data), 'r-')
+    ax.xaxis.set_ticks(numpy.arange(0,avn.fine_fft_size,128))
     ax.set_title('Quantiser data')
     ax.grid()
     plt.draw() # Use this instead of show(). For some reason.

@@ -69,7 +69,7 @@ if __name__ == '__main__':
     p.set_description(__doc__)
     p.add_option('-l', '--acc_len', dest='acc_len', type='int',default=2*(2**28)/2048,
         help='Set the number of vectors to accumulate between dumps. default is 2*(2^28)/2048, or just under 2 seconds.')
-    p.add_option('-g', '--gain', dest='gain', type='int',default=0xffffffff,
+    p.add_option('-g', '--gain', dest='gain', type='int',default=0x01ffffff,
         help='Set the digital gain (6bit quantisation scalar). Default is 0xffffffff (max), good for wideband noise. Set lower for CW tones.')
     p.add_option('-s', '--skip', dest='skip', action='store_true',
         help='Skip reprogramming the FPGA and configuring EQ.')
@@ -127,7 +127,8 @@ try:
         print 'Skipped.'
 
     #set up the figure with a subplot to be plotted
-    fig = matplotlib.pyplot.figure()
+    fig = matplotlib.pyplot.figure();
+    fig.hold(True) #Added by James to try and check the response with 1MHz resolution
     ax = fig.add_subplot(1,1,1)
 
     # start the process

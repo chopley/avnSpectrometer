@@ -9,7 +9,7 @@ Updated for CASPER 2013 workshop. This tut needs a rework to use new snap blocks
 import numpy,corr, time, struct, sys, logging, socket,pylab
 
 #Decide where we're going to send the data, and from which addresses:
-dest_ip  =10*(2**24) + 0*(2**16) + 0*(2**8) + 1
+dest_ip  =10*(2**24) + 0*(2**16) + 0*(2**8) + 3
 fabric_port=60000         
 source_ip= 10*(2**24) + 0*(2**16) + 0*(2**8) + 2
 mac_base=(2<<40) + (2<<32)
@@ -33,9 +33,10 @@ test_fineFFT= 'vals_testQDR'
 #boffile = 'c09f12_01_avn_2014_Oct_13_1031.bof'
 #boffile = 'c09f12_01_2014_Aug_08_1735.bof'
 #boffile = 'c09f12_01_avn_2014_Oct_31_1038.bof'
-boffile = 'c09f12_01_2014_Dec_04_1813.bof'
 #boffile = 'c09f12_01_2014_Nov_11_1411.bof'
 #boffile = 'c09f12_01_2014_Nov_11_1542.bof'
+#boffile = 'c09f12_01_2014_Dec_04_1813.bof'
+boffile = 'c09f12_12avn_2015_Feb_25_1753.bof'
 fpga=[]
 
 def bramw(fpga,bname,odata,samples=1024):
@@ -127,52 +128,66 @@ if __name__ == '__main__':
     if opts.bof != '':
         boffile = opts.bof
 try:
-    lh = corr.log_handlers.DebugLogHandler()
-    logger = logging.getLogger(roach)
-    logger.addHandler(lh)
-    logger.setLevel(10)
+		lh = corr.log_handlers.DebugLogHandler()
+		logger = logging.getLogger(roach)
+		logger.addHandler(lh)
+		logger.setLevel(10)
 
-    print('Connecting to server %s... '%(roach)),
-    fpga = corr.katcp_wrapper.FpgaClient(roach, logger=logger)
-    time.sleep(1)
+		print('Connecting to server %s... '%(roach)),
+		fpga = corr.katcp_wrapper.FpgaClient(roach, logger=logger)
+		time.sleep(1)
 
-    if fpga.is_connected():
-        print 'ok\n'
-    else:
-        print 'ERROR connecting to server %s.\n'%(roach)
-        exit_fail()
-    
-    if not opts.noprogram:
-        print '------------------------'
-        print 'Programming FPGA...',
-        sys.stdout.flush()
-        fpga.progdev(boffile)
-        time.sleep(10)
-        print 'ok'
+		if fpga.is_connected():
+						print 'ok\n'
+		else:
+						print 'ERROR connecting to server %s.\n'%(roach)
+						exit_fail()
+
+		if not opts.noprogram:
+						print '------------------------'
+						print 'Programming FPGA...',
+						sys.stdout.flush()
+						fpga.progdev(boffile)
+						time.sleep(10)
+						print 'ok'
+		print '---------------------------'
+		print 'Port 0 linkup: '
+		sys.stdout.flush()
+		print 'Port 3 linkup: '
+		sys.stdout.flush()
+		print 'Configuring transmitter core...'
+		sys.stdout.flush()
+		fpga.tap_start('tap0',tx_core_name,mac_base+source_ip,source_ip,fabric_port)
+		print 'done'
+		print '---------------------------'
+		print 'Setting-up packet source...'
+		sys.stdout.flush()
+		print 'Setting-up destination addresses...',
+		sys.stdout.flush()
+		fpga.write_int('gbe_ip0',dest_ip)
+		fpga.write_int('gbe_port',fabric_port)
+		fpga.write_int('snap_debug_ctrl',1<<0)
+		fpga.write_int('adc_snap0_ctrl',1)
+		fpga.write_int('adc_ctrl0',1<<31|10)
+		fpga.write_int('adc_ctrl1',1<<31|10)
+		fpga.write_int('coarse_ctrl',0<<20|31)
+		fpga.write_int('fine_ctrl',0)
+
+		time.sleep(1)
+		fpga.write_int('control',1<<9|1<<10|0<<25|1<<2|1<<3)
+		#fpga.write_int('control',1<<9|1<<10|0<<25)
 
 
-    fpga.write_int('snap_debug_ctrl',1<<0)
-    fpga.write_int('adc_snap0_ctrl',1)
-    fpga.write_int('adc_ctrl0',1<<31|10)
-    fpga.write_int('adc_ctrl1',1<<31|10)
-    fpga.write_int('coarse_ctrl',0<<20|31)
-    fpga.write_int('fine_ctrl',0)
-		
-    time.sleep(1)
-    #fpga.write_int('control',1<<9|1<<10|0<<25|1<<2|1<<3)
-    fpga.write_int('control',1<<9|1<<10|0<<25)
-
-
-    time.sleep(2)
+		time.sleep(2)
 
 
 except KeyboardInterrupt:
-    exit_clean()
+		exit_clean()
 except Exception as inst:
-    print type(inst)
-    print inst.args
-    print inst
-    exit_fail()
+		print type(inst)
+		print inst.args
+		print inst
+		exit_fail()
 
 exit_clean()
 
