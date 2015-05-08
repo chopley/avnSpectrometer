@@ -2,6 +2,28 @@
 
 Doesn't actually store data in its present format, just prints a (numpy) abbreviated version of
 it to the screen to prove that it can.
+
+Note:
+    The UDP handler is _technically_ fast enough to catch all the packets.
+    Unfortunately if the OS gives something else priority, then it misses some.
+    I was finding using the diagnostics at the end of the script that about 10
+    to 15 % of the frames are lost this way - packet loss isn't anywhere near
+    that bad of course but it just takes one missing packet in a frame of 4096
+    to force the frame to be thrown away.
+
+    I've discovered a less-than-elegant solution (an 'ugly hack,' to use the common
+    parlance), which involves noting the PID of the UDP handler, flipping over to a
+    new terminal and running
+        sudo renice -10 -p <UDP_handler PID>
+    -20 makes the process absolute top priority, 0 is normal, 19 is the lowest.
+    -1 didn't really make much of a difference, but when I used -10 the packet loss
+    went away completely.
+
+    It's ugly because only root is allowed to assign negative priorities to processes,
+    so either you need to use the method described above, or if you want to build the
+    functionality into the script you need to give it root permissions.
+
+    I'm not sure yet what the best solution to that is.
 '''
 
 import socket
