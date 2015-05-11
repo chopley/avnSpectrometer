@@ -32,7 +32,7 @@ fabric_port = 60000
 source_ip = 10<<24 | 0<<16 | 0<<8 | 2<<0
 mac_base = 2<<40 | 2<<32
 
-coarse_channel = 128
+coarse_channel = 106
 
 gain_factor = 1
 
@@ -160,9 +160,9 @@ try:
     # Pulse arm and clr_status high, along with setting gbe_enable and adc_protect_disable high
     control_reg.gbe_enable = True
     control_reg.adc_protect_disable = True
-    control_reg.tvg_en = True
+    #control_reg.tvg_en = True
     #control_reg.ct_tvg = True
-    control_reg.fine_tvg_en = True
+    #control_reg.fine_tvg_en = True
     control_reg.clr_status = True
     control_reg.arm = True
     fpga.write_int('control', struct.unpack('>I', avn.control_reg_bitstruct.build(control_reg))[0])

@@ -35,6 +35,11 @@ import numpy as np
 import signal
 import sys
 import os
+import logging
+
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 
 # Some constants for making the script easier to modify
 packet_length = 264 # Size in bytes of the packet to be received over UDP. This is determined by the current boffile, the way the packetiser works.
@@ -55,6 +60,8 @@ fft_group_size = 128 # This is how many actual FFTs come in each frame. This is 
 # have their own copy. For this purpose, multiprocessing provides a Value in a shared
 # memory space which works almost like a pointer in C but not quite.
 receive_UDP = multiprocessing.Value('B', 1)
+priority = -10
+#wait_for_permission = multiprocessing.value()
 
 def interpret_header(header):
     '''Read the header of the UDP packet and return a "timestamp" and a "packet number".
@@ -85,6 +92,12 @@ def UDP_handler(IP_address, port, output_queue):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.bind((IP_address, port))
 
+    time.sleep(0.2) # Just to give the other processes time to print their messages
+    command_string = 'sudo renice ' + str(priority) + ' ' + str(os.getpid())
+    print 'Please enter password to elevate priority of UDP handler process:'
+    print command_string
+    os.system(command_string)
+
     # The script will probably start up somewhere during the course of a frame,
     # in which case we'll want to chuck away everythign up to and including the last
     # packet of the frame, so we can start with the first one of the next one.
@@ -99,7 +112,7 @@ def UDP_handler(IP_address, port, output_queue):
         timestamp, packet_number = interpret_header(header)
     print 'Packet 0 of new frame found, starting...' # This sort of assumes that zero hasn't been skipped, but the next process can handle.
 
-    while receive_UDP.value: # Keepin' it gangsta.
+    while receive_UDP.value: # Short and simple.
         packet, addr = sock.recvfrom(packet_length)
         output_queue.put(packet)
 
@@ -227,6 +240,7 @@ def accumulator(input_queue, accum_length):
     print 'accumulator PID is %d.'%(os.getpid())
     signal.signal(signal.SIGINT, signal.SIG_IGN)
     loop = True
+    plt.ion()
     while loop:
         #print 'queue3 size: %d'%(input_queue.qsize())
         stokes_set = input_queue.get()
@@ -236,8 +250,9 @@ def accumulator(input_queue, accum_length):
             loop = False
             break
         timestamp = stokes_set[0]
+        print 'stokes set timestamped'
         stokes_accumulator = np.array(stokes_set[1:])
-        for i in range(accum_length -1):
+        for i in range(accum_length):
             stokes_set = input_queue.get()
             if stokes_set == None:
                 print 'accumulator detected poison pill, exiting sanely...'
@@ -248,11 +263,18 @@ def accumulator(input_queue, accum_length):
 
         # Replace this with actually storing the data. When I get around to figuring out exactly how that should work.
         print stokes_accumulator
+        np.save(str(timestamp), stokes_accumulator)
+        plt.plot(stokes_accumulator[0])
+        plt.savefig(str(timestamp) + '.png')
+        plt.close('all')
+
 
 
 if __name__ == '__main__':
     from optparse import OptionParser
     p = OptionParser()
+
+    logging.basicConfig(level=logging.DEBUG)
 
     # Haven't actually added any options yet, I initially thought that I might.
     # I may still do so later, e.g. for choosing the output format, or perhaps
