@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 
 verbose = False
 
-accumulation_length = 10
+accumulation_length = 1
 
 
 def exit_fail():
@@ -85,35 +85,60 @@ try:
 
 #    fpga.write_int('coarse1_crs_snap_setUp', 255) # This is just to compensate for the temporary error in the synchronisation of the snap in the boffile. Should be removed soon.
 
-    plt.ion()
 
-    LCP_accumulator = numpy.zeros(avn.coarse_fft_size)
-    RCP_accumulator = numpy.zeros(avn.coarse_fft_size)
-
-    for i in range(0,accumulation_length):
-        if verbose:
-            print "Beginning accumulation %d..."%(i)
-            sys.stdout.flush()
-
-        LCP_data, RCP_data = avn.retrieve_coarse_FFT_snap(fpga, verbose=verbose)
-
-        LCP_accumulator += LCP_data
-        RCP_accumulator += RCP_data
-
-    plt.close('all')
-    f = plt.figure()
-    ax = f.add_subplot(111)
-    ax.plot(numpy.arange(avn.coarse_fft_size), LCP_accumulator, 'b-')
-    ax.plot(numpy.arange(avn.coarse_fft_size), RCP_accumulator, 'r-')
-    ax.set_title('Coarse FFT')
+    f = plt.figure(figsize=(10,10))
+    ax = plt.subplot(111)
+    line_lcp, = ax.plot([], [], 'b', lw=1)
+    line_rcp, = ax.plot([], [], 'r', lw=1)
+    plt.title('Coarse spectrometer')
+    plt.xlabel('Channel number')
+    plt.ylabel('Relative power [dB]')
     ax.set_xlim(-1, avn.coarse_fft_size)
-    ax.grid()
-    plt.draw() # Use this instead of show(). For some reason.
+    ax.set_ylim(0,100)
 
-    f = raw_input('press enter to continue')
+    plt.ion()
+    plt.show()
 
-except KeyboardInterrupt:
-    exit_clean()
+    x = range(avn.coarse_fft_size)
+    y = numpy.zeros(avn.coarse_fft_size)
+    line_lcp.set_data(x,y)
+    line_rcp.set_data(x,y)
+
+    recording_file = open('results_' + str(int(time.time())), 'w' )
+    recording_file.write('#Convention: [timestamp, 256xLCP channels, 256xRCP channels], per line. Recorded linearly. Accumulation length: %d\n'%(accumulation_length))
+    recording_file.write('#Can easily be read into numpy using such a command: >> X = numpy.loadtxt(result_file, delimiter=",")\n')
+    recording_file.write('#Splitting the numpy arrays up into rows / columns as desired is easy enough\n')
+
+    while 1:
+        try:
+            LCP_accumulator = numpy.zeros(avn.coarse_fft_size)
+            RCP_accumulator = numpy.zeros(avn.coarse_fft_size)
+
+            for i in range(0,accumulation_length):
+                if verbose:
+                    print 'Beginning accumulation %d...'%(i)
+                    sys.stdout.flush()
+
+                LCP_data, RCP_data = avn.retrieve_coarse_FFT_snap(fpga, verbose=verbose)
+
+                LCP_accumulator += LCP_data
+                RCP_accumulator += RCP_data
+
+            line_lcp.set_ydata(10*numpy.log10(numpy.array(LCP_accumulator) + 1))
+            line_rcp.set_ydata(10*numpy.log10(numpy.array(RCP_accumulator) + 1))
+            f.canvas.draw()
+
+            record_array = [time.time()]
+            record_array.extend( list(numpy.asarray(LCP_accumulator)) )
+            record_array.extend( list(numpy.asarray(RCP_accumulator)) )
+            record_string = (str(record_array) + '\n').translate(None, '[]')
+            recording_file.write(record_string)
+
+        except KeyboardInterrupt:
+            print 'Ctrl-C recognised.'
+            recording_file.close()
+            break
+
 except Exception as inst:
     print type(inst)
     print inst.args
@@ -121,5 +146,5 @@ except Exception as inst:
     sys.stdout.flush()
     exit_fail()
 
-exit_clean()
+    exit_clean()
 
