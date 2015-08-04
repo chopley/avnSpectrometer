@@ -32,7 +32,7 @@ fabric_port = 60000
 source_ip = 10<<24 | 0<<16 | 0<<8 | 2<<0
 mac_base = 2<<40 | 2<<32
 
-coarse_channel = 106
+coarse_channel = 102
 
 gain_factor = 1
 
@@ -183,7 +183,11 @@ try:
     quantiser_gain = np.left_shift(quantiser_gain, gain_factor)
     quantiser_gain = np.bitwise_or(quantiser_gain, np.left_shift(quantiser_gain, 16))
     avn.setGainCoefficients(fpga, quantiser_gain)
-
+    print 'fpgaClockSpeed -This should be around 200- wont be exact'
+    a=fpga.est_brd_clk()
+    print a
+    clk_frequency = fpga.read_uint('clk_frequency')
+    print 'Clock Frequency Should be 200000000 and is %d' %clk_frequency
     if verbose:
         print 'ROACH %s armed and ready.'%(roach)
         sys.stdout.flush()

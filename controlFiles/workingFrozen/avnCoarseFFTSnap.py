@@ -94,8 +94,9 @@ try:
     plt.xlabel('Channel number')
     plt.ylabel('Relative power [dB]')
     ax.set_xlim(-1, avn.coarse_fft_size)
-    ax.set_ylim(0,100)
-
+    ax.set_ylim(-100,0)
+    ax.set_yticks(numpy.arange(-100,0.,5.))
+    plt.grid()
     plt.ion()
     plt.show()
 
@@ -124,9 +125,16 @@ try:
                 LCP_accumulator += LCP_data
                 RCP_accumulator += RCP_data
 
-            line_lcp.set_ydata(10*numpy.log10(numpy.array(LCP_accumulator) + 1))
-            line_rcp.set_ydata(10*numpy.log10(numpy.array(RCP_accumulator) + 1))
-            f.canvas.draw()
+            #and now we average things
+            LCP_accumulator = LCP_accumulator/accumulation_length
+            RCP_accumulator = RCP_accumulator/accumulation_length
+            measuredOffset = -73
+            try:
+                line_lcp.set_ydata(measuredOffset + 10*numpy.log10(numpy.array(LCP_accumulator)+1))
+                line_rcp.set_ydata(measuredOffset + 10*numpy.log10(numpy.array(RCP_accumulator)+1))
+                f.canvas.draw()
+            except:
+                print 'failed to plot'
 
             record_array = [time.time()]
             record_array.extend( list(numpy.asarray(LCP_accumulator)) )
