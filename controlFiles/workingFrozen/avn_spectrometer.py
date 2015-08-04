@@ -171,7 +171,7 @@ def us4(uint):
 def ri2power(r, i, exp = 0):
     '''Return power (r^2 + i^2) given a real and imaginary variable
     '''
-    return float(numpy.abs((numpy.square(r) + numpy.square(i))/(2**exp))) # Without the abs() this sometimes returned negative numbers. No idea why, possibly something done wrong in previous iterations. Not too expensive computationally though so left in for the time being.
+    return float(numpy.abs((numpy.square(r) + numpy.square(i))/(2<<exp))) # Without the abs() this sometimes returned negative numbers. No idea why, possibly something done wrong in previous iterations. Not too expensive computationally though so left in for the time being.
 
 def trigger_snap(fpga, verbose=False):
     '''Write a posedge to the 'snap_debug_ctrl' register on the FPGA in order to start it up, then wait for it to be ready.
