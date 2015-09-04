@@ -1,7 +1,8 @@
 #!/bin/env ipython
 '''
 Script to retrieve the data from after the quantiser block through the snap.
-Initial version: 30 March, James Smith
+A snap script, much like the others. Run initRoach.py first, to get the ROACH
+set up properly in order to handle this script.
 '''
 
 import numpy
@@ -105,7 +106,7 @@ try:
     plt.draw() # Use this instead of show(). For some reason.
     print 'LCP RMS value for this snap: %f'%(avn.calculate_RMS(left_data))
     print 'RCP RMS value for this snap: %f'%(avn.calculate_RMS(right_data))
-    wait = raw_input('enter to continue')
+    wait = raw_input('enter to continue') # So script doesn't exit and plot disappear before the user can examine
 
 except KeyboardInterrupt:
     exit_clean()

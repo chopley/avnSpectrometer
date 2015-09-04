@@ -1,29 +1,20 @@
-'''Script to capture, convert to stokes, accumulate and store data from the AVN Spectrometer.
-
-Doesn't actually store data in its present format, just prints a (numpy) abbreviated version of
-it to the screen to prove that it can.
-
-Note:
-    The UDP handler is _technically_ fast enough to catch all the packets.
-    Unfortunately if the OS gives something else priority, then it misses some.
-    I was finding using the diagnostics at the end of the script that about 10
-    to 15 % of the frames are lost this way - packet loss isn't anywhere near
-    that bad of course but it just takes one missing packet in a frame of 4096
-    to force the frame to be thrown away.
-
-    I've discovered a less-than-elegant solution (an 'ugly hack,' to use the common
-    parlance), which involves noting the PID of the UDP handler, flipping over to a
-    new terminal and running
-        sudo renice -10 -p <UDP_handler PID>
-    -20 makes the process absolute top priority, 0 is normal, 19 is the lowest.
-    -1 didn't really make much of a difference, but when I used -10 the packet loss
-    went away completely.
-
-    It's ugly because only root is allowed to assign negative priorities to processes,
-    so either you need to use the method described above, or if you want to build the
-    functionality into the script you need to give it root permissions.
-
-    I'm not sure yet what the best solution to that is.
+#!/bin/python
+'''Script to capture, convert to Stokes, accumulate and store data from the AVN Spectrometer.
+The script at present stores Stokes parameters in binary numpy format, along
+with a png of a plot of Stokes I for the accumulation.
+The script calls "sudo" to give authorisation to elevate the priority of the
+UDP_handler process to -10, in order to ensure that no packet loss is
+encountered. If it is discovered that packet loss is happenning (perhaps
+through the diagnostics presented at the conclusion of the script), the
+"priority" variable can be modified to -20 (highest possible priority). It
+may also be prudent at that point to use a utility like "top" to monitor
+whether there are other processes causing load on the system. The UDP_handler
+process is fast enough to capture all of the UDP data, but it requires elevated
+priority in order to be able to do so.
+The script will not terminate immediately when Ctrl+C is pressed, because it would
+prefer to save all its files cleanly. Using this KeyboardInterrupt combination causes
+a poison pill to propagate through the process queue, upon receipt of which each process
+finishes what it's doing, saves and exits.
 '''
 
 import socket
@@ -38,7 +29,7 @@ import os
 import logging
 
 import matplotlib
-matplotlib.use('Agg')
+matplotlib.use('Agg') # This allows the image file to be saved even in the absence of an X display.
 import matplotlib.pyplot as plt
 
 # Some constants for making the script easier to modify
@@ -46,10 +37,6 @@ packet_length = 264 # Size in bytes of the packet to be received over UDP. This 
 accumulation_length = 1000 # This is somewhat arbitrary and can be tuned to suit needs.
 frame_length = 4096 # This is how many packets make a 'frame'. In the current design, each packet corresponds to a frequency channel.
 fft_group_size = 128 # This is how many actual FFTs come in each frame. This is because of the corner-turner.
-# Explanation: each packet contains a header (8 bytes) and 256 bytes of data, 128 times LCP and RCP bytes, each 4-bit real, 4-bit imaginary.
-# They're all the same channel - just subsequent samples. Doesn't make as much sense for single-dish observations but this round of the design
-# was pirated (in a somewhat modified state) from KAT-7, and that's what was needed for their F-X engine architecture.
-
 # This right here came as the culmination of basically two days of searching.
 # Killing or terminating the socket causes problems, especially when it's within
 # the 'while 1' loop. Couldn't get around this any way I tried. Eventually decided
@@ -61,7 +48,6 @@ fft_group_size = 128 # This is how many actual FFTs come in each frame. This is 
 # memory space which works almost like a pointer in C but not quite.
 receive_UDP = multiprocessing.Value('B', 1)
 priority = -10
-#wait_for_permission = multiprocessing.value()
 
 def interpret_header(header):
     '''Read the header of the UDP packet and return a "timestamp" and a "packet number".
@@ -110,12 +96,15 @@ def UDP_handler(IP_address, port, output_queue):
         header = struct.unpack('>' + 'B'*8, packet[0:8])
         data = struct.unpack('>' + 'B'*256, packet[8:])
         timestamp, packet_number = interpret_header(header)
-    print 'Packet 0 of new frame found, starting...' # This sort of assumes that zero hasn't been skipped, but the next process can handle.
+    print 'Packet 0 of new frame found, starting...' # This sort of assumes that zero hasn't been dropped, but the next process can handle it if it has.
 
     while receive_UDP.value: # Short and simple.
         packet, addr = sock.recvfrom(packet_length)
-        output_queue.put(packet)
+        output_queue.put(packet) # No header unpacking here, the next process will handle it now.
+                                 # We need speed...
 
+    # If we get out of the previous while loop, it means that the user pressed Ctrl+C
+    # and that changed the global "receive" flag to false...
     print 'UDP handler detected Ctrl+C, starting the poison pill process...'
     sock.close()
     output_queue.put(None)
@@ -124,11 +113,9 @@ def packet_sorter(input_queue, output_queue):
     '''Packet sorter function.
     Gathers 4096 packets together into a group and spits 128 FFTs onto the next queue.
     Checks that there aren't any missing from a particular frame. Current behaviour is to
-    discard the entire thing and wait for a next one.
-    There may be a more elegant and less lossy way to do this, but I haven't thought of it yet.
-    There is enough performance headroom to be able to perhaps do some sorting, but I suspect
-    that if anything gets missed, it's actually the previous thread being too slow rather than
-    packets arriving out-of-order.
+    discard the entire thing and wait for a next one, I don't think there's any benefit to
+    trying to sort out-of-order packets, because it's quite unlikely that packets will be
+    received out-of-order on the cable between the ROACH and the PC.
     '''
     print 'packet sorter PID is %d.'%(os.getpid())
     signal.signal(signal.SIGINT, signal.SIG_IGN)
@@ -160,7 +147,7 @@ def packet_sorter(input_queue, output_queue):
                 data_array = []
                 packets_before_mistake = i + 1
                 packets_after_mistake = 0
-                print 'packet %d inappropriate, got %d instead - waiting for frame to empty...'%(i,packet_number)
+                print 'Error: expected packet number %d, got %d instead - waiting for frame to empty...'%(i,packet_number)
                 while  packet_number <> frame_length - 1:
                     packet = input_queue.get()
                     if packet == None:
@@ -202,7 +189,6 @@ def Stokes_converter(input_queue, output_queue):
     print 'stokes converter PID is %d.'%(os.getpid())
     signal.signal(signal.SIGINT, signal.SIG_IGN)
     while 1: # Flat loop so no loop variable needed.
-        #print 'queue2 size: %d'%(input_queue.qsize())
         fft = input_queue.get()
         if fft == None:
             print 'Stokes converter detected poison pill, exiting sanely...'
@@ -232,17 +218,17 @@ def Stokes_converter(input_queue, output_queue):
 def accumulator(input_queue, accum_length):
     '''Accumulator function
     Receives Stokes parameters one at a time, adds them together according to the
-    specified accumulation length, then in the current iteration prints them to the
-    screen. Next iteration will likely save numpy binaries. Possibly in the future,
-    a new process after this one might receive the accumulated blocks and put them
-    in an HDF-5 file.
+    specified accumulation length, then prints them to the screen (numpy abbreviates the
+    big array of data so that it doesn't cover several screens' worth). Saves numpy
+    binaries. Possibly in the future, a new process after this one might receive the
+    accumulated blocks and put them in an HDF-5 file, but this requires more data than what
+    we get from the ROACH.
     '''
     print 'accumulator PID is %d.'%(os.getpid())
     signal.signal(signal.SIGINT, signal.SIG_IGN)
     loop = True
     plt.ion()
     while loop:
-        #print 'queue3 size: %d'%(input_queue.qsize())
         stokes_set = input_queue.get()
         if stokes_set == None:
             print 'accumulator detected poison pill, exiting sanely...'
@@ -261,13 +247,11 @@ def accumulator(input_queue, accum_length):
                 break
             stokes_accumulator += np.array(stokes_set[1:])
 
-        # Replace this with actually storing the data. When I get around to figuring out exactly how that should work.
         print stokes_accumulator
         np.save(str(timestamp), stokes_accumulator)
         plt.plot(stokes_accumulator[0])
         plt.savefig(str(timestamp) + '.png')
         plt.close('all')
-
 
 
 if __name__ == '__main__':
@@ -276,12 +260,12 @@ if __name__ == '__main__':
 
     logging.basicConfig(level=logging.DEBUG)
 
-    # Haven't actually added any options yet, I initially thought that I might.
-    # I may still do so later, e.g. for choosing the output format, or perhaps
-    # the option to store something other than Stokes, in which case I'd need to
-    # fire up a different process. If the need arises.
+    # Useful options may be for example to choose a different storage format instead of Stokes,
+    # in which case the Stokes process can be switched out with another one.
     p.set_usage('python avnSpectrometerAccumulator.py <ROACH 10GbE IP> <ROACH 10GbE Port> [options]')
     p.set_description(__doc__)
+    p.add_option('-a', '--accum', dest='accum_len', type='int', default=accumulation_length,
+            help='Specify an accumulation length (in fine FFT samples, 1 equivalent to approx. 10 ms. Default %d.'%(accumulation_length))
     opts, args = p.parse_args(sys.argv[1:])
 
     if args==[]:
@@ -290,6 +274,9 @@ if __name__ == '__main__':
     else:
         roach_IP = args[0]
         roach_port = int(args[1])
+
+    # From here on it's basically standard multiprocessing stuff, just start all the things up
+    # and set up the signal handler to take care of Ctrl+C.
 
     signal.signal(signal.SIGINT, signal_handler) # This catches KeyboardInterrupt signals and sends them to the handler.
 
@@ -318,4 +305,3 @@ if __name__ == '__main__':
     accumulator_process.join()
 
     print 'Success! All child processes joined cleanly.'
-

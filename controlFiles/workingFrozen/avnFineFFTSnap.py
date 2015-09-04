@@ -1,11 +1,7 @@
 #!/bin/env ipython
 '''
 Script to perform software accumulation from snaps of the fine FFT data.
-
-Usage:
-python initRoach.py -v catseye
-python -v avnFineFFTSnap.py #This script. It is suggested to | grep Tone if you're looking for a specific bin, or >> into a log file, otherwise the amount of output that the -v flag produces gets large quickly.
-
+It is suggested to | grep Tone if you're looking for a specific bin, or >> into a log file, otherwise the amount of output that the -v flag produces gets large quickly.
 An iPython session can be used to set the valon to the optimum frequency for this script to pick up:
 a.set_frequency(8,197.75,1) Note the third argument is important to set the correct channel spacing.
 '''
@@ -15,13 +11,19 @@ a.set_frequency(8,197.75,1) Note the third argument is important to set the corr
 # Updated: 18 March 2015 James Smith - modified the function to be more agnostic as to the size of the data that it's receiving from the fpga read functions. The correspondingly updated avn_spectrometer functions now return the entire 4096 points of the FFT.
 
 
-import corr, time, struct, sys, logging, socket, construct
+import corr
+import time
+import struct
+import sys
+import logging
+import socket
+import construct
 import numpy as np
 import avn_spectrometer as avn
 import matplotlib.pyplot as plt
 
 verbose = False
-accumulation_length = 1 # With the current (slow) bof file, longer accumulations than this take very long.
+accumulation_length = 1 # As the fine FFT takes multiple snaps, accumulating any significant size may take a while.
 coarse_channel = 128 # 128 is 200 MHz, a tone at 200 MHz exactly would be in bin 0, and 201 MHz will be around bin 1900 or so.
 
 
@@ -82,7 +84,6 @@ try:
         exit_fail()
 
     plt.ion()
-
     LCP_accumulator = np.zeros(avn.fine_fft_size)
     RCP_accumulator = np.zeros(avn.fine_fft_size)
 
@@ -107,8 +108,7 @@ try:
     axarr[1].set_xlim(-1,avn.fine_fft_size)
     axarr[1].xaxis.set_ticks(np.arange(0,avn.fine_fft_size,128))
     plt.draw()
-
-    f = raw_input('press enter to continue') # In case you'd like to have the thing wait. Sometimes it can flash through the graph too quickly to be able to examine it properly.
+    f = raw_input('press enter to continue') # So script doesn't exit and plot disappear before the user can examine
 
 except KeyboardInterrupt:
     exit_clean()
@@ -119,4 +119,3 @@ except Exception as inst:
     exit_fail()
 
 exit_clean()
-

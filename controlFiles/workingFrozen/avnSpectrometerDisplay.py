@@ -2,7 +2,7 @@
 
 """
 NOTE: Deprecated - this script's functionality has been incorporated into the Broad script with the -n flag.
-It has none of the newer features.
+It has none of the newer features. I've also stopped maintaining it.
 
 Displays a debug-version of the AVN wideband spectrometer, with data
 from the coarse FFT and a selected fine FFT channel. The data is retrieved

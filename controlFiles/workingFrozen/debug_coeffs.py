@@ -1,9 +1,9 @@
 #!/bin/env ipython
 
-'''Loops through values of the quantiser coefficients in powers of two, then saves jpgs of the various snaps.
+'''Loops through values of the quantiser coefficients in powers of two, then saves pngs of the various snaps.
 Uses Test Vector Generators (TVGs), so no actual input is required.
 
-Using this script was a bit of a hack, and since the quantiser is going to be removed from subsequent boffiles, it's here purely for historical reasons.
+The quantiser is likely to be removed fom subsequent iterations of the spectrometer.
 '''
 
 import corr
@@ -48,12 +48,12 @@ if __name__ == '__main__':
     p = OptionParser()
     p.set_usage('python initRoach.py <ROACH_HOSTNAME_or_IP> [options]')
     p.set_description(__doc__)
-    p.add_option('', '--noprogram', dest='noprogram', action='store_true',
-        help='Don\'t write the boffile to the FPGA.')
+    #p.add_option('', '--noprogram', dest='noprogram', action='store_true',
+    #    help='Don\'t write the boffile to the FPGA.')
     p.add_option('-v', '--verbose', dest = 'verbose', action='store_true',
         help='Show verbose information on what\'s happening')
-    p.add_option('-b', '--boffile', dest='bof', type='str', default=boffile,
-        help='Specify the bof file to load')
+    #p.add_option('-b', '--boffile', dest='bof', type='str', default=boffile,
+    #    help='Specify the bof file to load')
     p.add_option('-p', '--katcpport', dest='kcp', type='int', default=katcp_port,
         help='Specify the KatCP port through which to communicate with the ROACH, default 7147')
     opts, args = p.parse_args(sys.argv[1:])
@@ -63,8 +63,8 @@ if __name__ == '__main__':
         exit()
     else:
         roach = args[0]
-    if opts.bof != '':
-        boffile = opts.bof
+    #if opts.bof != '':
+    #    boffile = opts.bof
     if opts.kcp != '':
         katcp_port = opts.kcp
     if opts.verbose:
@@ -90,15 +90,15 @@ try:
         print 'ERROR connecting to server %s.\n'%(roach)
         exit_fail()
 
-    if not opts.noprogram:
-        if verbose:
-            print '------------------------'
-            print 'Programming FPGA...',
-            sys.stdout.flush()
-        fpga.progdev(boffile)
-        time.sleep(5)
-        if verbose:
-            print 'ok'
+    #if not opts.noprogram:
+    if verbose:
+        print '------------------------'
+        print 'Programming FPGA...',
+        sys.stdout.flush()
+    fpga.progdev(boffile)
+    time.sleep(5)
+    if verbose:
+        print 'ok'
 
     if verbose:
         print 'Enabling debug snap block...'
@@ -119,10 +119,10 @@ try:
     control_reg = avn.control_reg_bitstruct.parse('\x00\x00\x00\x00')
     # Pulse arm and clr_status high, along with setting gbe_enable and adc_protect_disable high
     control_reg.gbe_enable = True
-    control_reg.adc_protect_disable = True
+    control_reg.adc_protect_disable = True # Not actually sure whether this is necessary for the sync to come through
     control_reg.tvg_en = True
-    #control_reg.fine_tvg_en = True # We'll use the fine FFT's TVG for the time being.
-    control_reg.ct_tvg = True
+    control_reg.fine_tvg_en = True
+    #control_reg.ct_tvg = True #not this one, since it comes after the quantiser...
     control_reg.clr_status = True
     control_reg.arm = True
     fpga.write_int('control', struct.unpack('>I', avn.control_reg_bitstruct.build(control_reg))[0])
@@ -137,11 +137,16 @@ try:
         print 'ROACH %s armed and ready, proceeding with debug snap run...'%(roach)
         sys.stdout.flush()
 
+    # This is for practical purposes - I discovered that often the first time you snap things,
+    # the data which comes out of the snap block is nonsensical. This is just to get past that
+    # before the important stuff starts.
     foo_bar = avn.retrieve_coarse_FFT_snap(fpga)
 
-    for gain_factor in np.arange(0,1):
+    for gain_factor in np.arange(0,16):
         if verbose:
             print 'Gain is now 2^%d.'%(gain_factor)
+            # 2^gain factor because in essence the quantiser is bit-shifting.
+            # No point in in-between values.
 
         quantiser_gain = np.ones(avn.fine_fft_size, dtype=int)
         quantiser_gain = np.left_shift(quantiser_gain, gain_factor)
@@ -200,3 +205,4 @@ except Exception as inst:
     exit_fail()
 
 exit_clean()
+

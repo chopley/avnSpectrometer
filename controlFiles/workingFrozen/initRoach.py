@@ -8,11 +8,17 @@ are enabled.
 # Usage can be easily obtained by running 'python initRoach.py --help'
 
 # Revision History:
+# 15 March 2015 - fine-toothed-comb to make sure it's sensible. No functionality change.
 # 26 March 2015 - Q&D addition of source and destination IP variables to write to the ROACH, so that the UDP works properly.
 # 06 March 2015 - First proper working version created by James Smith.
 # Originally adapted (somewhat) from Jason Manley's script for Tutorial 3.
 
-import corr, time, sys, logging, struct
+import corr
+import time
+import sys
+import logging
+import struct
+import os
 import numpy as np
 import avn_spectrometer as avn
 
@@ -32,42 +38,46 @@ fabric_port = 60000
 source_ip = 10<<24 | 0<<16 | 0<<8 | 2<<0
 mac_base = 2<<40 | 2<<32
 
-coarse_channel = 102
+coarse_channel = 106
 
 gain_factor = 1
 
 def exit_fail():
     print 'FAILURE DETECTED. Log entries:\n', lh.printMessages()
-    try:
-        fpga.stop()
-    except: pass
-    raise
+    #try:
+    #    fpga.stop()
+    #except: pass
+    #raise
     exit()
 
 def exit_clean():
-    try:
-        fpga.stop()
-    except: pass
+    #try:
+    #    fpga.stop()
+    #except: pass
     exit()
 
 if __name__ == '__main__':
     from optparse import OptionParser
 
+    logger = logging.getLogger(__name__)
+
     p = OptionParser()
-    p.set_usage('python initRoach.py <ROACH_HOSTNAME_or_IP> [options]')
+    p.set_usage('python %s <ROACH_HOSTNAME_or_IP> [options]'%(os.basename.path(__file__)))
     p.set_description(__doc__)
     p.add_option('', '--noprogram', dest='noprogram', action='store_true',
-        help='Don\'t write the boffile to the FPGA.')
+        help='Don\'t write the boffile to the FPGA. Useful to reset control registers for a programmed FPGA, but not generally recommended.')
     p.add_option('-v', '--verbose', dest = 'verbose', action='store_true',
         help='Show verbose information on what\'s happening')
     p.add_option('-b', '--boffile', dest='bof', type='str', default=boffile,
-        help='Specify the bof file to load')
+        help='Specify a different boffile to load. Default is %s'%(boffile))
     p.add_option('-p', '--katcpport', dest='kcp', type='int', default=katcp_port,
-        help='Specify the KatCP port through which to communicate with the ROACH, default 7147')
+        help='Specify the KatCP port through which to communicate with the ROACH, default %d'%(katcp_port))
     p.add_option('-a', '--atten', dest='atn', type='int', default=adc_atten,
         help='Specify the amount by which the ADC should attenuate the input power, with zero being unattenuated and 63 being the maximum of 31.5 dB, in 0.5 dB steps. default %d'%(adc_atten))
     p.add_option('-g', '--gain', dest='gain', type='int', default=gain_factor,
         help='Specify the quantiser gain coefficients. At the moment, this script assigns the same coefficient to all channels, default %d. Only powers of 2 really useful.'%(gain_factor))
+    p.add_option('-c', '--coarsechan', dest='coarse_chan', type='int', default=coarse_channel,
+        help='Specify the coarse channel from which to make the fine FFT, default %d'%(coarse_channel))
     opts, args = p.parse_args(sys.argv[1:])
 
     if args==[]:
@@ -93,6 +103,11 @@ if __name__ == '__main__':
         else:
             print 'Please enter a quantiser gain number between 0 and  %d (inclusive).\nExiting.'%(2**16)
             exit()
+    if opts.coarse_chan != None and (opts.coarse_chan >= 0) and (opts.coarse_chan < avn.coarse_fft_size):
+        coarse_channel = opts.coarse_chan
+    else:
+        print 'Please enter the desired channel for the fine FFT! Valid options between 0 and %d.\nExiting...'%(avn.coarse_fft_size - 1)
+        exit()
 
 try:
     #Logging for debug purposes in the event of a crash
@@ -149,17 +164,21 @@ try:
 
     if verbose:
         print 'Setting 10GbE source and destination addresses...'
-    fpga.write_int('gbe_ip0',dest_ip)
-    fpga.write_int('gbe_port',fabric_port)
+    fpga.write_int('gbe_ip0', dest_ip)
+    fpga.write_int('gbe_port', fabric_port)
 
     if verbose:
         print 'Enabling 10GbE...'
     fpga.tap_start('tap0','gbe0', mac_base+source_ip, source_ip, fabric_port)
 
-    control_reg = avn.control_reg_bitstruct.parse('\x00\x00\x00\x00') # Just create a blank one to use...
+    control_reg = avn.control_reg_bitstruct.parse('\x00\x00\x00\x00') # Just create a blank one
     # Pulse arm and clr_status high, along with setting gbe_enable and adc_protect_disable high
     control_reg.gbe_enable = True
     control_reg.adc_protect_disable = True
+    # If the test vector generators (TVGs) are to be used, this is where they'd be used...
+    # I should probably put this in as a flag in the option parser, but I was too lazy.
+    # They're not very useful for operation of the system, they were useful in the debugging
+    # phase, but that's finished now.
     #control_reg.tvg_en = True
     #control_reg.ct_tvg = True
     #control_reg.fine_tvg_en = True
@@ -167,29 +186,32 @@ try:
     control_reg.arm = True
     fpga.write_int('control', struct.unpack('>I', avn.control_reg_bitstruct.build(control_reg))[0])
 
+    time.sleep(0.01)
+    # ... and bring them low again.
     control_reg.clr_status = False
     control_reg.arm = False
     fpga.write_int('control', struct.unpack('>I',avn.control_reg_bitstruct.build(control_reg))[0])
 
     if verbose:
         print 'Configuring coarse_ctrl register...'
-    coarse_ctrl_reg = avn.coarse_ctrl_reg_bitstruct.parse('\x00\x00\x00\x00') # Starting a clean one here, previous data not of interest.
+    coarse_ctrl_reg = avn.coarse_ctrl_reg_bitstruct.parse('\x00\x00\x00\x00')
     coarse_ctrl_reg.coarse_chan_select = coarse_channel
     coarse_ctrl_reg.coarse_fft_shift = 341 # 341 translates to 0101010101 in binary.
     fpga.write_int('coarse_ctrl',struct.unpack('>I', avn.coarse_ctrl_reg_bitstruct.build(coarse_ctrl_reg))[0])
     fpga.write_int('fine_ctrl',0)
 
+    if verbose:
+        print 'Setting quantiser gain: %d...'%(quantiser_gain)
     quantiser_gain = np.ones(avn.fine_fft_size, dtype=int)
+    # This strange bitwise kung-fu is here because the numbers are complex, stored
+    # as 16 bits real and 16 bits imaginary.
     quantiser_gain = np.left_shift(quantiser_gain, gain_factor)
     quantiser_gain = np.bitwise_or(quantiser_gain, np.left_shift(quantiser_gain, 16))
     avn.setGainCoefficients(fpga, quantiser_gain)
-    print 'fpgaClockSpeed -This should be around 200- wont be exact'
-    a=fpga.est_brd_clk()
-    print a
-    clk_frequency = fpga.read_uint('clk_frequency')
-    print 'Clock Frequency Should be 200000000 and is %d' %clk_frequency
+
     if verbose:
         print 'ROACH %s armed and ready.'%(roach)
+        #print 'Thunderbirds are go...'
         sys.stdout.flush()
     #time.sleep(2)
 
@@ -202,3 +224,4 @@ except Exception as inst:
     exit_fail()
 
 exit_clean()
+

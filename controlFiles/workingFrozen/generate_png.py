@@ -1,7 +1,9 @@
 #!/usr/bin/python
 '''
 Simple script - read past text-based saves from whence no png has been generated, then generate
-one. Saves it in ../ with the same name as the current directory.
+one. Saves it in ../ with the same name as the current directory. I wrote this because the png
+saving feature in the spectrometer script was added only after a bunch of data had been saved
+already.
 
 Do yourself a favour and chmod +x on the script, then double-click on it from Dolphin or Nautilus.
 It'll save a heck of a lot of pain cd-ing in and out of the directories.
@@ -12,6 +14,8 @@ import os
 
 filename = '../' + os.getcwd()[os.getcwd().rfind(u'/') + 1:] + '.png' # Sometimes I am so clever I even amaze myself.
 
+# If the data of interest is saved as binary instead of txt, just change loadtxt to load
+# :19,22 s/loadtxt/load/g
 LCP_coarse_accumulator = np.loadtxt('coarse_LCP')
 RCP_coarse_accumulator = np.loadtxt('coarse_RCP')
 LCP_fine_accumulator = np.loadtxt('fine_LCP')
@@ -82,5 +86,6 @@ ax[4].set_ylim(ax[3].get_ylim())
 ax[5].set_ylim(ax[3].get_ylim())
 
 plt.savefig(filename)
+
 
 
